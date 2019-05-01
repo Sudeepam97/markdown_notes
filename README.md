@@ -231,13 +231,14 @@ for (int i = 0; i <= 5; i++){
 ### Arrays and Functions.
 * Arrays are never passed by value in a function. If I write a function definition as `void func_name(int arr[])`, The local variable `arr` is treated by the compiler, as a pointer to the original array which was passed during the call. Hence, arrays are always passed by reference.
 * This makes sense because arrays can be quite big and it does not make sense to create new copies of them during function calls.
+* Unlike Arrays, vectors can be passed by Values.
 
 # Classes and Objects
 
 * Class is the blueprint, object is the instance of the blueprint.
 ```cpp
 class node {
-  public: // Acess specifier
+  public: // Public members can be accessed outside the class with an object of the class
     int data;
     node *next;
     
@@ -254,8 +255,14 @@ class node {
       // Constructors are mostly used to initialize member variables but can contain code for other tasks as well.
     }
 
-  private:
+  private: // Private members can be accessed within the class only
     void some_function (int val){
+      // Code
+    }
+
+  protected: // Can be accessed outside the class but only in a class derived (Inheritance) from this class.
+    int some_var;
+    int some_other_function (){
       // Code
     }
 };
@@ -272,12 +279,12 @@ newnode.some_function(newnode.data);
 * Check out acess specifiers and OOP using classes and objects.
 * C++ structures are basically the same as C++ classes. The main differece is that, in a class all members are `private` by default, and in a structure all members are `public` by default.
 
+# Getters and Setters in C++ Classes
 
 # Inheritance
 
 
 # To- do
-* Getters and Setters
 * Static Members
 * Destructor
 * Operator Overloading
