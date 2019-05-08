@@ -44,7 +44,68 @@ int main() {
   * **boolean**: Allows us to store True/False values.
     * **eg:** `bool isTrue = False;` (Typically 2 bytes)
 * Data types can be pre-defined (like `int`) or user defined (like a `class`).
-* `signed`, `unsigned`, `long`, `short` are data type modifiers. 
+* `signed`, `unsigned`, `long`, `short` are data type modifiers. Declaration is like `unsigned long int a = 5`.
+
+Read: https://stackoverflow.com/questions/18971732/what-is-the-difference-between-long-long-long-long-int-and-long-long-i
+
+
+# Bit-wise operations
+
+## Logical Operators
+### AND
+```cpp
+int a = 21;
+int b = 6;
+int c = a & b; // '&' Returns the bitwise AND of a and b
+cout << c;     // 4
+```
+
+### OR
+```cpp
+int a = 21;
+int b = 6;
+int c = a | b; // '|' Returns the bitwise OR of a and b
+cout << c;     // 23
+```
+
+### XOR
+```cpp
+int a = 21;
+int b = 6;
+int c = a & b; // '^' Returns the bitwise XOR of a and b
+cout << c;     // 19
+```
+
+### NOT
+```cpp
+int a = 21;
+int b = ~a; // '~' Returns the bitwise NOT of a and b
+cout << b;  // -22
+```
+* Just like we write `a += b` for `a = a + b`, we can write `a |= b` for ` a = a | b`.
+* bitwise operators work on integers whereas logical operators such as `&&` and `||` work on boolean.
+ 
+
+## Shift Operators
+* Shift Operators should not be used for negative numbers, as the result is undefined.
+* Left Shift by `x` or right shift by `x` is equal to multiplication or division by pow(2, x) respectively.
+* The digits that overflow the range of the data type (on left shift), or underflow the range of the data type (on right shift) are lost, and this results in undefined behavior.
+
+### Left Shift Operator
+```cpp
+int a = 29;     // 0011101
+int x = 2;
+int b = a << x; // Shifts the bits of `a` towards left by `x` digits and stores the result in b.
+cout << b;      // 116 = 1110100
+```
+
+### Right Shift Operator
+```cpp
+int a = 29;     // 0011101
+int x = 2;
+int b = a >> x; // Shifts the bits of `a` towards right by `x` digits and stores the result in b.
+cout << b;      // 7 = 0000111
+```
 
 # Working with Strings
 
@@ -215,6 +276,12 @@ for (int i = 0; i <= 5; i++){
 * We can also create a 2D or rather, an N-D array like:
   * `int nums[][] = {{1, 2}, {3, 4}, {5, 6}};`
   * Initialization is similar to 1D arrays.
+* In C and C++ we cannot have something like
+  ```cpp
+  n = 10; 
+  int arr[n]; // Invalid
+  ```
+  Hence, we use vectors for dynamic arrays.
 
 ## Some important points
 
@@ -236,6 +303,7 @@ for (int i = 0; i <= 5; i++){
 # Classes and Objects
 
 * Class is the blueprint, object is the instance of the blueprint.
+* Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
 ```cpp
 class node {
   public: // Public members can be accessed outside the class with an object of the class
@@ -279,8 +347,6 @@ newnode.some_function(newnode.data);
 * Check out acess specifiers and OOP using classes and objects.
 * C++ structures are basically the same as C++ classes. The main differece is that, in a class all members are `private` by default, and in a structure all members are `public` by default.
 
-# Getters and Setters in C++ Classes
-
 # Inheritance
 
 
@@ -303,7 +369,65 @@ newnode.some_function(newnode.data);
 # Algorithms
 
 * Sorting algos
+* Sieve of erathosthenes.
+* Learn to Use terniary operators for conditions.
+* Number system conversions, assuming positive numbers ...
+  * Any number A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub> at base `b` conversion to decimal is done by....  
+  `A0 * (b^0)` + `A1 * (b^1)` + `A2 * (b^2)` + `A3 * (b^3)` 
+  * Dividing decimal number by base `b` and continously storing the remainder in down to up fashion gives us the number at base b.
 
 ## Sorting
 * A stable sorting algorithm preserves the relative order of elements.
 * In C++, you can sort a vector `V` with `sort(V.begin(), V.end());`
+
+
+## Binary Search
+* For `mid`, one way is `mid = (start + end)/2` but sometimes `start + end` can exceed the limit of int, hence a better option is:
+ `mid = start + (end - start) / 2`
+* Binary search can be implemented recursively also.
+* The concept of Binary Search can be used for finding x so that f(x) = p, if x is a monotonic function.
+* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
+  last index of an element in an array if it is present multiple times.
+
+# Strings
+
+* Case handling and comparing strings is complicated in C/C++. Python is better. 
+```cpp
+str.size()
+// Returns the size of the string
+str.empty()
+// Returns true if length of str is 0
+str.replace(9, 5, "Hello friend")
+// Replaces the next 5 characters from the 9th position by "Hello friend".
+str.substr(3, 5)
+// Returns a substring starting at position 3 and containing the next 5 characters (character at pos 3 included).
+str1.swap(str2)
+// Swaps the values of str1 and str2
+str.c_str()
+/* Returns a pointer to a null-terminated char array
+(C style string) containing the current value of the string.*/
+toupper(str[i])
+tolower(str[i])
+isalnum(str[i])
+// Checks if the ith character of str is upper/lower/alphanumeric.
+transform(str.begin(), str.end(), str.begin(), ::tolower)
+transform(str.begin(), str.end(), str.begin(), ::toupper)
+transform(str.begin(), str.end(), str.begin(), ::isalnum)
+/* Transform applies an an operation uniformly to each element of a
+sequence. the first two arguments specify the range in which operation
+has to be applied, the third argument defines the starting position from
+which the result would be stored, and the fourth argument is the
+operation that is to be applied. This can be used to add two arrays with a
+single line of code, or to convert a string to upper or lower case or
+remove all non alpha numeric characters etc. */
+s1.compare(s2)
+/*returns 0 if s1 is the same as s2  
+  returns a value < 0 if s1 is smaller than s2
+  returns a value > 0 if s1 is larger than s2
+*/
+
+str.find()
+str.rfing()
+compare()
+```
+# Bit manipulation
