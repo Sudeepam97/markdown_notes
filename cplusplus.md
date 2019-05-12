@@ -32,15 +32,15 @@ int main() {
 * Unlike say, JAVA, the C++ standard does not strictly define the size of its in-built data types. The sizes are compiler dependent. What C++ does define is a rule for each data type, as in "double should have a precision not less than float". The exact precision is compiler defined and not C++ defined. The mandated rules can be found here: http://www.cplusplus.com/doc/tutorial/variables/
 
 * Given below, are the various built-in data types in C++, user defined data types will be discussed later. The sizes and range mentioned below are in accordance with GCC.
-  * **char**: 1 byte. Allows us to store single characters with ASCII values b/w `[-128, 127]` in case of signed or `[0, 255]` in case of unsigned.
+  * **char**: 1 byte. Allows us to store single characters with ASCII values b/w `[-128, 127]` (signed) or `[0, 255]` (unsigned).
     * **eg:** `char c = 'A';`
-  * **short**: 2 bytes (16 bits). It allows us to store whole numbers b/w `[-2^15,  2^15 - 1]` in case of signed or `[0, 2^64 - 1]` in case of unsigned.
+  * **short**: 2 bytes (16 bits). It allows us to store whole numbers b/w `[-2^15,  2^15 - 1]` (signed) `[0, 2^16 - 1]` (unsigned).
     * **eg** `short num = 10;`
-  * **int**: 4 bytes (32 bits). It allows us to store whole numbers b/w `[-2^31,  2^31 - 1]` in case of signed or `[0, 2^32]` in case of unsigned.
+  * **int**: 4 bytes (32 bits). It allows us to store whole numbers b/w `[-2^31,  2^31 - 1]`(signed) `[0, 2^32 - 1]` (unsigned).
     * **eg:** `int num = 1000;`
   * **long**: C++ mandates this to be atleast as wide as `int`. Typically this is 8 bytes (64 bits), however GCC defines it to be 4 bytes/32 bits (which, mind you, is not wrong). Hence GCC `long` is the same as int.
     * **eg** `long num = 1000;`
-  * **long long**: 8 bytes (64 bits). It allows us to store whole numbers b/w `[-2^63,  2^63 - 1]` in case of signed or `[0, 2^64 - 1]` in case of unsigned.
+  * **long long**: 8 bytes (64 bits). Allows us to store whole numbers b/w `[-2^63,  2^63 - 1]` (signed) or `[0, 2^64 - 1]` (unsigned).
     * **eg:** `long long num = 1000000;`
   * **float**: Allows us to store decimal numbers, is 4 bytes in GCC with ability to store at-least 6 significant decimal digits.
     * **eg:** `float num = 5.9;`
