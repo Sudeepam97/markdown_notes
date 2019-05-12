@@ -135,7 +135,7 @@ str[1] = 'e';
 ```
 ## Useful Functions
 ```cpp
-// Both are synonymus and return the length of the string.
+// Both are synonomus and return the length of the string.
 str.size();
 str.length();
 
@@ -181,8 +181,6 @@ isalnum(str[i]);
   - Lowecase */
 toupper(str[i]);
 tolower(str[i]);
-
-Either the value of the first character that does not match is lower in the compared string, or all compared characters match but the compared string is shorter.
 
 /* returns 0 if str_1 is the same as str_2
     OR
@@ -496,8 +494,7 @@ newnode.some_function(newnode.data);
  `mid = start + (end - start) / 2`
 * Binary search can be implemented recursively also.
 * The concept of Binary Search can be used for finding x so that f(x) = p, if x is a monotonic function.
-* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
-  last index of an element in an array if it is present multiple times.
+* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or last index of an element in an array if it is present multiple times.
 
 # Strings
 
