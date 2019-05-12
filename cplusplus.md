@@ -35,11 +35,11 @@ int main() {
   * **char**: 1 byte. Allows us to store single characters with ASCII values b/w `[-128, 127]` (signed) or `[0, 255]` (unsigned).
     * **eg:** `char c = 'A';`
   * **short**: 2 bytes (16 bits). It allows us to store whole numbers b/w `[-2^15,  2^15 - 1]` (signed) `[0, 2^16 - 1]` (unsigned).
-    * **eg** `short num = 10;`
+    * **eg:** `short num = 10;`
   * **int**: 4 bytes (32 bits). It allows us to store whole numbers b/w `[-2^31,  2^31 - 1]`(signed) `[0, 2^32 - 1]` (unsigned).
     * **eg:** `int num = 1000;`
-  * **long**: C++ mandates this to be atleast as wide as `int`. Typically this is 8 bytes (64 bits), however GCC defines it to be 4 bytes/32 bits (which, mind you, is not wrong). Hence GCC `long` is the same as int.
-    * **eg** `long num = 1000;`
+  * **long**: C++ mandates this to be atleast as wide as `int`. Typically this is 8 bytes (64 bits), however GCC defines it to be 4 bytes/32 bits (which, mind you, is not wrong). Hence GCC `long` is the same as `int`.
+    * **eg:** `long num = 1000;`
   * **long long**: 8 bytes (64 bits). In GCC, it allows us to store whole numbers b/w `[-2^63,  2^63 - 1]` in case of signed or `[0, 2^64 - 1]` (unsigned).
     * **eg:** `long long num = 1000000;`
   * **float**: Allows us to store decimal numbers, is 4 bytes in GCC with ability to store at-least 6 significant decimal digits.
@@ -49,7 +49,7 @@ int main() {
   * **boolean**: 1 byte in GCC. Allows us to store true/false values.
     * **eg:** `bool val = false;`
 
-* `long` and `long int` mean the same, similarly `long long` and `long long int` are the same. The difference between `long` and `long long` is that, as stated above, the C++ standard mandates minimum ranges for each, and `long long` must be at least as wide as `long`.
+* `long` and `long int` mean the same, similarly `long long` and `long long int` are the same. The difference between `long` and `long long` is that, as stated above, the C++ standard mandates minimum ranges for each, and `long long` must be at least as wide as `long`. The difference, therefore, is compiler dependent.
 * `short short int` does not exist.
 * Data types can be declared as `signed` or `unsigned`. These are data type modifiers. Declaration is like `unsigned int a = 5`.
 * Signed types can have negative numbers or their equivalents, whereas unsigned types can have non negative numbers only.
@@ -57,12 +57,12 @@ int main() {
 # Special Values
 
 * `\0` is the null character.
+* `null` is also the null character.
 * `NULL` is the null pointer.
 * `true` is boolean truth value.
 * `false` is boolean false value.
 
 # Bit-wise operations
-* https://www.interviewbit.com/tutorial/tricks-with-bits/
 
 ## Logical Operators
 ### AND
@@ -118,12 +118,16 @@ int b = a >> x; // Shifts the bits of `a` towards right by `x` digits and stores
 cout << b;      // 7 = 0000111
 ```
 
+## Points to remember.
+* (A XOR B) XOR B = A
+* 
+
 # Strings
 
 ## Basics
-* `string` is an inbuilt class in C++ that allows us to work with strings. They are much more powerful than the C style strings (null terminated char arrays).
+`string` is an inbuilt class in C++ that allows us to work with strings (sequence of characters). C++ string objects are much more powerful than the C style strings (null terminated char arrays).
 ```cpp
-string str; // str is now an object of the string class of C++.
+string str; // str is an object of the string class of C++.
 str = "hello friend";
 
 // C++ Strings are 0 indexed.
@@ -131,18 +135,20 @@ str[1] = 'e';
 ```
 ## Useful Functions
 ```cpp
-// Returns the length of the string.
-str.size(); 
+// Both are synonymus and return the length of the string.
+str.size();
+str.length();
 
 // Returns true if the length of the string `str` is 0.
 str.empty();
 
 /* Starts looking from the 2nd index and returns the first index where the
-substring "abc" is encountered. */
+substring "abc" is encountered. Returns -1 if substring is not found. */
 str.find("abc", 2);
 
-// Check
-str.rfing()
+/* Returns the last occourance of "abc" in the string. `pos` specifies the
+last character in the string to be considered as the beginning of a match. */
+str.rfind("abc", pos);
 
 /* Returns a substring starting at position 3 and containing the next 5
 characters (character at pos 3 included). */
@@ -154,11 +160,12 @@ str.replace(9, 5, "Hello friend")
 // Swaps the values of str1 and str2
 str1.swap(str2)
 
-/* Returns a pointer to a null-terminated character array (C style string) containing the current value of the `str` string object*/
+/* Returns a pointer to a null-terminated character array (C style string)
+containing the current value of the `str` string object*/
 str.c_str()
 ```
 ## Case conversion
-* You cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
+We cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
 
 ```cpp
 /* Checks if the ith character of str is 
@@ -175,20 +182,35 @@ isalnum(str[i]);
 toupper(str[i]);
 tolower(str[i]);
 
-/*returns 0 if str_1 is the same as str_2
-  returns a value < 0 if str_1 is smaller than str_2
-  returns a value > 0 if str_1 is larger than str_2 */
+Either the value of the first character that does not match is lower in the compared string, or all compared characters match but the compared string is shorter.
+
+/* returns 0 if str_1 is the same as str_2
+    OR
+   returns `length(str_1) - length(str_2)` if one is a substring of another.
+    OR 
+   if a difference is encountered at the ith position, returns (int) (str_1[i] - str_2[i]).
+   */
 str_1.compare(str_2);
 
-/* 
-- Single line operations are done using the `transform()` function.`
+// compare() can be used to compare substrings also, example...
+str_1 = "green apple";
+str_2 = "red apple";
+str_1.compare(6, 5, "apple");     // == 0
+str_1.compare(6, 5, str_2, 4, 5)  // == 0
 
-- `transform()` applies an an operation uniformly to each element of a sequence.
+/* Note: `str_1 == str_2` can be used to compare strings as well. This returns a 
+   ----   boolean whereas  str1.compare(str_2) returns a signed int. Also,
+          compare() can be used to compare substrings of the two strings, whereas
+          `==` can be used to compare whole strings only. */
+ 
+/*
+`transform()` applies an an operation uniformly to each element of a sequence.
   - The first two arguments specify the range in which operation has to be applied
   - The third argument defines the starting position from which the result would be stored.
   - The fourth argument is the operation that is to be applied.
   
-This can therefore be used to add two arrays with a single line of code, or as shown below, to convert a string to upper or lower case*/
+This can therefore be used to add two arrays with a single line of code, or as shown below, 
+to convert a string to upper or lower case in a single line of code */
 
 transform(str.begin(), str.end(), str.begin(), ::tolower)
 transform(str.begin(), str.end(), str.begin(), ::toupper)
@@ -209,9 +231,11 @@ stoi(str);
 to_string(10);
 ```
 
+----------------------------------------------CONTINUE DOWN FROM HERE---------------------------------------------------------------
+
 # Working with Numbers
 
-* The modulus operator is `%`
+* The modulus operator is `%` and is defined for non negative integers only.
 * C++ follows PEDMAS.
 * `x++` first uses, then increments. `++x` first increments, then uses. We also have `x += 10` 
 * Any arithmetic between a decimal number and an integer returns a decimal number.
