@@ -40,7 +40,7 @@ int main() {
     * **eg:** `int num = 1000;`
   * **long**: C++ mandates this to be atleast as wide as `int`. Typically this is 8 bytes (64 bits), however GCC defines it to be 4 bytes/32 bits (which, mind you, is not wrong). Hence GCC `long` is the same as int.
     * **eg** `long num = 1000;`
-  * **long long**: 8 bytes (64 bits). Allows us to store whole numbers b/w `[-2^63,  2^63 - 1]` (signed) or `[0, 2^64 - 1]` (unsigned).
+  * **long long**: 8 bytes (64 bits). In GCC, it allows us to store whole numbers b/w `[-2^63,  2^63 - 1]` in case of signed or `[0, 2^64 - 1]` (unsigned).
     * **eg:** `long long num = 1000000;`
   * **float**: Allows us to store decimal numbers, is 4 bytes in GCC with ability to store at-least 6 significant decimal digits.
     * **eg:** `float num = 5.9;`
