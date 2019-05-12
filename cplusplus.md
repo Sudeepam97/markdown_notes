@@ -1,5 +1,3 @@
-# C++
-
 * C++ was created by Bjrane Stroustrup.
 * OOP Concepts
   * **Encapsulation**: Wrapping together, all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
@@ -50,6 +48,7 @@ Read: https://stackoverflow.com/questions/18971732/what-is-the-difference-betwee
 
 
 # Bit-wise operations
+* https://www.interviewbit.com/tutorial/tricks-with-bits/
 
 ## Logical Operators
 ### AND
@@ -84,13 +83,11 @@ cout << b;  // -22
 ```
 * Just like we write `a += b` for `a = a + b`, we can write `a |= b` for ` a = a | b`.
 * bitwise operators work on integers whereas logical operators such as `&&` and `||` work on boolean.
- 
 
 ## Shift Operators
 * Shift Operators should not be used for negative numbers, as the result is undefined.
 * Left Shift by `x` or right shift by `x` is equal to multiplication or division by pow(2, x) respectively.
 * The digits that overflow the range of the data type (on left shift), or underflow the range of the data type (on right shift) are lost, and this results in undefined behavior.
-
 ### Left Shift Operator
 ```cpp
 int a = 29;     // 0011101
@@ -107,20 +104,95 @@ int b = a >> x; // Shifts the bits of `a` towards right by `x` digits and stores
 cout << b;      // 7 = 0000111
 ```
 
-# Working with Strings
+# Strings
 
-* In C++, strings are 0 indexed.
+## Basics
+* `string` is an inbuilt class in C++ that allows us to work with strings. They are much more powerful than the C style strings (null terminated char arrays).
 ```cpp
-str = "hello";
+string str; // str is now an object of the string class of C++.
+str = "hello friend";
+
+// C++ Strings are 0 indexed.
 str[1] = 'e';
 ```
-* The following are some useful string functions.
+## Useful Functions
 ```cpp
-str.length(); // Length of a string.
+// Returns the length of the string.
+str.size(); 
 
-str.find("abc", 2); // Starts looking from the 2nd index and returns the index where the substring "abc" is encountered.
+// Returns true if the length of the string `str` is 0.
+str.empty();
 
-str.substr(8, 3); // Starts at the 8th index and returns the next three chararacters.
+/* Starts looking from the 2nd index and returns the first index where the
+substring "abc" is encountered. */
+str.find("abc", 2);
+
+// Check
+str.rfing()
+
+/* Returns a substring starting at position 3 and containing the next 5
+characters (character at pos 3 included). */
+str.substr(3, 5)
+
+// Replaces characters at position 9, 10, 11, 12, & 13 with "Hello friend".
+str.replace(9, 5, "Hello friend")
+
+// Swaps the values of str1 and str2
+str1.swap(str2)
+
+/* Returns a pointer to a null-terminated character array (C style string) containing the current value of the `str` string object*/
+str.c_str()
+```
+## Case conversion
+* You cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
+
+```cpp
+/* Checks if the ith character of str is 
+  - Uppercase.
+  - Lowercase.
+  - Alphanumeric.*/
+isupper(str[i]);
+islower(str[i]);
+isalnum(str[i]);
+
+/* Converts the ith character of str to
+  - Uppercase
+  - Lowecase */
+toupper(str[i]);
+tolower(str[i]);
+
+/*returns 0 if str_1 is the same as str_2
+  returns a value < 0 if str_1 is smaller than str_2
+  returns a value > 0 if str_1 is larger than str_2 */
+str_1.compare(str_2);
+
+/* 
+- Single line operations are done using the `transform()` function.`
+
+- `transform()` applies an an operation uniformly to each element of a sequence.
+  - The first two arguments specify the range in which operation has to be applied
+  - The third argument defines the starting position from which the result would be stored.
+  - The fourth argument is the operation that is to be applied.
+  
+This can therefore be used to add two arrays with a single line of code, or as shown below, to convert a string to upper or lower case*/
+
+transform(str.begin(), str.end(), str.begin(), ::tolower)
+transform(str.begin(), str.end(), str.begin(), ::toupper)
+```
+
+## Type Conversion
+```cpp
+// Parses the string to an integer.
+stoi(str);
+
+/* Note: `atoi(str)` is a similar function, but `atoi()` is basically a C function
+   ----   and it parses C style strings (null terminated char arrays) to integers.
+          `stoi()` is a C++ function and it parses the C++ string objects to an
+          integer. Note that the `atoi` function will silently fail if the string
+          not convertible to an int, while the `stoi()` will throw an exception. */
+
+// Converts an integer type to string type.
+to_string(10);
 ```
 
 # Working with Numbers
@@ -391,43 +463,4 @@ newnode.some_function(newnode.data);
 
 # Strings
 
-* Case handling and comparing strings is complicated in C/C++. Python is better. 
-```cpp
-str.size()
-// Returns the size of the string
-str.empty()
-// Returns true if length of str is 0
-str.replace(9, 5, "Hello friend")
-// Replaces the next 5 characters from the 9th position by "Hello friend".
-str.substr(3, 5)
-// Returns a substring starting at position 3 and containing the next 5 characters (character at pos 3 included).
-str1.swap(str2)
-// Swaps the values of str1 and str2
-str.c_str()
-/* Returns a pointer to a null-terminated char array
-(C style string) containing the current value of the string.*/
-toupper(str[i])
-tolower(str[i])
-isalnum(str[i])
-// Checks if the ith character of str is upper/lower/alphanumeric.
-transform(str.begin(), str.end(), str.begin(), ::tolower)
-transform(str.begin(), str.end(), str.begin(), ::toupper)
-transform(str.begin(), str.end(), str.begin(), ::isalnum)
-/* Transform applies an an operation uniformly to each element of a
-sequence. the first two arguments specify the range in which operation
-has to be applied, the third argument defines the starting position from
-which the result would be stored, and the fourth argument is the
-operation that is to be applied. This can be used to add two arrays with a
-single line of code, or to convert a string to upper or lower case or
-remove all non alpha numeric characters etc. */
-s1.compare(s2)
-/*returns 0 if s1 is the same as s2  
-  returns a value < 0 if s1 is smaller than s2
-  returns a value > 0 if s1 is larger than s2
-*/
-
-str.find()
-str.rfing()
-compare()
-```
-# Bit manipulation
+* Write about C++ STL stack, queue, unordered_map, vector
