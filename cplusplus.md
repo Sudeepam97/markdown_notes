@@ -133,7 +133,7 @@ str = "hello friend";
 // C++ Strings are 0 indexed.
 str[1] = 'e';
 ```
-## Useful Functions
+## Operations on string
 ```cpp
 // Both are synonomus and return the length of the string.
 str.size();
@@ -164,17 +164,21 @@ str1.swap(str2)
 containing the current value of the `str` string object*/
 str.c_str()
 ```
-## Case conversion
+## Operations on characters of the string
 We cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
 
 ```cpp
 /* Checks if the ith character of str is 
   - Uppercase.
   - Lowercase.
-  - Alphanumeric.*/
+  - Alphanumeric.
+  - Alphabet.
+  - Numeric. */
 isupper(str[i]);
 islower(str[i]);
 isalnum(str[i]);
+isalpha(str[i]);
+isdigit(str[i]);
 
 /* Converts the ith character of str to
   - Uppercase
@@ -186,8 +190,8 @@ tolower(str[i]);
     OR
    returns `length(str_1) - length(str_2)` if one is a substring of another.
     OR 
-   if a difference is encountered at the ith position, returns (int) (str_1[i] - str_2[i]).
-   */
+   if the difference is encountered at the ith position, returns (int) (str_1[i] - str_2[i]).
+*/
 str_1.compare(str_2);
 
 // compare() can be used to compare substrings also, example...
@@ -227,6 +231,9 @@ stoi(str);
 
 // Converts an integer type to string type.
 to_string(10);
+
+https://www.geeksforgeeks.org/isalpha-isdigit-functions-c-example/
+
 ```
 
 ----------------------------------------------CONTINUE DOWN FROM HERE---------------------------------------------------------------
@@ -408,6 +415,10 @@ for (int i = 0; i <= 5; i++){
 * This makes sense because arrays can be quite big and it does not make sense to create new copies of them during function calls.
 * Unlike Arrays, vectors can be passed by Values.
 
+## Vectors
+This is a part of STL but we will cover it here, since it is more logical to do so.
+
+
 # Classes and Objects
 
 * Class is the blueprint, object is the instance of the blueprint.
@@ -457,6 +468,103 @@ newnode.some_function(newnode.data);
 
 # Inheritance
 
+# STL Containers
+
+## <stack> (LIFO)
+```cpp
+// declares an empty stack.
+stack<int> A;
+
+// Pushes a new element to the stack in O(1) time.
+A.push(newElement);
+
+// Pops an element off the stack in O(1) time.
+// pop() removes the top element, does not return its value.
+A.pop();
+
+// Top is used to get the top element (not pop). O(1) operation.
+A.top();
+
+// Returns true if Stack is empty and false otherwise. O(1).
+A.empty();
+
+// Returns the size of the Stack. O(1)
+A.size();
+```
+
+## <queue> (FIFO)
+```cpp
+// declares an empty queue.
+queue<int> A;
+
+// Pushes a new element to the queue in O(1) time.
+A.push(newElement);
+
+// Pops an element off the queue in O(1) time.
+// pop() removes the front element, does not return its value.
+A.pop();
+
+// Front is used to get the top element (not pop). O(1) operation.
+A.front();
+
+// Returns true if Queue is empty and false otherwise. O(1).
+A.empty();
+
+// Returns the size of the Queue. O(1)
+A.size();
+```
+
+## <unordered_map>
+* These are used to implement Hash tables.
+* Keys in an unordered map are unique.
+
+```cpp
+// declares an empty map. O(1)
+unordered_map<int, int> A;
+
+// Adding an key, value pair. O(1) average.           (CHECK)
+A.insert(key, value);
+
+/* Searches the container for elements whose key is `k` and returns the
+number of elements found. Because unordered_map containers do not allow 
+for duplicate keys, this means that the function actually returns 1 (int)
+if an element with that key exists in the container, and zero otherwise.*/
+A.count(k); 
+
+/* Can be used to acess the value corosponding to key `k`. If the key `k`
+does not exist, an out of bounds exception is thrown */
+A.at(k);
+
+// Returns the number of elements in the unordered_map container. O(1).
+A.size()
+
+// True if the container size is 0, false otherwise. O(1).
+A.empty();
+
+// Traversing the unordered_map.
+unordered_map<int, int>::iterator itr; // This is an iterator to the map
+/* Note: itr->first;  // The key.
+         itr->second; // The value. */
+for (itr = A.begin(); itr != A.end(); itr++){
+  cout << itr->first << "\t" << itr->second;
+}
+
+/* Returns an iterator to the element, if the specified key-value is found,
+   or unordered_map::end if the specified key is not found in the container.
+   O(1) average case. Rare worst case O(n). */
+unordered_map<int, int>::iterator itr = A.find(K);
+
+if (itr) == A.end())  //means that K does not exist in A.
+  return null;
+else
+  cout << itr->first << "\t" << itr->second; 
+
+// Erase from the map               (CHECK)
+if (A.find(K) != A.end())
+  A.erase(A.find(K));
+// OR
+A.erase(K);
+```
 
 # To- do
 * Static Members
@@ -494,11 +602,18 @@ newnode.some_function(newnode.data);
  `mid = start + (end - start) / 2`
 * Binary search can be implemented recursively also.
 * The concept of Binary Search can be used for finding x so that f(x) = p, if x is a monotonic function.
-* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or last index of an element in an array if it is present multiple times.
+* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
+  last index of an element in an array if it is present multiple times.
 
-# Strings
+
+
+
+
+
+
 
 * Write about C++ STL stack, queue, unordered_map, vector
+
 * OOP Concepts
   * **Encapsulation**: Wrapping together, all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
   * **Abstraction**: Means, know only the necessary parts. Creeating and using functions is a way of achieving this.
