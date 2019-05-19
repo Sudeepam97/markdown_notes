@@ -231,9 +231,6 @@ stoi(str);
 
 // Converts an integer type to string type.
 to_string(10);
-
-https://www.geeksforgeeks.org/isalpha-isdigit-functions-c-example/
-
 ```
 
 ----------------------------------------------CONTINUE DOWN FROM HERE---------------------------------------------------------------
@@ -296,6 +293,8 @@ int main() {
 }
 ```
 * If the function A (main), that calls the function B (function_name), is written before B, we need to declare B first. Do this using `int function_name(std::string);`
+* Note that it is not necessery to catch the value that is returned by a function.
+* If there is no catch, an inbuilt data type just stays there, ignored, and an object is destroyed.
 
 # Conditional Statements
 
@@ -470,7 +469,7 @@ newnode.some_function(newnode.data);
 
 # STL Containers
 
-## <stack> (LIFO)
+## stack (LIFO)
 ```cpp
 // declares an empty stack.
 stack<int> A;
@@ -492,7 +491,7 @@ A.empty();
 A.size();
 ```
 
-## <queue> (FIFO)
+## queue (FIFO)
 ```cpp
 // declares an empty queue.
 queue<int> A;
@@ -514,17 +513,82 @@ A.empty();
 A.size();
 ```
 
-## <unordered_map>
-* These are used to implement Hash tables.
+## tuple
+An object of the tuple class can hold a collection of multiple elements where each can be of different type.
+```cpp
+// Creating a Tuple
+std::tuple <std::string, char, float> student;
+std::string name = "Sudeepam";
+char gender = 'M';
+float gpa = 7.0;
+student = make_tuple(name, gender, gpa);
+
+// Acessing the elements of the Tuple
+std::string s_name = "";
+char s_gender = '\0';
+float s_gpa = 0.0;
+std::tie(s_name, s_gender, s_gpa) = student;
+```
+
+## pair
+* This class couples together a pair of values, both may of different types. This is a special case of tuple
+```cpp
+// Creating a Pair.
+std::pair<std::string, float> foo;
+foo = std::make_pair("Sudeepam", 7.0);
+// Acessing the elements of the pair
+cout << "name: " << foo.first << "\n";
+cout << "gpa: " << foo.first;
+```
+
+## unordered_map
+* These are implemented via Hash tables, and can be used for fast retrievals.
+* Elements are not sorted in any order.
 * Keys in an unordered map are unique.
+* Each element is an object of the `pair` class. Each iterator is therefore a pointer to a `pair` object.
+  Check below on how unorderd_maps can be traversed for more clarity.
 
 ```cpp
 // declares an empty map. O(1)
-unordered_map<int, int> A;
+unordered_map<int, int> gpa;
 
-// Adding an key, value pair. O(1) average.           (CHECK)
-A.insert(key, value);
+// Traversing the unordered_map.
+unordered_map<int, int>::iterator itr;    // This is an iterator to the map
+/* Note: itr->first;  OR (*itr).first;    // The key.
+         itr->second; OR (*itr).second;   // The value. */
+for (itr = A.begin(); itr != A.end(); itr++){
+  cout << itr->first << "\t" << itr->second;
+}
+```
+Methods for inserting Key-Value Pairs ...
+```cpp
+/* We have an overloaded insert() function which provides various methods
+to insert elements, into the unordered_map */.
 
+/* 1:
+With this, we can insert multiple elements in map. This version of insert()
+returns void, and since an unordered_map can have unique keys only, with this 
+method, there is no way to know which elements were added and which are not */
+gpa.insert({ {"Sudeepam", 7.0}, {"Charu", 7.2}, {"abcd", 6.9} } );
+// OR
+gpa["Sudeepam"] = 7.0; // This has the same behaviour.
+
+/* 2:
+This next version inserts a `std::pair` of key and value into the hashmap. It
+returns a `std::pair` of `iterator` and `boolean`. If the element is sucessfully
+inserted, the boolean is `true` and the iterator points to the newly inserted
+element. Else, the boolean is `false` and the iterator points to `NULL`. */
+unordered_map<int, int>::iterator itr;
+pair<itr, bool> result;
+result = A.insert(make_pair<int, int>(key, value));
+// OR
+pair<int, int> my_pair(key, value);
+A.insert(my_pair); // Note that it is not necessary to store the returned pair.
+// OR
+result = A.insert({key, value});
+```
+Other functions ....
+```cpp
 /* Searches the container for elements whose key is `k` and returns the
 number of elements found. Because unordered_map containers do not allow 
 for duplicate keys, this means that the function actually returns 1 (int)
@@ -541,29 +605,28 @@ A.size()
 // True if the container size is 0, false otherwise. O(1).
 A.empty();
 
-// Traversing the unordered_map.
-unordered_map<int, int>::iterator itr; // This is an iterator to the map
-/* Note: itr->first;  // The key.
-         itr->second; // The value. */
-for (itr = A.begin(); itr != A.end(); itr++){
-  cout << itr->first << "\t" << itr->second;
-}
-
 /* Returns an iterator to the element, if the specified key-value is found,
    or unordered_map::end if the specified key is not found in the container.
    O(1) average case. Rare worst case O(n). */
 unordered_map<int, int>::iterator itr = A.find(K);
-
 if (itr) == A.end())  //means that K does not exist in A.
   return null;
 else
   cout << itr->first << "\t" << itr->second; 
-
-// Erase from the map               (CHECK)
-if (A.find(K) != A.end())
-  A.erase(A.find(K));
-// OR
-A.erase(K);
+```
+Erasing elements from a map ...
+```cpp
+unordered_map<string, string>::iterator itr;
+/* 1:
+Return an iterator pointing to the position immediately following the last of the elements erased.*/
+itr = mymap.erase(mymap.begin());  // erasing by iterator
+/* 2:
+Returns an iterator pointing to the position immediately following the last of the elements erased.*/
+itr = mymap.erase(mymap.find("China"), mymap.end()); // erasing by range
+/* 3:
+Returns the number of elements erased. Since an unordered_map has unique keys, if an element did exist
+and is now erased, the returned value is 1, and if the element did not exist, the value is 0.*/
+int num = mymap.erase("France"); // erasing by key
 ```
 
 # To- do
