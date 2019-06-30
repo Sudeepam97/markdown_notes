@@ -1,13 +1,21 @@
 # Some Basics
-* Enclose strings within single `' '` or double `" "` quotes.
-* Use triple quotes `""" """` for multi-line strings.
-* % - Modulus operator of python.
 * `45.0` - An example of a floating point number.
 * Python uses PEMDAS (Parentheses Exponents Multiplication Division Addition Subtraction) to evaluate expressions.
-* Generalized length function of python is `len()`.
 * `\` is to escape next character and so `\\` can be used to get a backslash. `eg: print ("\\")`
 * Boolean values are `True` and `False`.
-* For exponents we do a `**` for example: `2**3 = 2^3`.
+
+# Operators
+
+| Operator     | Name           | Description                                            |
+|--------------|----------------|--------------------------------------------------------|
+| ``a + b``    | Addition       | Sum of ``a`` and ``b``                                 |
+| ``a - b``    | Subtraction    | Difference of ``a`` and ``b``                          |
+| ``a * b``    | Multiplication | Product of ``a`` and ``b``                             |
+| ``a / b``    | True division  | Quotient of ``a`` and ``b``                            |
+| ``a // b``   | Floor division | Quotient of ``a`` and ``b``, removing fractional parts |
+| ``a % b``    | Modulus        | Integer remainder after division of ``a`` by ``b``     |
+| ``a ** b``   | Exponentiation | ``a`` raised to the power of ``b``                     |
+| ``-a``       | Negation       | The negative of ``a``                                  |
 
 
 # Printing
@@ -49,16 +57,21 @@ print (statement.format (my_name)) # Argument of format goes within the {}
 
 
 # Strings
-Basics...
 ```python
-name = "Sudeepam Pandey"              # An object of the string class.
-print (name.lower ())                 # Convert to lower case (similarly name.upper()).
-print (name.isupper ())               # Check if everything is in upper case.
-print (name.lower().islower())        # Note that name.islower().lower() cannot be done.
-print (name.index ("e"))              # First index of `e`.
-print (name.index ("Pan")             # First index where "Pan" starts.
-print (name.replace ("Sud", "lol"))   # Replace the occurrence of 'Sud' with 'lol'
+"""Triple quotes are used to write
+multiline strings in python"""
+
+mystr = "Sudeepam Pandey."             # An object of the string class.
+print (mystr.lower ())                 # Convert to lower case (similarly mystr.upper()).
+print (mystr.isupper ())               # Check if everything is in upper case.
+print (mystr.lower().islower())        # Note that mystr.islower().lower() cannot be done.
+print (mystr.index ("e"))              # First index of `e`.
+print (mystr.index ("Pan")             # First index where "Pan" starts.
+print (mystr.replace ("Sud", 'lol'))   # Replace the occurrence of 'Sud' with 'lol'
+print (mystr.isdigit())                # Checks if `mystr` is a number. Returns False in this case.
+print (mystr.rstrip(',.'))             # Strips the characters '.' and ',' from the end of the string
 ```
+
 Strings can be concatenated with a `+` sign as demonstrated earlier.
 
 ```python
@@ -70,21 +83,25 @@ print ("My age is " + str(my_age))   # works
 ```
 
 
-# Common Math Functions
-```python
-str (5)                   # Converts the number 5 to a string.
+# Useful Functions
+```py
+help(func)                # Get the documentation for indenrifier specified by `func`
+len(x)                    # Generalized length function. x can be a string, list, etc.
 round (x)                 # Rounds off 'x' to the closest whole number (x = 3.5 -> 4 | x = 3.4 -> 3).
 abs (x)                   # Absolute value of 'x'.
 pow (x, y)                # Calculates x^y (x to the power of y).
 max (x, y)                # Max of x and y.
 min (x, y)                # Min of x and y.
+str (5)                   # Converts the number 5 to a string object.
+int ('c')                 # Converts a char to an int object.
+```
 
-# Requires importing the math module
+# Math module
+```py
 floor (x)                 # Greatest integer less than x.
 ceil (x)                  # Least integer greater than x.
 sqrt (x)                  # Square root of x.
 ```
-
 
 # Input at run time
 ```python
@@ -97,16 +114,16 @@ salary = float (input ("Your Salary? "))   # Prompts the user to input their sal
 
 
 # Lists
-* All elements of the list need not be of the same type.
+* Same list can accomodate elements of different types.
 * In python, accessing a nested list cannot be done with multi dimensional slicing like [0, 1:5].
-They do not work the way MATLAB or Numpy arrays work.
+They do not work the way MATLAB or NumPy arrays work.
 
-### Basics
+## Basics
 ```python
 # Example 1
 my_list = ["bro_1", 5, 'k', "bro_2"]
 print (my_list[0])      # Prints bro_1
-print (my_list[1])      # Prints bro_2
+print (my_list[-1])      # Prints bro_2
 
 # Example 2
 nums = [0, 1, 2, 3, 4, 5, 6]
@@ -116,8 +133,11 @@ print (nums[4:])        # Prints 4, 5, 6 (4 to end)
 # Example 3
 multi_list = [[[1, 2], [3, 4]],
               [[5, 6], [7, 8]]]
-# A three dimensional list. The outermost brackets 
-# decide the 1st dimension, and so on. Try this...
+
+# A three dimensional list has been defined above. The outermost brackets 
+# decide the 1st dimension, the next brackts decide the second and so on.
+# The following chunk of code can help you understand this... 
+
 print (multi_list[0, 0, 0])  # = 1
 print (multi_list[0, 0, 1])  # = 2
 print (multi_list[0, 1, 0])  # = 3
@@ -128,7 +148,7 @@ print (multi_list[1, 1, 0])  # = 7
 print (multi_list[1, 1, 1])  # = 8
 ```
 
-### Common functions
+## Common functions
 ```python
 lis_1 = [1, 2, 3, 4, 5]
 lis_2 = ["hello", "darkness", "my", "old", "friend"]
@@ -145,6 +165,12 @@ lis_2.sort()                     # Sorts the list.
 lis_2.count("old")               # Count how many times the entry "old" comes in the list.
 ```
 
+## List Comprehensions
+```py
+threshold = 5
+L = [1, 7, 5, 4, 3]
+elem_greater = [elem > threshold for elem in L]      # This is a list comprehension
+```
 
 # Tuples
 **Note:** Tuples are immutable.
@@ -277,6 +303,10 @@ try:
     val = 10 / 0
     num = int(input("Enter a number: "))
     print (num)
+# To catch the exact exception that was raised.
+except Exception as e:
+  print (e)
+# To catch specific type of errors.
 except ZeroDivisionError:
     print ("Divided by zero")
 except ValueError:
@@ -365,24 +395,36 @@ Examples of how arguments can be passed in python functions ...
 ```python
 # Example 1  (Pass by value)
 def pass_by_val (arg1, arg2):
+    """ This is a docstring. This is basically the
+    documentation of this function and this is what
+    is returned by the `help` function"""
     print (f"arg1: {arg1}, arg2: {arg2}")
-pass_by_val ("Sudeepam","Pandey")
 
+pass_by_val ("Sudeepam","Pandey")
+```
+```py
 # Example 2  (Returning values)
 def returning_stuff ():
     return "nothing here"
+
 message = returning_stuff ()
 print (message)
+```
 
+```py
 # Example 3 (Pack arguments into a dictionary)
 def pass_dictionary (*args):
     arg1, arg2 = args
     print (f"arg1: {arg1}, arg2: {arg2}")
-pass_dictionary ("Sudeepam","Pandey")
 
+pass_dictionary ("Sudeepam","Pandey")
+```
+
+```py
 # Example 4 (Passing file pointers)
 def print_file (f): 
     print (f.read())
+
 f = open ("text_file.txt")
 print_file(f)
 ```
@@ -448,9 +490,46 @@ class Student:
     #code...
 
 # Hidden members cannot be directly accessed from outside the class
-Student_1 = Student ()
-print (Student_1.__hidden)          # throws error
+Student1 = Student ()
+print (Student1.__hidden)          # throws error
 
 # Hidden members can be accessed with an extra line of code
-print (Student_1._Student__hidden)  # prints the hidden variable
+print (Student1._Student__hidden)  # prints the hidden variable
+```
+
+# Inheritance
+**Note:** The code snippets have been borrowed from [here](https://www.digitalocean.com/community/tutorials/understanding-class-inheritance-in-python-3).
+* In inheritance a class, usually called the superclass is inherited by a subclass.
+* Lets create a superclass first ...
+
+```python
+class Fish:
+  def __init__ (self, first_name, last_name = "Fish", skeleton = "bone", eyelids = False):
+    self.first _name = first_name
+    self.last_name = last_name
+    self.skeleton = skeleton
+    self.eyelids = eyelids
+
+    def swim (self):
+      print ("This fish is swimming")
+    
+    def swim_backwards (self):
+      print ("This fish can swim backwards")
+```
+
+* The subclass will be able to make use of methods and variables of the superclass
+* We can also choose to just use the existing members of the superclass by using the `pass` keyword, or we can add more members and override existing members.
+* Lets create a subclass ...
+
+```python
+# Example 1: using `pass`
+class Trout(Fish):
+    pass
+
+terry = Trout("Terry")
+print(terry.first_name + " " + terry.last_name)
+print(terry.skeleton)
+print(terry.eyelids)
+terry.swim()
+terry.swim_backwards()
 ```
