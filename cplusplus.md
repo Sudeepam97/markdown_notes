@@ -1,18 +1,18 @@
 # Everything C++ 
-
 C++ is an Object Oriented programming language and it was created by Bjrane Stroustrup.
 
-# Input and Output
 
+
+
+
+# Input and Output
 * `cin` (console in) is used to get user input at runtime.
 * `cout` (console out) is used to print a message on the console.
 * Both `cin` and `cout` are pre-defined objects.
 *  `>>` is called the `get_from` or `extraction` operator.
 *  `<<` is called the `put_to` or `insertion` operator.
-
 ```cpp
 // A basic program using the above concepts
-
 #include <iostream>
 int main() {
   int n;
@@ -23,15 +23,16 @@ int main() {
 }
 ```
 
+
+
+
+
 # Variables and Data Types
-
 * Variables are containers for data.
-
 * Data types can be pre-defined (like `int`) or user defined (like a `class` or a `struct`).
-
 * Unlike say, JAVA, the C++ standard does not strictly define the size of its in-built data types. The sizes are compiler dependent. What C++ does define is a rule for each data type, as in "double should have a precision not less than float". The exact precision is compiler defined and not C++ defined. The mandated rules can be found here: http://www.cplusplus.com/doc/tutorial/variables/
-
 * Given below, are the various built-in data types in C++, user defined data types will be discussed later. The sizes and range mentioned below are in accordance with GCC.
+
   * **char**: 1 byte. Allows us to store single characters with ASCII values b/w `[-128, 127]` (signed) or `[0, 255]` (unsigned).
     * **eg:** `char c = 'A';`
   * **short**: 2 bytes (16 bits). It allows us to store whole numbers b/w `[-2^15,  2^15 - 1]` (signed) `[0, 2^16 - 1]` (unsigned).
@@ -54,18 +55,23 @@ int main() {
 * Data types can be declared as `signed` or `unsigned`. These are data type modifiers. Declaration is like `unsigned int a = 5`.
 * Signed types can have negative numbers or their equivalents, whereas unsigned types can have non negative numbers only.
 
-# Special Values
 
+
+
+
+# Special Values
 * `\0` is the null character.
-* `null` is also the null character.
 * `NULL` is the null pointer.
 * `true` is boolean truth value.
 * `false` is boolean false value.
 
-# Bit-wise operations
 
-## Logical Operators
-### AND
+
+
+
+# Bit-wise Logical operations
+
+## AND
 ```cpp
 int a = 21;
 int b = 6;
@@ -73,7 +79,7 @@ int c = a & b; // '&' Returns the bitwise AND of a and b
 cout << c;     // 4
 ```
 
-### OR
+## OR
 ```cpp
 int a = 21;
 int b = 6;
@@ -81,7 +87,7 @@ int c = a | b; // '|' Returns the bitwise OR of a and b
 cout << c;     // 23
 ```
 
-### XOR
+## XOR
 ```cpp
 int a = 21;
 int b = 6;
@@ -89,7 +95,7 @@ int c = a & b; // '^' Returns the bitwise XOR of a and b
 cout << c;     // 19
 ```
 
-### NOT
+## NOT
 ```cpp
 int a = 21;
 int b = ~a; // '~' Returns the bitwise NOT of a and b
@@ -98,11 +104,16 @@ cout << b;  // -22
 * Just like we write `a += b` for `a = a + b`, we can write `a |= b` for ` a = a | b`.
 * bitwise operators work on integers whereas logical operators such as `&&` and `||` work on boolean.
 
-## Shift Operators
+
+
+
+
+# Shift Operators
 * Shift Operators should not be used for negative numbers, as the result is undefined.
 * Left Shift by `x` or right shift by `x` is equal to multiplication or division by pow(2, x) respectively.
 * The digits that overflow the range of the data type (on left shift), or underflow the range of the data type (on right shift) are lost, and this results in undefined behavior.
-### Left Shift Operator
+
+## Left Shift Operator
 ```cpp
 int a = 29;     // 0011101
 int x = 2;
@@ -110,17 +121,18 @@ int b = a << x; // Shifts the bits of `a` towards left by `x` digits and stores 
 cout << b;      // 116 = 1110100
 ```
 
-### Right Shift Operator
+## Right Shift Operator
 ```cpp
 int a = 29;     // 0011101
 int x = 2;
 int b = a >> x; // Shifts the bits of `a` towards right by `x` digits and stores the result in b.
 cout << b;      // 7 = 0000111
 ```
+* **This relation is often useful**: (A XOR B) XOR B = A
 
-## Points to remember.
-* (A XOR B) XOR B = A
-* 
+
+
+
 
 # Strings
 
@@ -133,6 +145,7 @@ str = "hello friend";
 // C++ Strings are 0 indexed.
 str[1] = 'e';
 ```
+
 ## Operations on string
 ```cpp
 // Both are synonomus and return the length of the string.
@@ -164,6 +177,7 @@ str1.swap(str2)
 containing the current value of the `str` string object*/
 str.c_str()
 ```
+
 ## Operations on characters of the string
 We cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
 
@@ -197,8 +211,8 @@ str_1.compare(str_2);
 // compare() can be used to compare substrings also, example...
 str_1 = "green apple";
 str_2 = "red apple";
-str_1.compare(6, 5, "apple");     // == 0
-str_1.compare(6, 5, str_2, 4, 5)  // == 0
+str_1.compare(6, 5, "apple");     // == 0 (compare str_1, beginning 6 and next 5 (6 included) to apple)
+str_1.compare(6, 5, str_2, 4, 5)  // == 0 (compare index 6,7,8,9,10 of str_1 to index 4,5,6,7,8 of str_2)
 
 /* Note: `str_1 == str_2` can be used to compare strings as well. This returns a 
    ----   boolean whereas  str1.compare(str_2) returns a signed int. Also,
@@ -233,16 +247,16 @@ stoi(str);
 to_string(10);
 ```
 
-----------------------------------------------CONTINUE DOWN FROM HERE---------------------------------------------------------------
+
+
+
 
 # Working with Numbers
-
 * The modulus operator is `%` and is defined for non negative integers only.
 * C++ follows PEDMAS.
 * `x++` first uses, then increments. `++x` first increments, then uses. We also have `x += 10` 
 * Any arithmetic between a decimal number and an integer returns a decimal number.
-
-Useful C++ math function
+* Below are some useful C++ math functions are
 ```cpp
 #include <cmath>
 
@@ -251,6 +265,14 @@ sqrt(7.5);  // Calculates the square root of 7.5
 round(4.1); // Rounds of 4.1
 fmax(3, 7); // Returns the bigger number, similarly fmin()
 ```
+
+* [These](https://www.quora.com/What-are-all-the-properties-of-modulo-which-can-be-used-in-programming-competitions)
+properties of modulo are very important.
+
+
+
+
+
 # Pointers and References
 
 ## Pointers
@@ -263,8 +285,7 @@ fmax(3, 7); // Returns the bigger number, similarly fmin()
 * If `ptr` is a pointer to an `int` then `ptr + 1` will increment this address by 4 bytes. If it is a pointer to `char` then the address is incremented by 1 byte.
 
 ## References
-* A reference is basically another name for an already existing variable,
-
+* A reference is basically another name for an already existing variable.
 ```cpp
 int i = 17;
 int& r = i; // `r` is our reference variable
@@ -272,32 +293,45 @@ int& r = i; // `r` is our reference variable
 
 ## Differences b/w pointers and references
 * You cannot have NULL references. You must always be able to assume that a reference is connected to a legitimate piece of storage.
-
-* Once a reference is initialized to an object, it cannot be changed to refer to another object. Pointers can be pointed to another object at any time.
-
+* Once a reference is initialized to an object, it cannot be changed to refer to another object. Pointers can be pointed to another object at any time. Remove any confusions here in the example with `i` and `r` above, we can say `r = 14` and that is
+fine, the value to which a reference points can change. But we cannot change `r` to point to a different variable say `j`.
+We cannot say `r = j`. Whereas this is possible with pointers.
 * A reference must be initialized when it is created. Pointers can be initialized at any time.
 
-# Functions
 
+
+
+
+# Functions
 * C++ functions are call by value, call by pointer, or call by reference.
 * The program below shows a basic example of a function.
+
 ```cpp
 int function_name(std::string name) {
   cout << "enter your age " << name;
   std::cin >> age;
   return age;
 }
+
 int main() {
   age = function_name("Sudeepam");
   std::cout << "Your age is: " << age;
 }
 ```
+
 * If the function A (main), that calls the function B (function_name), is written before B, we need to declare B first. Do this using `int function_name(std::string);`
 * Note that it is not necessery to catch the value that is returned by a function.
-* If there is no catch, an inbuilt data type just stays there, ignored, and an object is destroyed.
+* If there is no catch, an inbuilt data type just stays in the memory, ignored. Whereas an object of a user defined data type is destroyed when the control leaves it's scope.
+
+
+
+
 
 # Conditional Statements
-
+* `&&` is used for **AND**.
+* `||` is used for **OR**.
+* `==` is used for **equals**.
+* `!=` is used for **not equals**.
 ```cpp
 int main(){
   bool isMale;
@@ -313,14 +347,13 @@ int main(){
   }
   return 0;
 }
-``` 
-* `&&` is used for **AND**.
-* `||` is used for **OR**.
-* `==` is used for **equals**.
-* `!=` is used for **not equals**.
+```
+
+
+
+
 
 # Switch statements
-
 ```cpp
   std::cout << "enter choice (A/B/1/2)";
   char choice
@@ -346,50 +379,80 @@ int main(){
       std::cout << "error: invalid choice. \n";
 ```
 
+
+
+
+
 # While Loops
-
 * Checks the condition and then executes the code.
-
 ```cpp
 int index = 1; // No execution if index = 6 initially
-while  (index <= 5){
+while  (index <= 5) {
   std::cout << index;
-  index ++ ;
+  index++;
 }
 ```
 
+
+
+
+
 # Do while loops
-
 * Executes the code and then checks the condition to see if execution must be done again.
-
 ```cpp
 int index = 1; // One execution if index = 6 initially
-do{
+do {
   std::cout << index;
-  index ++;
-} while index <= 5
+  index++;
+}
+while index <= 5;
 ```
 
-# For loops
 
+
+
+
+# For loops
 ```cpp
 for (int i = 0; i <= 5; i++){
   std::cout << i;
 }
 ```
+
+
+
+
+
 # Arrays
 
 ## Basics
 * C++ arrays can hold multiple values of the same data type.
+
 * To create an integer array (say):
   * `int nums[] = {4, 8, 15, 16, 23};`
+
 * The array above can store only the specified numbers. If we need to store,  say 20 numbers, we can declare the array as ...
-  * `int arr[20];`
-  * OR, with initialization, `int arr[20] = {};`
-  * OR, specify first few (say 3) elements, `int nums[] = {4, 8, 15};`
+  ```cpp
+  int arr[20];
+  ```
+
+* The above declaration results in array being filled with garbage values. A better practice is to initialize arrray as follows,
+  ```cpp
+  int arr[20] = {}; // initialize with default values of data types
+  ```
+  * OR, specify first few (say 3) elements,
+  ```cpp
+  int nums[20] = {4, 8, 15};
+  ```
+
 * We can also create a 2D or rather, an N-D array like:
-  * `int nums[][] = {{1, 2}, {3, 4}, {5, 6}};`
-  * Initialization is similar to 1D arrays.
+  ```cpp
+  // Initialization is similar to 1D arrays.
+  int nums[][] = { {1, 2},
+                   {3, 4},
+                   {5, 6} } ;
+  ```
+
 * In C and C++ we cannot have something like
   ```cpp
   n = 10; 
@@ -397,29 +460,40 @@ for (int i = 0; i <= 5; i++){
   ```
   Hence, we use vectors for dynamic arrays.
 
-## Some important points
-
-### Arrays and Pointers.
+## Arrays and Pointers.
 * When I declare an array, like `int arr[20]`. The variable `arr` actually stores the address of the first element of the array and `cout << arr` will actually print this address. `cout << *arr` will print the first element of the array. `cout << *(arr + 1)` will print the second element of the array.
+
 * So for an array we can get address of ith element with `&arr[i]` or `arr+i` and value with `arr[i]` or `*(arr + i)`.
-* Also, if we have `int arr[]` then a pointer to this would be created as `int *p = arr`. `p++` is valid whereas `arr++` is not, even though both are pointers. `arr + 1` however, is valid. Similary, something like `p = arr` is valid but `arr = p` is not.
+
+* Also, if we have `int arr[]` then a pointer to this would be created as `int *p = arr`.
+
+* `p++` is valid whereas `arr++` is not, even though both are pointers. `arr + 1` however, is valid. Similary, something like `p = arr` is valid but `arr = p` is not.
+
 * When I do something like `B[2][3]` then `B[0]` and `B[1]` are 1-D arrays of 3 integers each. `B` will be a pointer **to a 1D array of 3 integers**.
+
 * A statement like `int *p = B` will throw an error because B is not a pointer to an integer, it is a pointer to a 1-D array. int `(*p)[3] = B` is fine.
+
 * `cout<< B+1` will return the address of `B[1][0]`
+
 * Output of `cout << *(B+1)` is insightful. When `B+1` is a pointer to a 1D array of 3 integers, so when we de-reference it, `B+1` will give us the whole 1D array, i.e. `B[1]`, which means we are printing the name of the 1D array `B[1]` which will give us the starting address of this 1D array. Hence `cout << *(B+1)` returns the address of `B[1][0]`.
+
 * **Practice**: `cout << *(*B + 1)` will print the value at `B[0][1]`.
 
-### Arrays and Functions.
+## Arrays and Functions.
 * Arrays are never passed by value in a function. If I write a function definition as `void func_name(int arr[])`, The local variable `arr` is treated by the compiler, as a pointer to the original array which was passed during the call. Hence, arrays are always passed by reference.
+
 * This makes sense because arrays can be quite big and it does not make sense to create new copies of them during function calls.
+
 * Unlike Arrays, vectors can be passed by Values.
 
 ## Vectors
-This is a part of STL but we will cover it here, since it is more logical to do so.
+Please see Vectors under the section of STL below. Worry not, you can read it before reading the next topic.
+
+
+
 
 
 # Classes and Objects
-
 * Class is the blueprint, object is the instance of the blueprint.
 * Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
 ```cpp
@@ -461,13 +535,23 @@ node newnode (0, NULL);   // Using constructor
 newnode.data = 4;
 newnode.some_function(newnode.data);
 ```
-
 * Check out acess specifiers and OOP using classes and objects.
 * C++ structures are basically the same as C++ classes. The main differece is that, in a class all members are `private` by default, and in a structure all members are `public` by default.
 
+
+
+
+
 # Inheritance
 
+
+
+
+
 # STL Containers
+
+## vectors
+
 
 ## stack (LIFO)
 ```cpp
@@ -491,6 +575,7 @@ A.empty();
 A.size();
 ```
 
+
 ## queue (FIFO)
 ```cpp
 // declares an empty queue.
@@ -513,6 +598,13 @@ A.empty();
 A.size();
 ```
 
+
+## Dequeue
+
+
+## Priority Queue
+
+
 ## tuple
 An object of the tuple class can hold a collection of multiple elements where each can be of different type.
 ```cpp
@@ -530,6 +622,7 @@ float s_gpa = 0.0;
 std::tie(s_name, s_gender, s_gpa) = student;
 ```
 
+
 ## pair
 * This class couples together a pair of values, both may of different types. This is a special case of tuple
 ```cpp
@@ -540,6 +633,7 @@ foo = std::make_pair("Sudeepam", 7.0);
 cout << "name: " << foo.first << "\n";
 cout << "gpa: " << foo.first;
 ```
+
 
 ## unordered_map
 * These are implemented via Hash tables, and can be used for fast retrievals.
@@ -563,7 +657,7 @@ for (itr = A.begin(); itr != A.end(); itr++){
 Methods for inserting Key-Value Pairs ...
 ```cpp
 /* We have an overloaded insert() function which provides various methods
-to insert elements, into the unordered_map */.
+to insert elements, into the unordered_map */. 
 
 /* 1:
 With this, we can insert multiple elements in map. This version of insert()
@@ -629,6 +723,21 @@ and is now erased, the returned value is 1, and if the element did not exist, th
 int num = mymap.erase("France"); // erasing by key
 ```
 
+
+## unordered_set
+
+
+## map
+
+
+## set
+
+
+
+
+
+
+
 # To- do
 * Static Members
 * Destructor
@@ -645,8 +754,9 @@ int num = mymap.erase("France"); // erasing by key
 * Namespace
 * STL
 
-# Algorithms
 
+
+# Algorithms (eventually remove from here and add to interviewbit notes.)
 * Sorting algos
 * Sieve of erathosthenes.
 * Learn to Use terniary operators for conditions.
@@ -672,7 +782,7 @@ int num = mymap.erase("France"); // erasing by key
 
 
 
-
+* Optimal Solution: Dynamic Programming, All solutions: Backtracking.
 
 
 * Write about C++ STL stack, queue, unordered_map, vector
