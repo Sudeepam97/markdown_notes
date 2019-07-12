@@ -494,63 +494,347 @@ Please see Vectors under the section of STL below. Worry not, you can read it be
 
 
 # Classes and Objects
-* Class is the blueprint, object is the instance of the blueprint.
-* Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
+* Basics
+  * Class is the blueprint, object is the instance of the blueprint.
+  * Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
+
+* Access Specifiers
+  * Public members can be accessed outside the class with an object of the class.
+  * Private members can be accessed within the class only.
+  * Can be accessed outside the class but only in a class derived (Inheritance) from this class.
+
+* Contructor
+  * Constructor is a special function that is called when an object of the class is created.
+  * Constructors are mostly used to initialize member variables but can contain code for other tasks as well.
+  * Constructors do not have a return type.
+  * If we do not define a constructor then compiler makes one for us.
+  * Howerver if we have defined even one, compiler wont make any.
+
 ```cpp
 class node {
-  public: // Public members can be accessed outside the class with an object of the class
+  public:
     int data;
     node *next;
-    
-    // Constructor is a special function that is called when an object of the class is created.
-    
-    node (){ // Non parameterized constructor
+
+    node() {                              // Non parameterized constructor
       data = 0;
       next = NULL;
     }
 
-    node(int ob_data, node *ob_next){ // Parameterized constructor
+    node(int ob_data, node *ob_next) {    // Parameterized constructor
       data = ob_data;
       next = ob_next;
-      // Constructors are mostly used to initialize member variables but can contain code for other tasks as well.
     }
 
-  private: // Private members can be accessed within the class only
+  private:
     void some_function (int val){
-      // Code
+      // Code...
+      // Code...
     }
 
-  protected: // Can be accessed outside the class but only in a class derived (Inheritance) from this class.
+  protected:
     int some_var;
-    int some_other_function (){
-      // Code
+    int some_other_function () {
+      // Code...
+      // Code...
     }
 };
 
-node newnode;             // An Object, no constructor used
-node *newnode_ptr;        // An Object Pointer
-node newnode (0, NULL);   // Using constructor
+node newnode;             // Creating an Object, default constructor used
+node *newnode_ptr;        // Creating an Object Pointer
+node newnode (0, NULL);   // Using parameterized constructor
 
 // This is how we can acess the members of a class.
 newnode.data = 4;
 newnode.some_function(newnode.data);
 ```
-* Check out acess specifiers and OOP using classes and objects.
 * C++ structures are basically the same as C++ classes. The main differece is that, in a class all members are `private` by default, and in a structure all members are `public` by default.
 
 
 
 
 
-# Inheritance
+# `new` and `delete`
+* The `new` and `delete` keywords are used for dynamic memory allocation in C++.
+* Dynamic memory is allocated in `heap` memory whereas rest is in `stack`. Study this in detail later.
+```cpp
+// Syntax for new
+struct demo {
+  int a;
+  int b;
+  demo() {
+    a = 0;
+    b = 0;
+  }
+  demo(int x, int y){
+    a = x;
+    b = y;
+  }
+}
+
+demo ptr* = new demo();         // Now memory is allocated for an instance of `demo` and a `ptr` is a pointer to it.
+demo ptr* = new demo(10, 20)    // Dynamic memory allocation with initialization.
+
+// It makes sense to use Dynamic Memory for structures but we can
+// actually have dynamic memory for default data types as well.
+int ptr* = new int(25);
+
+// Here, we dynamically allocate continous memory for an array
+// of ints of and returns pointer to the first element array.
+int *ptr = new int[10]
+```
+* If enough memory is not available in the heap to allocate, the new request indicates failure by throwing an exception of type std::bad_alloc, this can be prevented if “nothrow” is used with the new operator, in which case it returns a NULL pointer.
+* Dynamically allocated memory is not freed until explicitly freed by the programmer or untill the program terminates.
+* Enters the `delete` keyword. This is used to free dynamically allocated memory.
+```cpp
+// Syntax
+delete ptr;
+```
 
 
+
+
+
+# this
+
+
+
+
+
+# friend
+
+
+
+
+
+# Destructor
+* Destructor is a member function which destructs or deletes an object.
+* A destructor function is called automatically when the object goes out of scope.
+* Destructors have same name as the class preceded by a tilde (~).
+* Destructors don’t take any argument and don’t return anything.
+* There can only one destructor in a class with classname preceded by (~) no parameters and no return type.
+* The default destructor created by a compiler works fine unless we have dynamically allocated memory or pointer in class.
+* When a class contains a pointer to memory allocated in class, we should write a destructor to release memory before the class instance is destroyed. This must be done to avoid memory leak.
+```cpp
+// example of destructor
+class demo { 
+  int i; 
+  public: 
+    demo() { 
+      i = 0; 
+    } 
+    ~demo() {
+      // Check what to write.
+    } 
+};
+```
+
+
+
+
+# `static` keyword
+* Static keyword can be used for variables and functions...
+
+## Static Variables
+```cpp
+// synatx to declare a static variable.
+static int count = 0;
+```
+
+### Static variables in a Function
+* When a variable is declared as static, space for it gets allocated for the lifetime of the program.
+* Even if the function is called multiple times, space for the static variable is allocated only once.
+* Thus, the value of variable in the previous call gets carried through the next function call.
+
+### Static variables in a class
+* As the variables declared as static are initialized only once the static variables in a class are shared by the objects.
+* Because of this reason static variables can not be initialized using constructors.
+
+### Static objects of a class.
+* The life of an object is within the function in which it was declared.
+* When the closing braces `}` are encountered a destructor is called by C++ to destroy the object. (Do note that destructor is not called for dynamically allocated memory, i.e. for class type pointers(which I wrongly call object pointers)).
+* For a non static object, the execution is like...
+  * object created.
+  * destructor called.
+  * execution of program ends.
+* For a static object, similar to a static variable, execution is like..
+  * object created.
+  * execution of program ends.
+  * destructor called.
+```cpp
+#include<iostream> 
+using namespace std; 
+  
+class demo { 
+  int i; 
+  public: 
+    demo() { 
+      i = 0; 
+      cout << "Inside Constructor\n"; 
+    } 
+    ~demo() {
+      cout << "Inside Destructor\n"; 
+    } 
+}; 
+  
+int main() {
+  int x = 0; 
+  if (x == 0) { 
+    demo obj; 
+  } 
+  cout << "End of main\n"; 
+}
+/* Output...
+Inside Constructor
+Inside Destructor
+End of main
+
+...declare obj as `static GfG obj` and see the new output */
+```
+## Static Functions
+* Functions within a class and outside a class both can be static, but the two are entirely different.
+
+### Static member functions of a class
+* Static member functions of a class, do not depend on object of class.
+* We are allowed to invoke a static member function using an object of the class but it is recommended to invoke the static member functions using the scope resolution operator for redability.
+* Static member functions are allowed to access only the static data members or other static member functions, they can not access the non-static data members or member functions of the class.
+
+```cpp
+#include<iostream> 
+using namespace std; 
+  
+class demo { 
+  public:
+    static void print_message() { 
+      cout << "This is static biatch!"; 
+    }
+}; 
+
+int main() { 
+    demo::print_message(); 
+} 
+```
+
+### Static functions outside class
+* Static functions, are function which are available only in the module they are defined in.
+* They are not exported and cannot be put in a header file and used in another C++ file.
+* This way you can write different functions sharing the same name, and also the compiler may optimize your code more thoroughly by inlining the function, knowing that no other file is dependant on it.
+
+
+
+
+
+# Operator overloading
+
+
+
+
+
+# To- do
+* Method Overloading and Overriding (We say this when making two constructors)
+* Copy constructor
+* Inheritance
+* OOP from gfg.
+* important functions in C++ like binary_search and gcd
+
+* Virtual funtion
+* Abstract Classes
+
+* File Handling
+* Exception Handling
+* Namespace
 
 
 
 # STL Containers
 
+## tuple
+* An object of the tuple class can hold a collection of multiple elements where each can be of different type.
+```cpp
+// Creating a Tuple
+tuple <string, char, float> student;
+string name = "Sudeepam";
+char gender = 'M';
+float gpa = 7.0;
+student = make_tuple(name, gender, gpa);
+
+// Acessing the elements of the Tuple
+string s_name = "";
+char s_gender = '\0';
+float s_gpa = 0.0;
+tie(s_name, s_gender, s_gpa) = student;
+```
+
+
+## pair
+* This class couples together a pair of values, both may of different types. This is a special case of tuple
+```cpp
+// Creating a Pair.
+pair<string, float> foo;
+foo = make_pair("Sudeepam", 7.0);
+// Acessing the elements of the pair
+cout << "name: " << foo.first << "\n";
+cout << "gpa: " << foo.first;
+```
+
+
 ## vectors
+* Vectors are dynamic arrays.
+```cpp
+// Declaring an empty vector.
+vector<int> v;
+
+// Declaring an empty vector of some size.
+// elements are initialized by default values.
+vector<int> v(10);
+
+// Initializing a vector with some value (say 3).
+vector<int> v(10, 3);
+
+// WE DO NOT initialize a few elements like this.
+vector<int> v(10) = {1, 2, 3};
+```
+
+* Important funtions related to vectors
+```cpp
+// Returns an iterator to the start of vector
+v.begin();
+
+// Returns an iterator to the end of vector
+v.end();
+
+// Returns true if the vector is empty
+v.empty();
+
+// Returns the number of elements in the vector
+v.size();
+
+// Returns the capacity of the vector
+v.capacity();
+
+// Difference between capacity and size arize because vector
+// capacity is doubled when if it needs to fit more elements.
+vector<int> myvector;
+for (int i = 0; i < 5; i++)
+  myvector.push_back(i);
+cout << "size = " << myvector.size() << '\n';           // size = 5 
+cout << "capacity = " << myvector.capacity() << '\n';   // capacity = 8
+```
+
+* Elements of a vector are 0 indexed and can be accessed via `[]` or `.at()` function.
+* `[]` silently fails if an element is not found whereas `.at()` throws an error. 
+
+```cpp
+// examples of element access
+a = v[1];
+b = v.at(0);
+
+// push an element at the rear
+v.push_back(elem);
+
+// pop an element from rear
+v.pop_back();
+```
 
 
 ## stack (LIFO)
@@ -599,39 +883,49 @@ A.size();
 ```
 
 
-## Dequeue
+## dequeue
 
 
-## Priority Queue
-
-
-## tuple
-An object of the tuple class can hold a collection of multiple elements where each can be of different type.
+## priority_queue
+* Priority Queues are implemented via heaps. Elements are ordered via ascending or descending order according to some priority.
+* A max heap is constructed by default, but a min heap can also be formed.
+* duplicates can exist in a priority queue.
 ```cpp
-// Creating a Tuple
-std::tuple <std::string, char, float> student;
-std::string name = "Sudeepam";
-char gender = 'M';
-float gpa = 7.0;
-student = make_tuple(name, gender, gpa);
+// Declare a priority queue
+priority_queue<int> pq;
 
-// Acessing the elements of the Tuple
-std::string s_name = "";
-char s_gender = '\0';
-float s_gpa = 0.0;
-std::tie(s_name, s_gender, s_gpa) = student;
-```
+// Returns true if priority queue is empty, else false.
+pq.empty();
 
+// Returns the size of the priority queue.
+pq.size();
 
-## pair
-* This class couples together a pair of values, both may of different types. This is a special case of tuple
-```cpp
-// Creating a Pair.
-std::pair<std::string, float> foo;
-foo = std::make_pair("Sudeepam", 7.0);
-// Acessing the elements of the pair
-cout << "name: " << foo.first << "\n";
-cout << "gpa: " << foo.first;
+// Returns the value of the highest priority element of a priority queue
+pq.top();
+
+// Inserts an element into priority queue
+pq.push(5);
+pq.push(a);
+
+// pops the highest priority element from the queue
+pq.pop();
+
+// priority queue of pair of elements. Elements are ordered by first value of pair.
+priority_queue<pair<int, int> > pq;
+
+// Syntax to create a min heap priority queue is as follows:
+priority_queue <Type, vector<Type>, ComparisonType > min_heap_pq;
+
+// Min heap priority queue of integers
+priority_queue <int, vector<int>, greater<int> > pq;
+
+// Min heap priority queue of pairs
+typedef pair<int, int> pair_type;
+priority_queue <pair_type, vector<pair_type>, greater<pair_type> > pq;
+
+// Priority queue for user defined type
+// We use operator overloading for this.
+// More on this later.
 ```
 
 
@@ -654,34 +948,36 @@ for (itr = A.begin(); itr != A.end(); itr++){
   cout << itr->first << "\t" << itr->second;
 }
 ```
-Methods for inserting Key-Value Pairs ...
+
+* Methods for inserting Key-Value Pairs ...
 ```cpp
 /* We have an overloaded insert() function which provides various methods
-to insert elements, into the unordered_map */. 
+to insert elements, into the unordered_map */.
 
-/* 1:
-With this, we can insert multiple elements in map. This version of insert()
-returns void, and since an unordered_map can have unique keys only, with this 
-method, there is no way to know which elements were added and which are not */
+/* 1: With this, we can insert multiple elements in map. This version of insert()
+      returns void, and since an unordered_map can have unique keys only, with this 
+      method, there is no way to know which elements were added and which are not */
 gpa.insert({ {"Sudeepam", 7.0}, {"Charu", 7.2}, {"abcd", 6.9} } );
 // OR
 gpa["Sudeepam"] = 7.0; // This has the same behaviour.
 
-/* 2:
-This next version inserts a `std::pair` of key and value into the hashmap. It
-returns a `std::pair` of `iterator` and `boolean`. If the element is sucessfully
-inserted, the boolean is `true` and the iterator points to the newly inserted
-element. Else, the boolean is `false` and the iterator points to `NULL`. */
+/* 2: This next version inserts a `std::pair` of key and value into the hashmap. It
+      returns a `std::pair` of `iterator` and `boolean`. If the element is sucessfully
+      inserted, the boolean is `true` and the iterator points to the newly inserted
+      element. Else, the boolean is `false` and the iterator points to `NULL`. */
 unordered_map<int, int>::iterator itr;
 pair<itr, bool> result;
 result = A.insert(make_pair<int, int>(key, value));
+
 // OR
 pair<int, int> my_pair(key, value);
 A.insert(my_pair); // Note that it is not necessary to store the returned pair.
+
 // OR
 result = A.insert({key, value});
 ```
-Other functions ....
+
+* Other functions ....
 ```cpp
 /* Searches the container for elements whose key is `k` and returns the
 number of elements found. Because unordered_map containers do not allow 
@@ -708,51 +1004,34 @@ if (itr) == A.end())  //means that K does not exist in A.
 else
   cout << itr->first << "\t" << itr->second; 
 ```
-Erasing elements from a map ...
+
+* Erasing elements from a map ...
 ```cpp
 unordered_map<string, string>::iterator itr;
-/* 1:
-Return an iterator pointing to the position immediately following the last of the elements erased.*/
+/* 1: Return an iterator pointing to the position immediately following the last of the elements erased.*/
 itr = mymap.erase(mymap.begin());  // erasing by iterator
-/* 2:
-Returns an iterator pointing to the position immediately following the last of the elements erased.*/
+/* 2: Returns an iterator pointing to the position immediately following the last of the elements erased.*/
 itr = mymap.erase(mymap.find("China"), mymap.end()); // erasing by range
-/* 3:
-Returns the number of elements erased. Since an unordered_map has unique keys, if an element did exist
-and is now erased, the returned value is 1, and if the element did not exist, the value is 0.*/
+/* 3: Returns the number of elements erased. Since an unordered_map has unique keys, if an element did exist
+      and is now erased, the returned value is 1, and if the element did not exist, the value is 0.*/
 int num = mymap.erase("France"); // erasing by key
 ```
 
+## unordered_multiset
 
 ## unordered_set
 
+## unordered_multiset
 
 ## map
 
-
 ## set
 
+## multimap
+
+## multiset
 
 
-
-
-
-
-# To- do
-* Static Members
-* Destructor
-* Operator Overloading
-* friend, this, new, and delete functions
-* Method Overloading and Overriding
-* Virtual funtion
-* Abstract Classes
-* File Handling
-* Type Conversion
-* Templates
-* Initializers
-* Exception Handling
-* Namespace
-* STL
 
 
 
@@ -778,6 +1057,7 @@ int num = mymap.erase("France"); // erasing by key
 * This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
   last index of an element in an array if it is present multiple times.
 
+## __gcd()
 
 
 
@@ -785,7 +1065,6 @@ int num = mymap.erase("France"); // erasing by key
 * Optimal Solution: Dynamic Programming, All solutions: Backtracking.
 
 
-* Write about C++ STL stack, queue, unordered_map, vector
 
 * OOP Concepts
   * **Encapsulation**: Wrapping together, all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
