@@ -113,7 +113,7 @@ cout << b;  // -22
 * Left Shift by `x` or right shift by `x` is equal to multiplication or division by pow(2, x) respectively.
 * The digits that overflow the range of the data type (on left shift), or underflow the range of the data type (on right shift) are lost, and this results in undefined behavior.
 
-## Left Shift Operator
+## <u>Left Shift Operator</u>
 ```cpp
 int a = 29;     // 0011101
 int x = 2;
@@ -121,7 +121,7 @@ int b = a << x; // Shifts the bits of `a` towards left by `x` digits and stores 
 cout << b;      // 116 = 1110100
 ```
 
-## Right Shift Operator
+## <u>Right Shift Operator</u>
 ```cpp
 int a = 29;     // 0011101
 int x = 2;
@@ -136,7 +136,7 @@ cout << b;      // 7 = 0000111
 
 # Strings
 
-## Basics
+## <u>Basics</u>
 `string` is an inbuilt class in C++ that allows us to work with strings (sequence of characters). C++ string objects are much more powerful than the C style strings (null terminated char arrays).
 ```cpp
 string str; // str is an object of the string class of C++.
@@ -146,7 +146,7 @@ str = "hello friend";
 str[1] = 'e';
 ```
 
-## Operations on string
+## <u>Operations on string</u>
 ```cpp
 // Both are synonomus and return the length of the string.
 str.size();
@@ -178,7 +178,7 @@ containing the current value of the `str` string object*/
 str.c_str()
 ```
 
-## Operations on characters of the string
+## <u>Operations on characters of the string</u>
 We cannot check for the case, or convert case of the entire string object directly. It has to be done character wise.
 
 ```cpp
@@ -232,7 +232,7 @@ transform(str.begin(), str.end(), str.begin(), ::tolower)
 transform(str.begin(), str.end(), str.begin(), ::toupper)
 ```
 
-## Type Conversion
+## <u>Type Conversion</u>
 ```cpp
 // Parses the string to an integer.
 stoi(str);
@@ -242,6 +242,9 @@ stoi(str);
           `stoi()` is a C++ function and it parses the C++ string objects to an
           integer. Note that the `atoi` function will silently fail if the string
           not convertible to an int, while the `stoi()` will throw an exception. */
+
+// Parses a string to decimal.
+stod(str);
 
 // Converts an integer type to string type.
 to_string(10);
@@ -258,12 +261,13 @@ to_string(10);
 * Any arithmetic between a decimal number and an integer returns a decimal number.
 * Below are some useful C++ math functions are
 ```cpp
-#include <cmath>
-
-pow(3, 4);  // Calculates 3^4
-sqrt(7.5);  // Calculates the square root of 7.5
+pow(3, 4);  // Calculates 3^4. Returns a double
+sqrt(7.5);  // Calculates the square root of 7.5. Returns a double
+log(8);     // Returns the natural log of 8. log10(8) for base 8.
 round(4.1); // Rounds of 4.1
-fmax(3, 7); // Returns the bigger number, similarly fmin()
+max(3, 7);  // Returns the bigger number, similarly min()
+
+**Note**: `pow` function when typecasted to an `int` should be typecasted as (int)(pow(x) + 0.5).
 ```
 
 * [These](https://www.quora.com/What-are-all-the-properties-of-modulo-which-can-be-used-in-programming-competitions)
@@ -275,7 +279,7 @@ properties of modulo are very important.
 
 # Pointers and References
 
-## Pointers
+## <u>Pointers</u>
 * To create a pointer variable of integer type do `int *num` or `int* num`. Both are same, the later is more sensible.
 * `node* get_parent(node *root)` is an example of how pointers can be passed to and returned from functions.
 * `&var` gives us the address where the variable `var` is stored. 
@@ -284,14 +288,14 @@ properties of modulo are very important.
 `ob_ptr->var` which essentially is equal to `(*ob_ptr).var`.
 * If `ptr` is a pointer to an `int` then `ptr + 1` will increment this address by 4 bytes. If it is a pointer to `char` then the address is incremented by 1 byte.
 
-## References
+## <u>References</u>
 * A reference is basically another name for an already existing variable.
 ```cpp
 int i = 17;
 int& r = i; // `r` is our reference variable
 ```
 
-## Differences b/w pointers and references
+## <u>Differences b/w pointers and references</u>
 * You cannot have NULL references. You must always be able to assume that a reference is connected to a legitimate piece of storage.
 * Once a reference is initialized to an object, it cannot be changed to refer to another object. Pointers can be pointed to another object at any time. Remove any confusions here in the example with `i` and `r` above, we can say `r = 14` and that is
 fine, the value to which a reference points can change. But we cannot change `r` to point to a different variable say `j`.
@@ -307,7 +311,11 @@ We cannot say `r = j`. Whereas this is possible with pointers.
 * The program below shows a basic example of a function.
 
 ```cpp
-int function_name(std::string name) {
+int function_name(std::string name = "") { // default value for name is ""
+  if (name == ""){
+    cout << "name not specified\n";
+    return -1;
+  }
   cout << "enter your age " << name;
   std::cin >> age;
   return age;
@@ -425,7 +433,7 @@ for (int i = 0; i <= 5; i++){
 
 # Arrays
 
-## Basics
+## <u>Basics</u>
 * C++ arrays can hold multiple values of the same data type.
 
 * To create an integer array (say):
@@ -460,7 +468,7 @@ for (int i = 0; i <= 5; i++){
   ```
   Hence, we use vectors for dynamic arrays.
 
-## Arrays and Pointers.
+## <u>Arrays and Pointers</u>
 * When I declare an array, like `int arr[20]`. The variable `arr` actually stores the address of the first element of the array and `cout << arr` will actually print this address. `cout << *arr` will print the first element of the array. `cout << *(arr + 1)` will print the second element of the array.
 
 * So for an array we can get address of ith element with `&arr[i]` or `arr+i` and value with `arr[i]` or `*(arr + i)`.
@@ -479,15 +487,32 @@ for (int i = 0; i <= 5; i++){
 
 * **Practice**: `cout << *(*B + 1)` will print the value at `B[0][1]`.
 
-## Arrays and Functions.
+## </u>Arrays and Functions</u>
 * Arrays are never passed by value in a function. If I write a function definition as `void func_name(int arr[])`, The local variable `arr` is treated by the compiler, as a pointer to the original array which was passed during the call. Hence, arrays are always passed by reference.
 
 * This makes sense because arrays can be quite big and it does not make sense to create new copies of them during function calls.
 
-* Unlike Arrays, vectors can be passed by Values.
+* Unlike Arrays, vectors can be passed by Values. `vectors` in detail, under the STL section.
 
-## Vectors
-Please see Vectors under the section of STL below. Worry not, you can read it before reading the next topic.
+
+
+
+
+# Object Oriented Programming
+* Similar to how a religion would dictate, to a human who follows it, a set of rules by which they could lead a good life. A **programming paradigm** dictates to a programmer, a set of rules by which they could write good code.
+* There are various programming paradigms, such as **Procedure Oriented Programming**, **Functional Programming**, **Object oriented Programming**, etc. Programming langauges are designed to allow a programmer to write code in one or more of such paradigms.
+* Object Oriented programming is the most famous paradigm, and revolves around modeling the elements of code after real world entities.
+* In OOP, a `class` refers to a collection of attributes of a real world entity, and an `object` of the class refers to a particular instance of those attributes. Consider the example below...
+  * A `car` is a real world entity.
+  * Its `model`, `reg_number`, `color` etc, are various attributes by which it can be defined.
+  * Now, note that the values of these attributes are unique for each car, but each car must have these attributes no matter what.
+  * To store information on various cars in a program the generic way, you would create multiple variables like `model_1`, `color_1`, `model_2`, `color_2` etc.
+  * If your programming language allows you to group various variables together as a user defined data-type then that would be really nice. Something like a C `struct` would allow you to group these variables to create a user defined type, and you could then create various variables of this type for each car.
+  * The problem is only half solved though. Note that although all cars may `accelerate` and `apply_breaks` the same way, a `bus` would posess similar funtionality, but for a bus the internal way of acceleratig or applying brakes (and hence the function definitions), would be different.
+  * You can create multiple functions like `accelerate_bus`, `accelerate_car`, `apply_breaks_car` etc to overcome this, but then again, the process gets confusing really quickly. 
+  * What if, we could wrap all of the attributes **and the functions** associated with a `car` together, and do the same for a `bus` similar to a user defined data type but with the functionality of the real world entity wrapped within it as well, and create instances of this new 'blueprint'?
+* The last statement, is exactly what a `class` is. It is a blueprint that wraps together the attributes and functions associated with a `car`, and each instance of this blueprint is what is called an object.
+
 
 
 
@@ -501,7 +526,7 @@ Please see Vectors under the section of STL below. Worry not, you can read it be
 * Access Specifiers
   * Public members can be accessed outside the class with an object of the class.
   * Private members can be accessed within the class only.
-  * Can be accessed outside the class but only in a class derived (Inheritance) from this class.
+  * Protected members can be accessed outside the class but only in a class derived (Inheritance) from this class.
 
 * Contructor
   * Constructor is a special function that is called when an object of the class is created.
@@ -554,7 +579,7 @@ newnode.some_function(newnode.data);
 
 
 
-# `new` and `delete`
+# new and delete functions
 * The `new` and `delete` keywords are used for dynamic memory allocation in C++.
 * Dynamic memory is allocated in `heap` memory whereas rest is in `stack`. Study this in detail later.
 ```cpp
@@ -595,18 +620,6 @@ delete ptr;
 
 
 
-# this
-
-
-
-
-
-# friend
-
-
-
-
-
 # Destructor
 * Destructor is a member function which destructs or deletes an object.
 * A destructor function is called automatically when the object goes out of scope.
@@ -618,7 +631,7 @@ delete ptr;
 ```cpp
 // example of destructor
 class demo { 
-  int i; 
+  int i;
   public: 
     demo() { 
       i = 0; 
@@ -632,25 +645,32 @@ class demo {
 
 
 
-# `static` keyword
+
+# friend class and friend function
+
+
+
+
+
+# static keyword
 * Static keyword can be used for variables and functions...
 
-## Static Variables
+## <u>Static Variables</u>
 ```cpp
 // synatx to declare a static variable.
 static int count = 0;
 ```
 
-### Static variables in a Function
+### <u>Static variables in a Function</u>
 * When a variable is declared as static, space for it gets allocated for the lifetime of the program.
 * Even if the function is called multiple times, space for the static variable is allocated only once.
 * Thus, the value of variable in the previous call gets carried through the next function call.
 
-### Static variables in a class
+### <u>Static variables in a class</u>
 * As the variables declared as static are initialized only once the static variables in a class are shared by the objects.
 * Because of this reason static variables can not be initialized using constructors.
 
-### Static objects of a class.
+### <u>Static objects of a class</u>
 * The life of an object is within the function in which it was declared.
 * When the closing braces `}` are encountered a destructor is called by C++ to destroy the object. (Do note that destructor is not called for dynamically allocated memory, i.e. for class type pointers(which I wrongly call object pointers)).
 * For a non static object, the execution is like...
@@ -691,10 +711,10 @@ End of main
 
 ...declare obj as `static GfG obj` and see the new output */
 ```
-## Static Functions
+## <u>Static Functions</u>
 * Functions within a class and outside a class both can be static, but the two are entirely different.
 
-### Static member functions of a class
+### <u>Static member functions of a class</u>
 * Static member functions of a class, do not depend on object of class.
 * We are allowed to invoke a static member function using an object of the class but it is recommended to invoke the static member functions using the scope resolution operator for redability.
 * Static member functions are allowed to access only the static data members or other static member functions, they can not access the non-static data members or member functions of the class.
@@ -715,7 +735,7 @@ int main() {
 } 
 ```
 
-### Static functions outside class
+### <u>Static functions outside class</u>
 * Static functions, are function which are available only in the module they are defined in.
 * They are not exported and cannot be put in a header file and used in another C++ file.
 * This way you can write different functions sharing the same name, and also the compiler may optimize your code more thoroughly by inlining the function, knowing that no other file is dependant on it.
@@ -724,25 +744,210 @@ int main() {
 
 
 
+# this pointer
+* Note that each object of a class gets its own copy of data members (class variables) and share a single copy of member functions.
+* The `this` pointer is is a constant pointer that holds the memory address of the current (calling) object.
+* It is passed as a hidden argument to all nonstatic member function calls and is available as a local variable within the body of the nonstatic function.
+* It is not available in static member functions as static member functions can be called without any object (with class name).
+
+Given below, are the situations where `this` pointer is useful:
+
+## <u>When local variable’s name is same as member’s name</u>
+In such a case, we can use `this` pointer to refer to the member variables of the current object.
+```cpp
+// A member function that sets `x` of current object to the `x` passed in the argument
+void set(int x) {
+  this->x = x;
+}
+```
+
+## <u>To return reference to the calling object</u>
+* When a reference to the calling object is returned, the returned reference can be used to chain function calls on the object.
+```cpp
+// A poor example of chaining
+demo add(int x){
+  sum += x;     // `sum` is an instance variable of class `demo`
+  return *this;
+}
+
+demo obj;
+obj.add(10).add(20);    // Chaining
+```
+
+
+
+
+
+# Method Overloading and Overriding
+
+
+
+
+
 # Operator overloading
+* C++ has the ability to provide operators with a special meaning for a given data type, this is known as operator overloading.
+* The example below demonstrates operator overloading.
+```cpp
+#include<iostream> 
+using namespace std; 
+  
+class complex { 
+private: 
+    int real, imag; 
+public: 
+    complex (int r = 0, int c = 0) {
+      real = r;
+      imag = c;
+    }
+
+    // This function is automatically called when '+'
+    // is used with between two `complex` objects.
+    complex operator+ (complex const &ref_b) {
+         complex result;
+         result.real = real + ref_b.real;
+         result.imag = imag + ref_b.imag;
+         return result;
+    } 
+    void print_complex_num() { cout << real << " + i" << imag << endl; } 
+}; 
+  
+int main() {
+    complex a(10, 5), b(2, 4); 
+    complex sum = a + b;        // call to `operator+`. `a` is the calling object, `b` is the argument passed.
+    sum.print_complex_num();
+} 
+```
+* Name of an operator function is always the keyword `operator` followed by symbol of operator like `+`, `*`, etc.
+* The following operators cannot be overloaded...
+```cpp
+   .         // dot 
+   ::        // scope resolution
+   ?:        // if-else
+   sizeof    // duh!
+```
 
 
 
 
 
-# To- do
+# Inheritance
+The capability of a class to derive properties and characteristics from another class is called Inheritance.
+* **Sub Class**: The class that inherits properties from another class is called Sub class or Derived Class.
+* **Super Class**: The class whose properties are inherited by sub class is called Base Class or Super class.
+
+## <u>When to use inheritance</u>
+* Consider a group of vehicles. Say, we need to create classes for three type of vehicles: Bus, Car, and Truck.
+* The methods fuel_amount(), capacity(), apply_brakes() would be same for all the three classes.
+* Hence, we would end up writing the same code thrice.
+* A better method would be to create a class called `vehicles` that contains these functions, and inherit from it.
+* **Note**: Vehicle(Super Class) ---> Bus(Sub Class) ---> school_bus(Possible sub class) ---> Tata_Bus/Honda_Bus(objects).
+```cpp
+/* Syntax
+---------
+
+class sub_class_name : access_mode base_class_name{
+  // Code..
+}
+
+*/
+
+class parent {
+  // Some Code..
+};
+class child : public parent {
+  // Code...
+};
+
+```
+* A derived class doesn’t inherit **access to** private data members. However, it does inherit a full parent object, which contains any private members which that class declares.
+* **Public mode**: If we inherit the base class in the public mode, the public member of the base class will become public in the derived class and protected members of the base class will become protected in derived class.
+* **Protected mode**: If we inherit the base class in a protected mode, both public members, and protected members of the base class will become protected in derived class.
+* **Private mode**: If we derive a sub class from a Private base class. Then both public member and protected members of the base class will become Private in derived class. All members will become hidden.
+
+## <u>Types of Inheritance in C++</u>
+* Because a constructor initializes an instance of a class, they are never inherited.
+* However, the subclass must call a superclass constructor as it is an extension of a superclass object.
+* Creating an object of a subclass will implicitly invoke the default constructor of superclasses. User defined constructors must be called explicitly.
+* In case of default constructors, on creating an object of subclass a constructor of the subclass is invoked, the constructor before its own execution, invokes the default constructors of inherited classes in the order in which they were inherited, and then executes itself.
+* Parameterised constructors are called as follows:
+```cpp
+class superclass {
+  superclass(int x, int y){
+    // code...
+  }
+};
+
+class subclass : public superclass {
+  subclass(int x_val, y_val) : superclass(x_val, y_val){   // calling superclass constructor in definition of subclass constructor
+    // code...
+  }
+};
+```
+**NOTE:** The destructors are called in reverse order of constructors.
+
+
+### <u>Single Inheritance</u>
+In single inheritance, a class is allowed to inherit from only one class. i.e. one sub class is inherited by one base class only.
+```cpp
+class Car : public Vehicle {
+}; 
+```
+
+### <u>Multiple Inheritance</u>
+Multiple Inheritance is a feature of C++ where a class can inherit from more than one classes.
+```cpp
+class child : public father, public mother {
+  // Code..
+};
+```
+
+### <u>Multilevel Inheritance</u>
+In this type of inheritance, a derived class is created from another derived class.
+```cpp
+class A{
+};
+class B : A {
+};
+class C : B{
+}
+```
+
+### <u>Hierarchical Inheritance</u>
+In this type of inheritance, more than one sub class is inherited from a single base class.
+```cpp
+class vehicle{
+};
+class car : vehicle {
+};
+class bus : vehicle{
+}
+```
+
+### <u>Hybrid Inheritance</u>
+Hybrid Inheritance is implemented by combining more than one type of inheritance. This basically means we are using multiple types of inheritance in our code.
+
+
+
+
+
+# polymorphism
+# other concepts of oop as necessary
+# virtual functions
+# multiple inheritance and virtual functions
+# Abstract Class
+
+
+
+
+
+# To-do
 * Method Overloading and Overriding (We say this when making two constructors)
 * Copy constructor
-* Inheritance
-* OOP from gfg.
-* important functions in C++ like binary_search and gcd
-
-* Virtual funtion
-* Abstract Classes
-
 * File Handling
 * Exception Handling
 * Namespace
+
+
 
 
 
@@ -1057,14 +1262,18 @@ int num = mymap.erase("France"); // erasing by key
 * This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
   last index of an element in an array if it is present multiple times.
 
-## __gcd()
-
+* __gcd()
+* upper_bound()
+* sort(A.begin(), A.end());
+* *max_element(A.begin(), A.end());
+* binary_search();
+* a*b = lcm(a, b) * gcd(a, b)
 
 
 
 * Optimal Solution: Dynamic Programming, All solutions: Backtracking.
 
-
+* Divisibility Rules
 
 * OOP Concepts
   * **Encapsulation**: Wrapping together, all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
