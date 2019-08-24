@@ -514,5 +514,36 @@ car_id INTEGER REFERENCES car(id) UNIQUE
 * For further exercises execute `joins.sql`. Do take a look at the file.
 * Try running `SELECT * FROM person` and `SELCT * FROM table`.
 ```sql
-/* Assign 
+/* Now let us assign the two cars to two of the three people */
+UPDATE person SET car_id = 2 WHERE id = 1;
+UPDATE person SET car_id = 1 WHERE id = 3;
+```
+
+
+# JOINS
+* Joins are used to combine two tables.
+* We specify a condition on which the tables have to be joined, and depending upon the type of join, certain records are returned.
+
+## Inner Join
+* The inner join retrieves the records that have matching values in both the tables involved in the join.
+* Inner Join is essentially equal to (A intersection B).
+```sql
+/* breaking down the query for redability */
+SELECT * FROM
+person INNER JOIN car             /* Select from the 'Join' or combined `person` and `car` table */
+ON person.car_id = car.id;        /* The columns for which the values must match */
+
+/* We can also write JOIN instead of INNER JOIN
+```
+
+## Left Join
+* The left join retrieves all records from the first (or the left) table but only the matching records from the second (or the right table).
+```sql
+SELECT * FROM person LEFT JOIN car ON person.car_id = car.id;
+```
+
+## Right Join
+* The Right join retrieves all records from the second (or the right) table but only the matching records from the first (or the left table).
+```sql
+SELECT * FROM person LEFT JOIN car ON person.car_id = car.id;
 ```
