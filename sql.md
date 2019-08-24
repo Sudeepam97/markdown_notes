@@ -109,6 +109,7 @@ SELECT * FROM student;
 * Constraints allow us to make the table more error proof and makes it easier for us to insert data correctly into the table.
 * Say, some columns of our table should not have an empty value. We can impose this restriction on our tables with `NOT NULL`.
 * We can also use a constraint like `UNIQUE` to make sure some columns have different value for each row.
+* Another constraint is `CHECK` which makes sure that only the allowed values can be entered in a column
 * **Note**: The difference between a UNIQUE and primary key is that PK is both NOT NULL and UNIQUE.
 
 ```sql
@@ -120,6 +121,7 @@ CREATE TABLE student (
     name VARCHAR(30) NOT NULL,  /* Demonstration of NOT NULL*/
     major VARCHAR(30) UNIQUE,   /* Demonstration of UNIQUE*/
     PRIMARY KEY (student_id)
+    gender VARCHAR(10) CHECK (gender == 'MALE' OR gender == 'FEMALE') /* Demonstration of CHECK */
 );
 
 /* Inserts fine*/
@@ -289,64 +291,228 @@ SELECT id, email  FROM person WHERE gender = 'Male' AND country_of_birth = 'Russ
 ```
 
 
-# Like and iLike
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Updation and Deletion
-
-* Now we play around with the update statement. We'll continue with the database from the last section.
-
+# `LIKE` and `ILIKE`
+* Like is used for pattern matching with wildcards. Examples below...
 ```sql
-USE learning;
+/* Get the details of people whose email is of the form "some_characters + .com" */
+SELECT * FROM person WHERE email LIKE '%.com';
 
-SELECT * FROM student;
+/* Get details of people whose email is of the form "some_characters + google + some_characters" */
+SELECT * FROM person WHERE email LIKE '%google%';
 
-UPDATE student SET major = 'Bio' WHERE major = 'Biology';
-UPDATE student SET major = 'Comp. Sci.' WHERE major = 'Computer Science';
-UPDATE student SET major = 'Sociology' WHERE student_id = '2';
-UPDATE student SET major = 'Biochemistry' WHERE major = 'Bio' OR major = 'Chemistry';
-UPDATE student SET name = 'Tom', major = 'undecided' WHERE student_id = 1;
-
-SELECT * FROM student;
-
-/* Now we try some deletion */
-DELETE FROM student WHERE student_id = 5;
-DELETE FROM student WHERE major = 'Biochemistry' AND name = 'Claire';
+/* Get details of people with 4th char 's', 5th char 't', and any values of first three characters. */ 
+SELECT * FROM person WHERE email LIKE '___st%';
 ```
-**Note**: We can drop the `WHERE` and the conditions will be applied to every student */
 
-
-
-# Droping columns from a table.
-
+* `LIKE` is case sensitive. `ILIKE` ignores case.
 ```sql
+/* No results cuz all names start with capital letters */
+SELECT * FROM person WHERE country_of_birth LIKE 'p%'; 
+
+/* But after ignorning case with `ILIKE` we get results */
+SELECT * FROM person WHERE country_of_birth ILIKE 'p%'; 
+```
+
+
+# Aggregate Functions
+* Aggregate functions compute a single result from a set of input values.
+* Let us create a new Database called `car` with mockaroo.
+* Connect to the `learning` database and then run the `.sql` script from above.
+```sql
+/* MAX (Finding the most expensive car) */
+SELECT MAX(price) FROM car;
+
+/* MIN (Finding the lease expensive car) */
+SELECT MIN(price) FROM car;
+
+/* AVG (average) */
+SELECT AVG(price) FROM car;
+
+/* ROUND (Round off a number to 2 decimal places) */
+SELECT ROUND(AVG(price), 2) FROM car;
+
+/* sum (get sum of prices of all cars*/
+SELECT SUM(price) FROM car;
+
+/* COUNT (This function returns the number of Non NULL enteries) */
+/* This database does not have any NULLs, we cannot actually observe this */
+SELECT COUNT(price) FROM car WHERE make = 'Audi';
+```
+
+
+# GROUP BY
+* `GROUP BY` is a clause in SQL that is only used with aggregate functions.
+* It is used in collaboration with the `SELECT` statement to arrange identical data into groups.
+```sql
+/* list number of people in each country */
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth;
+
+/* Order these by country */
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth ORDER BY country_of_birth;
+
+/* Here's a test query to list the minimum price car by each company*/
+SELECT make, MIN(price) FROM car GROUP BY make;
+```
+
+
+# HAVING
+* `HAVING` works with `GROUP BY` and allows us to add an extra filter after we perform aggrigation.
+* `HAVING` should always be just after `GROUP BY`.
+```sql
+/* list number of people in each all country where population sample > 5 people */
+SELECT country_of_birth, COUNT(*) FROM person GROUP BY country_of_birth HAVING COUNT(*) > 5 ORDER BY country_of_birth;
+```
+
+
+# Operators
+* SQL also allows basic mathematical operations.
+* Some operations are `+`, `-`, `/`, `*`, `^` (power), `!` (Factorial), `%` (modulo).
+```sql
+/* Run a query to return original price + 10% discounted price */
+SELECT price, ROUND(0.1 * price, 2), ROUND(price - (0.1 * price), 2) FROM car;
+```
+
+
+# AS
+* In the last query, column names for calculations are `round`.
+* By default postgres gives us the function name or `?column?`.
+* `AS` is used to overwrite a name.
+```sql
+/* Run a query to return original price + 10% discounted price */
+SELECT price AS original_price, ROUND(0.1 * price, 2) AS discount, ROUND(price - (0.1 * price), 2) AS final_price FROM car;
+```
+
+
+# COALESCE
+* `COALESCE` allows us to have a default value in-case a value is not present.
+```sql
+SELECT COALESCE(email, 'EMAIL NOT PROVIDED') FROM person;
+```
+
+
+# NULLIF
+* This keyword takes in two arguments and returns `NULL` if the first argument is the same as the second argument, else it returns the first argument.
+* This can be used to tackle division by zero in postgres, to avoid an error throw.
+```sql
+/* POSTGRES throws an error for something like `10 / 0` but does not
+throw an error for `10 / NULL`. This is simply equal to `NULL` itself. 
+
+Thus we can do something like... */
+SELECT 10 / NULLIF(num, 0);             /* where `num` is the number we actually care about */
+```
+
+
+# Timestamps and dates
+```sql
+/* Setting the timezone */
+SET timezone = 'Asia/Kolkata';
+
+/* A complete timestamp with timezone */
+SELECT NOW();
+
+/* Selecting date from timestamp */
+SELECT NOW()::DATE;
+
+/* Selecting time from timestamp */
+SELECT NOW()::TIME;
+```
+
+
+# Date arithmetic
+```sql
+SELECT NOW() + INTERVAL '10 years'; /* or '10 year' works as well */
+SELECT NOW() - INTERVAL '10 months';
+SELECT NOW() - INTERVAL '10 days';
+SELECT NOW() + INTERVAL '10 hours';
+SELECT NOW() - INTERVAL '10 minutes';
+SELECT NOW() - INTERVAL '10 second';
+SELECT NOW() - INTERVAL '10 millisecond';
+
+(SELECT NOW() + INTERVAL '10 months')::DATE; /* To get the date only */
+```
+
+
+# Extracting fields
+* This keyword can be used to extract certain
+```sql
+SELECT EXTRACT (YEAR FROM NOW());
+/* fields allowed...
+YEAR, MONTH, DOW (day of the week), CENTURY, etc. */
+```
+
+
+# AGE
+* `AGE` is a function that, as the name suggests, can be used to calculate the age of something or someone.
+```sql
+SELECT first_name, last_name, AGE(NOW(), date_of_birth) FROM person;
+```
+
+
+# ALTERING a table.
+```sql
+/* let us drop the `PRIMARY KEY` constraint from `id`*/
+ALTER TABLE person DROP CONSTRAINT person_pkey;
+
+/* Re-insert the constraint. */
+ALTER TABLE person ADD PRIMARY KEY (id); /* Accepts multiple column names if composite key is required*/
+
+/* Another exaple of adding constraint */
+ALTER TABLE person ADD CONSTRAINT gender_constraint CHECK (gender = 'Female' OR gender = 'Male');
+
 /*Add another column to the table*/
-ALTER TABLE student ADD gpa DECIMAL(3, 2); /* 3 total digits and 2 are after decimal point*/
-DESCRIBE student;
+ALTER TABLE person ADD age INTEGER;
 
 /*Drop a specific column*/
-ALTER TABLE student DROP COLUMN gpa;
-DESCRIBE student;
+ALTER TABLE person DROP age;
+```
+
+
+# Deleting records (rows of database)
+* The best parameter to delete by is the primary key because it is unique for each row.
+```sql
+DELETE FROM person WHERE id = 23
+DELETE FROM person WHERE gender = 'Male' and country_of_birth = 'China'; 
+```
+
+
+# Updating records
+```sql
+UPDATE person SET email = 'sudeepam@gmail.com' WHERE first_name = 'Sudeepam';
+UPDATE person SET last_name = 'P', email = 'sudeepam.pandey@gmail.com' WHERE first_name = 'Sudeepam';
+```
+
+
+# Table Relations
+* Let us first take a quick look at the two tables that we had created...
+```sql
+CREATE TABLE person (
+	id SERIAL PRIMARY KEY,
+	first_name VARCHAR(50) NOT NULL,
+	last_name VARCHAR(50) NOT NULL,
+	gender VARCHAR(50) NOT NULL,
+	date_of_birth DATE NOT NULL,
+	country_of_birth VARCHAR(50) NOT NULL,
+	email VARCHAR(50)
+);
+
+CREATE TABLE car (
+	id SERIAL PRIMARY KEY,
+	make VARCHAR(50) NOT NULL,
+	model VARCHAR(50) NOT NULL,
+	price NUMERIC(10, 2) NOT NULL
+);
+```
+* Say we want to link a car to a person, such that 'a car could belong to one person only'
+* To do this, we can write something like this...
+```sql
+/* `UNIQUE` makes sure that the car could belong to only one person */
+/* `NOT NULL` constraint has not been applied, hence a person may or may not have a car */
+car_id INTEGER REFERENCES car(id) UNIQUE
+```
+
+# Updating Foreign Key Columns
+* For further exercises execute `joins.sql`. Do take a look at the file.
+* Try running `SELECT * FROM person` and `SELCT * FROM table`.
+```sql
+/* Assign 
 ```
