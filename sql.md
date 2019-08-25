@@ -215,6 +215,13 @@ SELECT * FROM person ORDER BY country_of_birth DESC;
 SELECT * FROM person ORDER BY country_of_birth, date_of_birth;
 ```
 
+## LENGTH()
+* length is a function that is used to get the length of a `VARCHAR`.
+```sql
+/* https://www.hackerrank.com/challenges/weather-observation-station-5/problem */
+SELECT city, LENGTH(city) FROM station ORDER BY LENGTH(city), city LIMIT 1;
+SELECT city, LENGTH(city) FROM station ORDER BY LENGTH(city) DESC, city LIMIT 1;
+```
 
 ## Get unique values with `DISTINCT`
 ```sql
@@ -222,7 +229,7 @@ SELECT * FROM person ORDER BY country_of_birth, date_of_birth;
 SELECT DISTINCT country_of_birth FROM person;
 ```
 
-# `WHERE`, `OR` and `AND` clause
+# `WHERE`, `OR`, `AND` clause
 * The `WHERE` clause allows us to select data based on conditions.
 ```sql
 /* List all Females */
@@ -280,6 +287,9 @@ SELECT * FROM person WHERE country_of_birth = 'China' OR country_of_birth = 'Bra
 * `IN` takes in an array of values and executes the query with each of those values.
 ```sql
 SELECT * FROM person WHERE country_of_birth IN ('China', 'Brazil', 'France');
+
+/* We can also use `NOT IN` to get details of people of all countries except these countries*/
+SELECT * FROM person WHERE country_of_birth NOT IN ('China', 'Brazil', 'France');
 ```
 
 
@@ -335,10 +345,22 @@ SELECT ROUND(AVG(price), 2) FROM car;
 SELECT SUM(price) FROM car;
 
 /* COUNT (This function returns the number of Non NULL enteries) */
-/* This database does not have any NULLs, we cannot actually observe this */
 SELECT COUNT(price) FROM car WHERE make = 'Audi';
-```
 
+/* An example query to print the (number of cities - number of distict cities) in a DB */
+SELECT COUNT(city) - COUNT(DISTINCT city) FROM station_db;
+```
+* Some more functions are `FLOOR()`, `CEIL()`, `ABS()`.
+
+
+# REPLACE
+* This attribute can be used to replace all occourances of a substring with a different string.
+```sql
+/* Outputs `HTML Tutorial` */
+SELECT REPLACE("SQL Tutorial", "SQL", "HTML");
+
+/* https://www.hackerrank.com/challenges/the-blunder/problem */
+```
 
 # GROUP BY
 * `GROUP BY` is a clause in SQL that is only used with aggregate functions.
@@ -546,4 +568,63 @@ SELECT * FROM person LEFT JOIN car ON person.car_id = car.id;
 * The Right join retrieves all records from the second (or the right) table but only the matching records from the first (or the left table).
 ```sql
 SELECT * FROM person LEFT JOIN car ON person.car_id = car.id;
+```
+
+## IS NULL
+* Used to get missing values in a column.
+* We also have a `IS NOT NULL`.
+```sql
+SELECT first_name, last_name FROM person WHERE email IS NULL;
+SELECT first_name, last_name FROM person WHERE email IS NOT NULL;
+```
+
+## CASE
+* If-else in SQL.
+```sql
+/* General */
+SELECT column_name,
+  CASE
+    WHEN condition THEN 'Result_1'
+    WHEN condition THEN 'Result_2'
+    ELSE 'Result_3'
+  END
+FROM table_name;
+
+/* https://www.hackerrank.com/challenges/what-type-of-triangle/problem */
+SELECT
+    CASE
+        WHEN A + B <= C OR B + C <= A OR A + C <= B THEN 'Not A Triangle' /* ideally we should remove `=` but cases are wrong */
+        WHEN A != B AND B != C AND C != A THEN 'Scalene'
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN A = B OR B = C OR C = A THEN 'Isosceles'
+    END
+FROM TRIANGLES;
+```
+
+## Arithmetic
+```sql
+/* returns the cities whose id is an even number */
+SELECT DISTINCT city FROM station_db WHERE ID % 2 = 0;
+```
+
+## SUBSTRING 
+* Can be used to extract a substring from a varchar entry.
+* Note that SQL strings are 1 indexed.
+* SUBSTRING and SUBSTR work the same way.
+```sql
+/* get all distinct cities whose names start with vowels*/
+SELECT DISTINCT city FROM station WHERE SUBSTRING(LOWER(city), 1, 1) IN ('a', 'e', 'i', 'o', 'u');
+
+/* get all distinct cities whose names end in vowels */
+SELECT DISTINCT city FROM station WHERE SUBSTRING(LOWER(city), -1, 1) IN ('a', 'e', 'i', 'o', 'u');
+```
+
+## Regular Expressions
+* An article on how to write regular expressions can be found [here](https://www.geeksforgeeks.org/write-regular-expressions/). 
+```sql
+/* get all distinct cities whose names start with vowels using regex*/
+SELECT DISTINCT city FROM station WHERE city REGEXP "^[aeiou].*";
+
+/* ends with */
+SELECT DISTINCT city FROM station WHERE city REGEXP "[aeiou]$";
 ```
