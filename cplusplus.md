@@ -335,6 +335,24 @@ int main() {
 
 
 
+# Function Overloading
+* Function overloading is a method of creating multiple functions with the same name by changing the function signature.
+* It is a mehtod of achieving compile-time polymorphism (an OOP concept described later in detail).
+* Function Overloading is **not** the same as Function Overriding. 
+```cpp
+float area(int r){ // area of circle
+  float pi = 3.14;
+  return pi*r*r;
+}
+int area(int l, int b){   // area of rectangle
+  return l * b
+}
+```
+
+
+
+
+
 # Conditional Statements
 * `&&` is used for **AND**.
 * `||` is used for **OR**.
@@ -356,7 +374,11 @@ int main(){
   return 0;
 }
 ```
-
+* We also have a short hand notation for if using the ternary operator `?`
+```cpp
+int greater_element = (x > y) ? x : y
+//  ^returned value   ^condition  (returns x if condition is true, else returns y)
+```
 
 
 
@@ -439,7 +461,7 @@ for (int i = 0; i <= 5; i++){
 * To create an integer array (say):
   * `int nums[] = {4, 8, 15, 16, 23};`
 
-* The array above can store only the specified numbers. If we need to store,  say 20 numbers, we can declare the array as ...
+* The array above can store only the specified numbers. If we need to store, say 20 numbers, we can declare the array as ...
   ```cpp
   int arr[20];
   ```
@@ -452,6 +474,16 @@ for (int i = 0; i <= 5; i++){
   ```cpp
   int nums[20] = {4, 8, 15};
   ```
+
+* We can also accept the size of an array at runtime, something that was not possible (I think) in C.
+```cpp
+int n;
+cin >> n;
+int arr[n];
+for (int i = 0; i < n; i++){
+    cin >> arr[i];
+}
+```
 
 * We can also create a 2D or rather, an N-D array like:
   ```cpp
@@ -498,6 +530,31 @@ for (int i = 0; i <= 5; i++){
 
 
 
+# Exception Handling
+
+```cpp
+// Basic custom error message printing
+try {
+    cout << stoi(S);
+}
+catch(...){
+    cout << "Bad String"; // if S = 'AB' say...
+}
+```
+```cpp
+// Another way
+try {
+  if (n < 0)
+      throw runtime_error("n should be non-negative");
+}
+catch(exception &e){
+  cout << e.what() << "\n";
+}
+```
+
+
+
+
 # Object Oriented Programming
 * Similar to how a religion would dictate, to a human who follows it, a set of rules by which they could lead a good life. A **programming paradigm** dictates to a programmer, a set of rules by which they could write good code.
 * There are various programming paradigms, such as **Procedure Oriented Programming**, **Functional Programming**, **Object oriented Programming**, etc. Programming langauges are designed to allow a programmer to write code in one or more of such paradigms.
@@ -511,19 +568,44 @@ for (int i = 0; i <= 5; i++){
   * The problem is only half solved though. Note that although all cars may `accelerate` and `apply_breaks` the same way, a `bus` would posess similar funtionality, but for a bus the internal way of acceleratig or applying brakes (and hence the function definitions), would be different.
   * You can create multiple functions like `accelerate_bus`, `accelerate_car`, `apply_breaks_car` etc to overcome this, but then again, the process gets confusing really quickly. 
   * What if, we could wrap all of the attributes **and the functions** associated with a `car` together, and do the same for a `bus` similar to a user defined data type but with the functionality of the real world entity wrapped within it as well, and create instances of this new 'blueprint'?
-* The last statement, is exactly what a `class` is. It is a blueprint that wraps together the attributes and functions associated with a `car`, and each instance of this blueprint is what is called an object.
+* The last statement, is exactly what is achieved by a `class`. A `class` is a blueprint that wraps together the attributes and functions associated with a `car`, and each instance of this blueprint is what is called an `object`.
 
+
+
+
+
+# Concepts of OOP
+The four most important concepts of OOP are..
+
+## <u>Encapsulation</u>
+Wrapping together all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
+
+## <u>Abstraction</u>
+Means, knowing only the necessary parts and hiding the details that are not required.
+* Creating and using functions is a way of achievig abstractions.
+* Using classes is another way, because a class can decide which data member will be visible to the outside world and which would not by using something called access specifiers (described later).
+* Another way to achieve abstraction in C++ is by using header files.
+
+## <u>Polymorphism</u>
+Poymorphism refers to having many forms. Two people may have the same name but different characteristics. Ways to achieve polymorphism are:
+* Function Overloading (Compile time)
+* Operator Overloading (Compile time)
+* Function Overriding (Run time)
+
+## <u>Inheritance</u>
+The capability of a class to derive properties and characteristics from another class is called Inheritance. Inheritance is one of the most important features of Object Oriented Programming. How C++ allows inheritance will be described in detail later.
+
+Few more (not so core) concepts are...
+* **Dynamic Binding**: In dynamic binding, the code to be executed in response to function call is decided at runtime. C++ has `virtual functions` to support this.
+* **Data Hiding**: Access Specifiers allow data hiding, to basically define a scope where certain data coulb be accessed.
 
 
 
 
 
 # Classes and Objects
-* Basics
-  * Class is the blueprint, object is the instance of the blueprint.
-  * Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
-
 * Access Specifiers
+  * Acess specifiers are helpful to make sure that instance variables do not get initialized with invalid values.
   * Public members can be accessed outside the class with an object of the class.
   * Private members can be accessed within the class only.
   * Protected members can be accessed outside the class but only in a class derived (Inheritance) from this class.
@@ -647,6 +729,30 @@ class demo {
 
 
 # friend class and friend function
+* A Friend Class can access private and protected members of other class in which it is declared as friend.
+```cpp
+class Node { 
+  private: 
+    int key; 
+    Node* next;
+    friend class LinkedList;  // Now class `LinkedList` can access private members of Node 
+};
+```
+* Like a friend class, a friend function can be given special access to private and protected members. A friend function can be:
+  * A method of another class.
+  * A global function.
+```cpp
+class Node { 
+private: 
+    int key; 
+    Node* next; 
+    friend int LinkedList::search(); // Only search() of linkedList can access internal members 
+}; 
+```
+* Friends should be used for limited purposes, too many friends lessens the value of encapsulation.
+* Friendship is not mutual. If class A is a friend of B, then B doesn’t become a friend of A automatically.
+* Friendship is not inherited. If a base class has a friend, then it doesn’t become a friend of the derived class(es).
+* The concept of friends is not there in Java.
 
 
 
@@ -778,12 +884,6 @@ obj.add(10).add(20);    // Chaining
 
 
 
-# Method Overloading and Overriding
-
-
-
-
-
 # Operator overloading
 * C++ has the ability to provide operators with a special meaning for a given data type, this is known as operator overloading.
 * The example below demonstrates operator overloading.
@@ -792,23 +892,23 @@ obj.add(10).add(20);    // Chaining
 using namespace std; 
   
 class complex { 
-private: 
-    int real, imag; 
+private:
+  int real, imag; 
 public: 
-    complex (int r = 0, int c = 0) {
-      real = r;
-      imag = c;
-    }
+  complex (int r = 0, int c = 0) {
+    real = r;
+    imag = c;
+  }
 
-    // This function is automatically called when '+'
-    // is used with between two `complex` objects.
-    complex operator+ (complex const &ref_b) {
-         complex result;
-         result.real = real + ref_b.real;
-         result.imag = imag + ref_b.imag;
-         return result;
-    } 
-    void print_complex_num() { cout << real << " + i" << imag << endl; } 
+  // This function is automatically called when '+'
+  // is used with between two `complex` objects.
+  complex operator+ (complex const &ref_b) {
+        complex result;
+        result.real = real + ref_b.real;
+        result.imag = imag + ref_b.imag;
+        return result;
+  } 
+  void print_complex_num() { cout << real << " + i" << imag << endl; } 
 }; 
   
 int main() {
@@ -930,22 +1030,67 @@ Hybrid Inheritance is implemented by combining more than one type of inheritance
 
 
 
-# polymorphism
-# other concepts of oop as necessary
-# virtual functions
+# Virtual functions and function overriding
+* Function overriding occurs when a derived class has a different definition for one of the member functions of the base class. The base class function is said to be overridden by the definition of derived class.
+* The function that is defined in the base class but overridden in the derived class is a `virtual function`.
+
+
+
+
 # multiple inheritance and virtual functions
+
+
+
+
+
 # Abstract Class
+* A class is called `abstract` if it has at least one pure virtual function.
+* A pure virtual function (or abstract function) in C++ is a virtual function for which we do not have an implementation in the base class. We only declare it in the base class, and the implementation is done in classes which are derived from the Abstract class.
+* Note that normal virtual functions have a definition in base class and are overriden in the child class, whereas pure VFs get their first definition in the child class itself.
+* Pure virtual function is useful when we know that a function should belong to a class, but we cannot actually define it in that class since definition is dependent on a special case of the class. For example, let `Shape` be a base class. We cannot provide implementation of function `draw()` in `Shape` since it is dependent on what the shape is, but we know that every derived class must have a `draw()` function.
+* A pure virtual function is declared by assigning `0` in declaration. For example...
+
+```cpp
+class Shape {
+  public: 
+    virtual void draw() = 0; // virtual function
+};
+class child : public shape {
+  public:
+    void draw(){
+      cout << "Code to draw the shape here";
+    }
+}
+
+```
+* If we do not override the pure virtual function in derived class, then derived class also becomes abstract class.
+* We cannot have objects of virtual classes. However, we can have object pointers for virtual classes.
+
+
+# Method Overriding
+* It is the re-definition of base class function in its derived class with same signature i.e return type and parameters.
+* Overriding can be done in the derived class only whereas overloading can be done in both, the base and derived class.
+```cpp
+class parent {
+  public:
+    virtual void display() {
+      cout << "hello";
+    }
+};
+
+class child : public parent {
+  public:
+    void display() {
+      cout << "hi there!";
+    }
+};
+```
 
 
 
 
 
-# To-do
-* Method Overloading and Overriding (We say this when making two constructors)
-* Copy constructor
-* File Handling
-* Exception Handling
-* Namespace
+# Copy constructor
 
 
 
@@ -953,7 +1098,29 @@ Hybrid Inheritance is implemented by combining more than one type of inheritance
 
 # STL Containers
 
-## tuple
+## STL iterator
+* Before diving into the data structures provided by STL. Let us take a moment to understand what an `iterator` is.
+* An iterator is an object (like a pointer) that points to an element inside the STL container.
+* We can use iterators to move through the contents of the container.
+* Depending upon the functionality of iterators they can be classified into five categories...
+  * Input Iterators
+  * Ouput Iterators
+  * Forward Iterators
+  * Bidirectional Iterators
+  * Random-Access Iterators
+* Different containers support different types of iterators. The most important points for us to know are...
+  * Forward iterators can be compared with another iterator, two iterators will be equal only when they point to the same position. Note that equality operators are allowed but relational operators (like `<=`) are not.
+  * Forward iterators can be incremented one step at a time only `itr++ / ++itr` and cannot be decremented. Note that `itr + 1` is not the same as `itr++` and is invalid.
+  * Bidirectional iterators are same as forward iterators, except they can be decremented as well, so `itr-- / --itr` is also valid in case of bidirectional iterators. Again, `itr - 1` is invalid and you can only move one step at a time.
+  * Random-access iterators can be used to access elements at an arbitrary offset position relative to the element they point to, making them the most complete type of iterators offering the same functionality as that of pointers.
+  * Thus with random access iterators operations like `itr + 5` or `itr - 5` are valid. Also, relational operations are also allowed by random access iterators.
+
+* `vectors`, and `dequeue` support Random-access iterators.
+* `unordered_map`, `unordered_sets`, `unordered_multiset`, and `unordered_multimap` support forward iterators.
+* `map`, `set`, `multiset`, and `multimap` support bi-directional iterators.
+
+
+## tuple (`#include <tuple>`)
 * An object of the tuple class can hold a collection of multiple elements where each can be of different type.
 ```cpp
 // Creating a Tuple
@@ -971,26 +1138,26 @@ tie(s_name, s_gender, s_gpa) = student;
 ```
 
 
-## pair
-* This class couples together a pair of values, both may of different types. This is a special case of tuple
+## pair (`#include <pair>`)
+* This class couples together a pair of values, values may be of different types. This is a special case of tuple.
 ```cpp
 // Creating a Pair.
 pair<string, float> foo;
 foo = make_pair("Sudeepam", 7.0);
 // Acessing the elements of the pair
 cout << "name: " << foo.first << "\n";
-cout << "gpa: " << foo.first;
+cout << "gpa: " << foo.second << "\n;
 ```
 
 
-## vectors
+## vectors (`#include <vector>`)
 * Vectors are dynamic arrays.
 ```cpp
 // Declaring an empty vector.
 vector<int> v;
 
-// Declaring an empty vector of some size.
-// elements are initialized by default values.
+// Declaring an empty vector of some size. Elements
+// are initialized by default values of data types.
 vector<int> v(10);
 
 // Initializing a vector with some value (say 3).
@@ -1042,19 +1209,23 @@ v.pop_back();
 ```
 
 
-## stack (LIFO)
+## dequeue (`#include <deque>`)
+
+
+
+## stack (`#include <stack>`)
 ```cpp
 // declares an empty stack.
 stack<int> A;
 
-// Pushes a new element to the stack in O(1) time.
+// Pushes a new element to the stack, O(1) time.
 A.push(newElement);
 
-// Pops an element off the stack in O(1) time.
+// Pops an element off the stack, O(1) time.
 // pop() removes the top element, does not return its value.
 A.pop();
 
-// Top is used to get the top element (not pop). O(1) operation.
+// top() is used to get the top element (not pop). O(1) operation.
 A.top();
 
 // Returns true if Stack is empty and false otherwise. O(1).
@@ -1065,15 +1236,15 @@ A.size();
 ```
 
 
-## queue (FIFO)
+## queue (`#include <queue>`)
 ```cpp
 // declares an empty queue.
 queue<int> A;
 
-// Pushes a new element to the queue in O(1) time.
+// Pushes a new element to the queue, O(1) time.
 A.push(newElement);
 
-// Pops an element off the queue in O(1) time.
+// Pops an element off the queue, O(1) time.
 // pop() removes the front element, does not return its value.
 A.pop();
 
@@ -1088,65 +1259,19 @@ A.size();
 ```
 
 
-## dequeue
-
-
-## priority_queue
-* Priority Queues are implemented via heaps. Elements are ordered via ascending or descending order according to some priority.
-* A max heap is constructed by default, but a min heap can also be formed.
-* duplicates can exist in a priority queue.
-```cpp
-// Declare a priority queue
-priority_queue<int> pq;
-
-// Returns true if priority queue is empty, else false.
-pq.empty();
-
-// Returns the size of the priority queue.
-pq.size();
-
-// Returns the value of the highest priority element of a priority queue
-pq.top();
-
-// Inserts an element into priority queue
-pq.push(5);
-pq.push(a);
-
-// pops the highest priority element from the queue
-pq.pop();
-
-// priority queue of pair of elements. Elements are ordered by first value of pair.
-priority_queue<pair<int, int> > pq;
-
-// Syntax to create a min heap priority queue is as follows:
-priority_queue <Type, vector<Type>, ComparisonType > min_heap_pq;
-
-// Min heap priority queue of integers
-priority_queue <int, vector<int>, greater<int> > pq;
-
-// Min heap priority queue of pairs
-typedef pair<int, int> pair_type;
-priority_queue <pair_type, vector<pair_type>, greater<pair_type> > pq;
-
-// Priority queue for user defined type
-// We use operator overloading for this.
-// More on this later.
-```
-
-
-## unordered_map
-* These are implemented via Hash tables, and can be used for fast retrievals.
+## unordered_map and unordered_multimap (`#include <unordered_map>`)
+* These are dictionary like data structures implemented via Hash tables. These can be used for O(1) search/retrievals.
 * Elements are not sorted in any order.
-* Keys in an unordered map are unique.
+* Keys in an `unordered_map` are unique, whereas keys of `unordered_multimap` need not be unique.
 * Each element is an object of the `pair` class. Each iterator is therefore a pointer to a `pair` object.
-  Check below on how unorderd_maps can be traversed for more clarity.
 
+The code snippets below use `unordered_map` but everything is same for `unordered_multimap` unless stated otherwise...
 ```cpp
 // declares an empty map. O(1)
 unordered_map<int, int> gpa;
 
 // Traversing the unordered_map.
-unordered_map<int, int>::iterator itr;    // This is an iterator to the map
+unordered_map<int, int>::iterator itr;    // This is an iterator(forward) to the unordered_map
 /* Note: itr->first;  OR (*itr).first;    // The key.
          itr->second; OR (*itr).second;   // The value. */
 for (itr = A.begin(); itr != A.end(); itr++){
@@ -1154,7 +1279,7 @@ for (itr = A.begin(); itr != A.end(); itr++){
 }
 ```
 
-* Methods for inserting Key-Value Pairs ...
+Methods for inserting Key-Value Pairs ...
 ```cpp
 /* We have an overloaded insert() function which provides various methods
 to insert elements, into the unordered_map */.
@@ -1163,9 +1288,11 @@ to insert elements, into the unordered_map */.
       returns void, and since an unordered_map can have unique keys only, with this 
       method, there is no way to know which elements were added and which are not */
 gpa.insert({ {"Sudeepam", 7.0}, {"Charu", 7.2}, {"abcd", 6.9} } );
-// OR
-gpa["Sudeepam"] = 7.0; // This has the same behaviour.
 
+gpa["Sudeepam"] = 7.0; // Same behavior
+```
+
+```cpp
 /* 2: This next version inserts a `std::pair` of key and value into the hashmap. It
       returns a `std::pair` of `iterator` and `boolean`. If the element is sucessfully
       inserted, the boolean is `true` and the iterator points to the newly inserted
@@ -1182,23 +1309,37 @@ A.insert(my_pair); // Note that it is not necessary to store the returned pair.
 result = A.insert({key, value});
 ```
 
-* Other functions ....
+Other functions ...
 ```cpp
-/* Searches the container for elements whose key is `k` and returns the
-number of elements found. Because unordered_map containers do not allow 
-for duplicate keys, this means that the function actually returns 1 (int)
-if an element with that key exists in the container, and zero otherwise.*/
-A.count(k); 
+// Return the number of entries having key as `k`
+A.count(k);
+/* This function can also be used to check if a certain key does
+not exsits (count > 0) or does not exsit (count = 0) in the map */
 
-/* Can be used to acess the value corosponding to key `k`. If the key `k`
-does not exist, an out of bounds exception is thrown */
-A.at(k);
-
-// Returns the number of elements in the unordered_map container. O(1).
+// Returns the number of elements in the container. O(1).
 A.size()
 
 // True if the container size is 0, false otherwise. O(1).
 A.empty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------- YAHAN SE EDIT ------------
+
+
+/* Can be used to acess the value corosponding to key `k`. If the 
+key `k` does not exist, an out of bounds exception is thrown */
+A.at(k);
 
 /* Returns an iterator to the element, if the specified key-value is found,
    or unordered_map::end if the specified key is not found in the container.
@@ -1222,62 +1363,140 @@ itr = mymap.erase(mymap.find("China"), mymap.end()); // erasing by range
 int num = mymap.erase("France"); // erasing by key
 ```
 
-## unordered_multiset
 
-## unordered_set
 
-## unordered_multiset
+## unordered_set and unordered_multiset (`#include <unordered_set>`)
+* Almost same, a certain type of insertion does not work..
 
-## map
 
-## set
 
-## multimap
-
-## multiset
+* Do not forget to write about internal implementation of set, map, multimap, , unorderd_maps etc.
+## map and multimap
+## Using maps when unhashable stuff has to be hashed
+## Set and multiset
 
 
 
 
+## priority_queue (`#include <queue>`)
+* Priority queues are **essentially the same as queues** except that the ordering of the queue formed is done, based on some priority of elements and not on the order in which they were inserted into the queue.
+* Note the fact that **they are essentially the same as queues**. Thus, you can access and remove the top element of the queue only. The only difference is the push operation.
+* Note that unlike `sets` and `multisets`, that we would discuss next, there is no concept of `iterating over` a priority queue. Note again, they are the same as `queues`, and the only difference is the way in which queue elements are ordered.
 
-# Algorithms (eventually remove from here and add to interviewbit notes.)
-* Sorting algos
-* Sieve of erathosthenes.
-* Learn to Use terniary operators for conditions.
-* Number system conversions, assuming positive numbers ...
-  * Any number A<sub>3</sub>A<sub>2</sub>A<sub>1</sub>A<sub>0</sub> at base `b` conversion to decimal is done by....  
-  `A0 * (b^0)` + `A1 * (b^1)` + `A2 * (b^2)` + `A3 * (b^3)` 
-  * Dividing decimal number by base `b` and continously storing the remainder in down to up fashion gives us the number at base b.
+* Priority Queues are implemented via heaps. (imagine them as specifically ordered queues though).
+* A max heap is constructed by default, but a min heap can also be created.
+* Duplicates can exist within a priority queue.
 
-## Sorting
-* A stable sorting algorithm preserves the relative order of elements.
-* In C++, you can sort a vector `V` with `sort(V.begin(), V.end());`
+```cpp
+// Declare a priority queue. O(1).
+priority_queue<int> pq;
+
+// Returns true if priority queue is empty, else false. O(1).
+pq.empty();
+
+// Returns the size of the priority queue. O(1).
+pq.size();
+
+// Returns the value of the highest priority element of a priority queue. O(1).
+pq.top();
+
+// Inserts an element into priority queue. O(log n).
+pq.push(5);
+// O(log n) push suggests that the time complexity of building
+// a priority queue from an unsorted array is O(nlog n)
+// However, this time complexity is O(n). See below...
+// https://www.geeksforgeeks.org/time-complexity-of-building-a-heap/
 
 
-## Binary Search
-* For `mid`, one way is `mid = (start + end)/2` but sometimes `start + end` can exceed the limit of int, hence a better option is:
- `mid = start + (end - start) / 2`
-* Binary search can be implemented recursively also.
-* The concept of Binary Search can be used for finding x so that f(x) = p, if x is a monotonic function.
-* This https://www.youtube.com/watch?v=OE7wUUpJw6I variation of Binary Search is important and can be used to find the first or
-  last index of an element in an array if it is present multiple times.
+// pops the highest priority element from the queue. O(log n).
+pq.pop();
 
+// priority queue of pair of elements. Elements are ordered by first value of pair.
+priority_queue<pair<int, int> > pq;
+
+// Syntax to create a min heap priority queue is as follows:
+priority_queue<Type, vector<Type>, ComparisonType > min_heap_pq;
+
+// example: Min heap priority queue of integers
+priority_queue <int, vector<int>, greater<int> > pq;
+
+// example: Min heap priority queue of pairs
+typedef pair<int, int> pair_type;
+priority_queue <pair_type, vector<pair_type>, greater<pair_type> > pq;
+```
+
+* Priority queue of a user defined type can also be made but we must define a priority ourselves using operator overloading.
+* Simply writing `priority_queue<class_name> pq;` would through an error since default priorities are not defined for class type.
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+
+// priority queue for class type  
+class Person {
+  public:
+    int age;
+    float height;
+    // A parameterised constructor
+}; 
+
+// A function to overload the `<` operator  
+bool operator< (const Person &p1, const Person &p2) {
+  // returnx true when second person has greater height.
+  // resulting in a height ordered max heap. 
+  return p2.height > p2.height; 
+} 
+  
+int main(){
+  priority_queue<Person> pq;
+  
+  Person p1(30, 5.7);
+  Person p2(25, 6.0);
+  Person p3(20, 5.6);
+  pq.push(p1);
+  pq.push(p2);
+  pq.push(p3);
+  pq.top().height;  // 6.0
+  pq.pop();
+
+  return 0;
+}
+```
+
+
+## Difference between priority queue and set
+(https://stackoverflow.com/questions/10141841/difference-between-stdset-and-stdpriority-queue)
+
+
+
+
+
+
+
+
+# To-do
+* File Handling
+* Exception Handling
+* Namespace
+
+
+
+## <u>useful functions</u> (check complexity and usage)
 * __gcd()
 * upper_bound()
+* lower_bound()
+* distance()
 * sort(A.begin(), A.end());
-* *max_element(A.begin(), A.end());
+* *max_element(A.begin(), A.end()); (similarly min_element())
 * binary_search();
-* a*b = lcm(a, b) * gcd(a, b)
 
 
 
-* Optimal Solution: Dynamic Programming, All solutions: Backtracking.
 
-* Divisibility Rules
 
-* OOP Concepts
-  * **Encapsulation**: Wrapping together, all the variables and functions related to an entity is encapsulation. Defining a class is a way of achieving it.
-  * **Abstraction**: Means, know only the necessary parts. Creeating and using functions is a way of achieving this.
-  * Polymorphism
-  * Data Hiding
-  * Inheritance
+# To do
+* Virtual functions
+* multiple inheritance and virtual functions
+* Abstract Class
+* Copy constructor
+--------
