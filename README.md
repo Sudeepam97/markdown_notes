@@ -1,3 +1,3 @@
 # Cheat Sheets
 
-Some notes I made while learning a few things.
+Some (not very good) notes I made while learning a few things.
