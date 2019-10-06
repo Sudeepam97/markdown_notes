@@ -1437,18 +1437,34 @@ class Person {
   public:
     int age;
     float height;
-    // A parameterised constructor
+    Person (int x, float y){
+      age = x;
+      height = y;
+    }
 }; 
 
-// A function to overload the `<` operator  
-bool operator< (const Person &p1, const Person &p2) {
-  // returnx true when second person has greater height.
-  // resulting in a height ordered max heap. 
-  return p2.height > p2.height; 
-} 
-  
+
+// In std::sort custom comparision, if `true` is returned, the first argument
+// is gets placed *before* the second argument, because a std::sort is
+// ascending by default.
+
+// A std::priority_queue is a max heap or descending by default. Therefore, a
+// `true` value returned by a custom comparator would place the first argument
+// *after* the second argument.
+
+// With this in mind, lets tak a look at the custom priority function below.
+
+// This returns true when height(p1) > height(p2). Thus the element with greater
+// height is placed after the one with smaller height. This results is a height
+// ordered `min heap`, i.e. smallest height would be on top of priority queue.
+struct comp{
+  bool operator()(const Person &p1, const Person &p2){
+    return p1.height > p2.height;
+  }
+};
+
 int main(){
-  priority_queue<Person> pq;
+  priority_queue<Person, vector<Person>, comp> pq;
   
   Person p1(30, 5.7);
   Person p2(25, 6.0);
@@ -1456,8 +1472,14 @@ int main(){
   pq.push(p1);
   pq.push(p2);
   pq.push(p3);
-  pq.top().height;  // 6.0
+  cout << pq.top().height << "\n";  // 5.6
   pq.pop();
+  cout << pq.top().height << "\n";  // 5.7
+  pq.pop();
+  cout << pq.top().height << "\n";  // 6.0
+  pq.pop();
+  if (pq.empty())
+    cout << "empty now\n";
 
   return 0;
 }
