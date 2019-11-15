@@ -264,6 +264,7 @@ SELECT * FROM person WHERE gender = 'Male' LIMIT 10;
 ```
 
 * `OFFSET` allows us to choose the starting point from where the data would be retrieved.
+* Note that you cannot use variables in offset since it is pre-compiled.
 ```sql
 /* Get info about the first 10 males, but skip the first 7 males*/
 SELECT * FROM person WHERE gender = 'Male' OFFSET 7 LIMIT 10;
@@ -350,7 +351,7 @@ SELECT COUNT(price) FROM car WHERE make = 'Audi';
 /* An example query to print the (number of cities - number of distict cities) in a DB */
 SELECT COUNT(city) - COUNT(DISTINCT city) FROM station_db;
 ```
-* Some more functions are `FLOOR()`, `CEIL()`, `ABS()`.
+* Some more functions are `FLOOR()`, `CEIL()`, `ABS()`, `SQRT()`, `POWER(base, exponent)`.
 
 
 # REPLACE
@@ -596,7 +597,7 @@ SELECT
         WHEN A + B <= C OR B + C <= A OR A + C <= B THEN 'Not A Triangle' /* ideally we should remove `=` but cases are wrong */
         WHEN A != B AND B != C AND C != A THEN 'Scalene'
         WHEN A = B AND B = C THEN 'Equilateral'
-        WHEN A = B OR B = C OR C = A THEN 'Isosceles'
+        ELSE 'Isocsceles'
     END
 FROM TRIANGLES;
 ```
@@ -627,4 +628,12 @@ SELECT DISTINCT city FROM station WHERE city REGEXP "^[aeiou].*";
 
 /* ends with */
 SELECT DISTINCT city FROM station WHERE city REGEXP "[aeiou]$";
+```
+
+## CONCAT
+* This is used to concat results in select query
+```sql
+/* https://www.hackerrank.com/challenges/the-pads/problem */
+SELECT CONCAT(Name, '(', SUBSTR(Occupation, 1, 1), ')') FROM OCCUPATIONS ORDER BY Name;
+SELECT 'There are a total of', count(Occupation) AS cnt, CONCAT(LOWER(Occupation), 's.') AS ocp FROM OCCUPATIONS GROUP BY Occupation ORDER BY cnt, ocp;
 ```
