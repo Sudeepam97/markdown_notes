@@ -1,207 +1,304 @@
+- example of concatenated formatting
+- comprehensions and iterables
+- init
+- loop and functions upar
+- tuple string multi line wala
+- l1.sort()                 # Sorts the list in-place.
+- sorted()
+
+
+
+
 # Some Basics
-* `45.0` - An example of a floating point number.
-* Python uses PEMDAS (Parentheses Exponents Multiplication Division Addition Subtraction) to evaluate expressions.
-* `\` is to escape next character and so `\\` can be used to get a backslash. `eg: print ("\\")`
+* Everything in python is an object.
 * Boolean values are `True` and `False`.
+* `\` is to escape next character and so `\\` can be used to get a backslash. `eg: print ("\\")`
+* Python uses PEMDAS (Parentheses Exponents Multiplication Division Addition Subtraction) to evaluate expressions.
+
+
+
 
 # Operators
+| Operator     | Name           | Description                                         |
+|--------------|----------------|-----------------------------------------------------|
+| `a + b`      | Addition       | Sum of `a` and `b`                                  |
+| `a - b`      | Subtraction    | Difference of `a` and `b`                           |
+| `a * b`      | Multiplication | Product of `a` and `b`                              |
+| `a / b`      | True division  | Quotient of `a` and `b`                             |
+| `a // b`     | Floor division | Quotient of `a` and `b`, removing fractional parts  |
+| `a % b`      | Modulus        | Integer remainder after division of `a` by `b`      |
+| `a ** b`     | Exponentiation | `a` raised to the power of `b`                      |
+ `-a`         | Negation       | The negative of `a`                                  |  
 
-| Operator     | Name           | Description                                            |
-|--------------|----------------|--------------------------------------------------------|
-| ``a + b``    | Addition       | Sum of ``a`` and ``b``                                 |
-| ``a - b``    | Subtraction    | Difference of ``a`` and ``b``                          |
-| ``a * b``    | Multiplication | Product of ``a`` and ``b``                             |
-| ``a / b``    | True division  | Quotient of ``a`` and ``b``                            |
-| ``a // b``   | Floor division | Quotient of ``a`` and ``b``, removing fractional parts |
-| ``a % b``    | Modulus        | Integer remainder after division of ``a`` by ``b``     |
-| ``a ** b``   | Exponentiation | ``a`` raised to the power of ``b``                     |
-| ``-a``       | Negation       | The negative of ``a``                                  |
+
+
+
+# Strings
+* Triple quotes (""") are used to enclose multiline strings in python.
+
+```python
+s = "Sudeepam Pandey."     # An object of the string class.
+
+s.lower()                  # Convert to lower case (similarly s.upper()).
+s.isupper()                # Check if everything is in upper case.
+s.isdigit()                # Checks if `s` is a valid number.
+
+s.index("e")               # First index of `e`.
+s.index("Pan")             # First index where "Pan" starts.
+s.replace("ud", 'du')      # Replace all occurrences of 'ud' with 'du'
+
+s.strip('Sud')             # Strips "sud" from the start of the string
+s.rstrip(',.')             # Strips the characters '.' and ',' from the end of the string
+
+```
+
+Strings can be concatenated with a `+`. Note that this requires **both** operands to be strings.
+```python
+age = 21
+statement = "My age is " + age        # incorrect
+statement = "My age is " + str(age)   # correct
+```
+This method is not clean and should be avoided
+
+
 
 
 # Printing
 ```python
-print () # Print statement in python3
-```
-**Note:** We can specify the line endings in the print function.
+# example 1: prints 'name'
+print("name")
 
+# example 2: comma separrated
+name = "sudeepam"
+print("name is", name)
+
+# example 3: We can specify the
+# line endings in the print
+# function like so..
+print("cheese", end = " ")
+print("burger")
+# prints 'cheese burger'
+```
+
+### Formatted printing: 
 ```python
-# example 1: prints 'cheese burger'
-print ("cheese", end = " ")
-print ("burger")
+name = "Sudeepam"
 
-# example 2: prints 'cheese  burger'
-print ("cheese", end = "\t")
-print ("burger")
+# Method 1: Never Use. Not clean
+print("My name is " + name)
 
-# example 3: prints 'cheese
-#                    burger'
-print ("cheese", end = "\n")
-print ("burger")
+# Method 2: Python 3.6+
+print(f"My name is {name}")
+
+# Method 3: Most resilient method
+print("My name is {my_name}.format(my_name=name))
+# if key value pair is not specified,
+# the alphabetical order is considered.
 ```
 
 
-# Various ways of beautiful printing
-```python
-my_name = "Sudeepam"
-statement = "My name is {}"
-
-# Method 1
-print ("My name is " + my_name)
-
-# Method 2
-print (f"My name is {my_name}")
-
-# Method 3
-print (statement.format (my_name)) # Argument of format goes within the {}
-```
-
-
-# Strings
-```python
-"""Triple quotes are used to write
-multiline strings in python"""
-
-mystr = "Sudeepam Pandey."             # An object of the string class.
-print (mystr.lower ())                 # Convert to lower case (similarly mystr.upper()).
-print (mystr.isupper ())               # Check if everything is in upper case.
-print (mystr.lower().islower())        # Note that mystr.islower().lower() cannot be done.
-print (mystr.index ("e"))              # First index of `e`.
-print (mystr.index ("Pan")             # First index where "Pan" starts.
-print (mystr.replace ("Sud", 'lol'))   # Replace the occurrence of 'Sud' with 'lol'
-print (mystr.isdigit())                # Checks if `mystr` is a number. Returns False in this case.
-print (mystr.rstrip(',.'))             # Strips the characters '.' and ',' from the end of the string
-```
-
-Strings can be concatenated with a `+` sign as demonstrated earlier.
-
-```python
-# Concatenation with a '+' sign
-# requires both operands to be strings.
-my_age = 21
-print ("My age is " + my_age)        # will throw an error
-print ("My age is " + str(my_age))   # works
-```
-
-
-# Useful Functions
-```py
-help(func)                # Get the documentation for indenrifier specified by `func`
-len(x)                    # Generalized length function. x can be a string, list, etc.
-round (x)                 # Rounds off 'x' to the closest whole number (x = 3.5 -> 4 | x = 3.4 -> 3).
-abs (x)                   # Absolute value of 'x'.
-pow (x, y)                # Calculates x^y (x to the power of y).
-max (x, y)                # Max of x and y.
-min (x, y)                # Min of x and y.
-str (5)                   # Converts the number 5 to a string object.
-int ('c')                 # Converts a char to an int object.
-```
-
-# Math module
-```py
-floor (x)                 # Greatest integer less than x.
-ceil (x)                  # Least integer greater than x.
-sqrt (x)                  # Square root of x.
-```
-
-# Input at run time
-```python
-name = input ("Enter your name: ")         # Prompts the user to input their name.
-# input() accepts the input as a string.
-# All other data types must be typecasted.
-age = int (input ("How old are you: "))    # Prompts the user to input their age.
-salary = float (input ("Your Salary? "))   # Prompts the user to input their salary.
-```
 
 
 # Lists
-* Same list can accomodate elements of different types.
-* In python, accessing a nested list cannot be done with multi dimensional slicing like [0, 1:5].
-They do not work the way MATLAB or NumPy arrays work.
+A list can accomodate multiple elements of same or different data types.
 
 ## Basics
 ```python
 # Example 1
-my_list = ["bro_1", 5, 'k', "bro_2"]
-print (my_list[0])      # Prints bro_1
-print (my_list[-1])      # Prints bro_2
+items = ["apple", 5, "c", "orange"]
+print(items[0])      # Prints 'apple'
+print(items[-1])     # Prints 'orange'
 
 # Example 2
 nums = [0, 1, 2, 3, 4, 5, 6]
-print (nums[2:5])       # Prints 2, 3, 4 (2 to 4)
-print (nums[4:])        # Prints 4, 5, 6 (4 to end)
+print (nums[2:5])       # Prints '2, 3, 4' (2 to 4)
+print (nums[4:])        # Prints '4, 5, 6' (4 to end)
 
 # Example 3
-multi_list = [[[1, 2], [3, 4]],
-              [[5, 6], [7, 8]]]
+multi_list = [
+  [[1, 2], [3, 4]],
+  [[5, 6], [7, 8]]
+]
 
 # A three dimensional list has been defined above. The outermost brackets 
 # decide the 1st dimension, the next brackts decide the second and so on.
-# The following chunk of code can help you understand this... 
+# The following piece of code will help you understand this... 
 
-print (multi_list[0, 0, 0])  # = 1
-print (multi_list[0, 0, 1])  # = 2
-print (multi_list[0, 1, 0])  # = 3
-print (multi_list[0, 1, 1])  # = 4
-print (multi_list[1, 0, 0])  # = 5
-print (multi_list[1, 0, 1])  # = 6
-print (multi_list[1, 1, 0])  # = 7
-print (multi_list[1, 1, 1])  # = 8
+print(multi_list[0, 0, 0])    # = 1
+print(multi_list[1, 0, 0])    # = 5
+print(multi_list[1, 1, 1])    # = 8
+
+# A nested python list cannot be accessed via multi
+# dimensional slicing like MATLAB arrays or NumPy arrays.
+# Example 4:
+multi_list = [
+  [[1, 2], [3, 4], [5, 6]],
+  [[7, 8], [9, 2], [7, 3]]
+]
+
+print(multi_list[0, 1:])
+# throws an error instead of printing
+# [[3, 4], [5, 6]]
+
 ```
 
-## Common functions
+## Some methods available in lists
 ```python
-lis_1 = [1, 2, 3, 4, 5]
-lis_2 = ["hello", "darkness", "my", "old", "friend"]
+l1 = ["hello", "darkness", "my", "old"]
+l2 = [1, 2, 3, 4, 5]
 
-lis_1.extend (lis_2)             # Appends lis_2 at the end of lis_1.
-lis_1.append ("sup")             # Appends "sup" at the end of lis_1.
-lis_1.insert (2, 2.5)            # Insert 2.5 at the 2nd position of lis_1, existing elements are pushed right.
-lis_1.reverse()                  # Reverse the existing order of the list.
-lis_3 = lis_1.copy()             # Copy lis_1 into lis_3.
-lis_2.remove ("darkness")        # Removes "darkness" from the list (pun).
-lis_2.pop ()                     # Removes the last item of the list (Use the list like a Stack).
-lis_2.index ("my")               # Returns the index of "my" in the list. Error if element is not in the list.
-lis_2.sort()                     # Sorts the list.
-lis_2.count("old")               # Count how many times the entry "old" comes in the list.
+
+l1.pop ()                 # Removes the last item of the list.
+l1.reverse()              # Reverse the existing order of the list.
+l1.extend(l2)             # Appends l2 at the end of l1.
+l1.append("friend")       # Appends "sup" at the end of l1.
 ```
 
-## List Comprehensions
+
+
+
+# Tuples
+**Tuples are immutable.**
+
+```python
+# Example 1
+t1 = (0, 1, 2, 3, 4)
+print (t1[3])                     # Prints `3`
+
+# Example 2
+coordinates = [(1, 2), (3, 4)]    # List of tuples
+```
+
+
+
+
+## Comprehensions
 ```py
 threshold = 5
 L = [1, 7, 5, 4, 3]
 elem_greater = [elem > threshold for elem in L]      # This is a list comprehension
 ```
 
-# Tuples
-**Note:** Tuples are immutable.
+
+
+
+# Iterable and Iterators
+* In python, an iterable is an object that can be iterated through. All Iterables have an `__iter()__` method.
+* Iterator is an object, which is used to iterate over an iterable object. All Iterators have a `__next()__` method which the iterator used to iterate over the iterable.
+* Every iterator is also an iterable, but not every iterable is an iterator.
+* An iterator can be created from an iterable by using the function iter().
+
+
+
+
+# The `split()` function
+The `split()` function allows us to split a string into a list.
+
+`Syntax: string.split(separator, maxsplit)`
 
 ```python
 # Example 1
-tup_1 = (0, 1, 2, 3, 4)
-print (tup_1[3])                # Prints 3
+sentence = "Welcome my friend"
+words = sentence.split()
+print(words)            # ["Welcome", "my", "friend"]
+
 
 # Example 2
-coordinates = [ (1, 2), (3, 4)] # List of tuples
+inpt = "1, 2, 3, 4, 5"
+nums = inpt.split(",")  # ["1", "2", "3", "4", "5"]
+
+
+# Example 3
+inpt = "1, 2, 3, 4, 5"
+inpt.split(",", 2)      # ["1", "2", "3"] (note that there are 2 splits here)
 ```
 
 
-# if-else
+
+
+# The `map()` function
+The `map()` function allows us to apply a given function to each item of an iterable and returns a map object (which is an iterator).
+```python 
+def square(num):
+  '''Return square of num'''
+  return num * num 
+
+numbers = [5, 3, 6, 4] 
+result = map(square, numbers)
+
+# printing the result
+for number in numbers:
+  print("Square of {num} is {sqr}".format(
+    num = number,
+    sqr = next(result)
+  ))
+```
+
+
+
+
+# Input at run-time
+The Statement:
+```python
+name = input("Enter your name: ")
+```
+
+`input()` accepts the input as a string. All other data types must be typecasted.
+```python
+age = int(input("How old are you: "))
+salary = float(input("Your Salary? "))
+```
+
+Taking space separated integers as input:
+```python
+numbers = list(map(int, input().split()))
+```
+
+
+
+
+
+
+
+# Useful Functions
+```py
+help(func)                # Get the documentation for indentifier specified by `func`
+len(x)                    # Generalized length function. x can be a string, list, etc.
+round (x)                 # Rounds off 'x' to the closest whole number (x = 3.5 -> 4 | x = 3.4 -> 3).
+abs (x)                   # Absolute value of 'x'.
+pow (x, y)                # Calculates x^y (x to the power of y).
+max (x, y)                # Max of x and y.
+min (x, y)                # Min of x and y.
+```
+
+
+
+
+# Math module
+```py
+import math
+
+math.floor (x)                 # Greatest integer less than x.
+math.ceil (x)                  # Least integer greater than x.
+math.sqrt (x)                  # Square root of x.
+```
+
+
+# if-elif-else
 ```python
 a = 5
 b = 4
 c = 7
 # The sequence explains the usual syntax.
-if a > b or a > c:
-  print ("a is not the least")
-elif a < b and a < c :
-  print ("a is the least")
-elif a == b:
-  print ("a is equal to b")
-elif b != c:
-  print ("b is not equal to c") 
+if a > b and a > c:
+  print ("a is the largest")
+elif a < b and a < c>:
+  print ("a is the smallest")
 else:
-  print ("I'm stumped")
+  print ("a is neither the largest, nor the smallest")
 ```
+
+
 
 
 # Dictionaries
@@ -209,16 +306,19 @@ else:
 * All keys should be unique.
 ```python
 # Creation
-my_dict = { "Jan" : "January", "Feb" : "February", "Mar" : "March", "Apr" : "April"} 
+months = { "Jan" : "January", "Feb" : "February", "Mar" : "March", "Apr" : "April"} 
 ```
 
 ```python
 # Accessing the value corresponding to a key
-print (my_dict["Jan"])
+print (months["Jan"])
+
 # We can use get() function, with which, we can define
 # a default if the specified key is not found.
-print (my_dict.get("Jan", "Not a valid key")) 
+print (months.get("May", "Not a valid key")) 
 ```
+
+
 
 
 # Loops
