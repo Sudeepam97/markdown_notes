@@ -1,5 +1,5 @@
-- example of concatenated formatting
-- comprehensions and iterables
+- comprehensions
+- special _type functions
 - init
 - loop and functions upar
 - tuple string multi line wala
@@ -14,6 +14,12 @@
 * Boolean values are `True` and `False`.
 * `\` is to escape next character and so `\\` can be used to get a backslash. `eg: print ("\\")`
 * Python uses PEMDAS (Parentheses Exponents Multiplication Division Addition Subtraction) to evaluate expressions.
+* Python doesn't have real private methods, so one underline in the beginning of a method or attribute means you shouldn't access it, because it's not part of the API.
+* The goal of two underlines in the beginning of is to avoid the attribute/method to be overridden by a subclass.
+* Finally `__this__` has a special meaning to python. It is a method that python calls and not us.
+
+
+
 
 
 
@@ -34,8 +40,7 @@
 
 
 # Strings
-* Triple quotes (""") are used to enclose multiline strings in python.
-
+* In python, double quotes (`""` or `''`) are used for single line strings and triple quotes (`"""` or `'''`) are used for multiline strings.
 ```python
 s = "Sudeepam Pandey."     # An object of the string class.
 
@@ -52,13 +57,25 @@ s.rstrip(',.')             # Strips the characters '.' and ',' from the end of t
 
 ```
 
-Strings can be concatenated with a `+`. Note that this requires **both** operands to be strings.
+Strings can be concatenated with a `+` sign. Note that this requires **both** operands to be strings. Note that this method is not clean and should be avoided.
 ```python
 age = 21
 statement = "My age is " + age        # incorrect
 statement = "My age is " + str(age)   # correct
 ```
-This method is not clean and should be avoided
+
+Here's a super clean method to use if you want a single line string but the string is too large to fit in a single line of code.
+```python
+# Try this
+output = (
+  "I want to print this string "
+  "in a single line "
+  "but using a single line to "
+  "define this in the code is super ugly. "
+  "Thereforre, I will use this neat trick."
+)
+print(output)
+```
 
 
 
@@ -68,7 +85,7 @@ This method is not clean and should be avoided
 # example 1: prints 'name'
 print("name")
 
-# example 2: comma separrated
+# example 2: comma separated
 name = "sudeepam"
 print("name is", name)
 
@@ -111,8 +128,8 @@ print(items[-1])     # Prints 'orange'
 
 # Example 2
 nums = [0, 1, 2, 3, 4, 5, 6]
-print (nums[2:5])       # Prints '2, 3, 4' (2 to 4)
-print (nums[4:])        # Prints '4, 5, 6' (4 to end)
+print (nums[2:5])    # Prints '2, 3, 4' (2 to 4)
+print (nums[4:])     # Prints '4, 5, 6' (4 to end)
 
 # Example 3
 multi_list = [
@@ -158,7 +175,7 @@ l1.append("friend")       # Appends "sup" at the end of l1.
 
 
 # Tuples
-**Tuples are immutable.**
+Tuples are similar to lists except the fact that **tuples are immutable.**
 
 ```python
 # Example 1
@@ -183,10 +200,39 @@ elem_greater = [elem > threshold for elem in L]      # This is a list comprehens
 
 
 # Iterable and Iterators
-* In python, an iterable is an object that can be iterated through. All Iterables have an `__iter()__` method.
-* Iterator is an object, which is used to iterate over an iterable object. All Iterators have a `__next()__` method which the iterator used to iterate over the iterable.
-* Every iterator is also an iterable, but not every iterable is an iterator.
-* An iterator can be created from an iterable by using the function iter().
+**DISCLAIMER**: Many questions will arise as you read through this section. Please go through the entire thing to get answers for most of them.
+
+* In python, an `iterable` is an object that can be iterated through, and an `iterator` is an object that is used to iterate through an `iterable`.
+
+* `iterators` and `iterables` are defined by these properties respectively:
+  * All `iterators` contain a `__next()__` method.
+  *  All `iterables` contain an `__iter()__` method or a `__getitem__()` method. Defining a `__iter__()` method is the preferred way to create an iterable, and defining the `__getitem__()` method is the legacy way. We'll discuss this in a bit.
+
+
+* The `__iter__()` method returns an iterator for the given iterable.
+
+* The `__next__()` method returns the next item of the iterable. If there are no further items, `__next()__` raises the `StopIteration` exception.
+
+* The `__get_item__()` method is a bit different. It is used to **get** an item via its key or index.
+
+  This essentially means that the `[]` syntax for getting an item by its key or index is just syntactic sugar. `__get_item__()` is what is called under the hood when you do something like `x = dummy_list[5]`.
+  
+  Since we're on it, let me also mention a method called `__set_item__()` which is used to **assign** by index or key, like so `dummy_list[3] = 10`. Take a look at [this](https://stackoverflow.com/questions/43627405/understanding-getitem-method/43627975#43627975) example.
+
+* At this point, I'd like to give an example of when you would need all of this knowledge.
+
+  Let's say that you are creating a class, and you would like the objects of this classes to be iterable via a for loop.
+  
+  Under the hood, a for loop just makes calls to these `__iter__()` and `__next__()` methods to perform the action of iteration, so this is where you would have to implement an `__iter__()` function for your class, and a `__next__()` function for the iterator of your class.
+
+
+* Lastly, `__get_item__()` is a legacy way to create iterable classes. The idea was that anything that is indexable, would have a length, and is therefore, iterable.
+
+  In contrast, `__iter__()` allows us to define classes that are iterable without necessarily being indexable. A perfect example for this is a linkedlist (iterable but not indexable).
+  
+  Finally, we should understand that in modern python, anything that is iterable and indexable should have both, an `__iter__()` and a `__get_item__()`.
+
+Please look at [these](https://docs.python.org/3/tutorial/classes.html#iterators) docs/examples on iterators.
 
 
 
