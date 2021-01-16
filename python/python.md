@@ -17,7 +17,7 @@
 * Python doesn't have real private methods, so one underline in the beginning of a method or attribute means you shouldn't access it, because it's not part of the API.
 * The goal of two underlines in the beginning of is to avoid the attribute/method to be overridden by a subclass.
 * Finally `__this__` has a special meaning to python. It is a method that python calls and not us.
-
+* to check if some variable (say `x`) resolves to `True`, do bool(x)
 
 
 
@@ -189,16 +189,6 @@ coordinates = [(1, 2), (3, 4)]    # List of tuples
 
 
 
-## Comprehensions
-```py
-threshold = 5
-L = [1, 7, 5, 4, 3]
-elem_greater = [elem > threshold for elem in L]      # This is a list comprehension
-```
-
-
-
-
 # Iterable and Iterators
 **DISCLAIMER**: Many questions will arise as you read through this section. Please go through the entire thing to get answers for most of them.
 
@@ -234,6 +224,54 @@ elem_greater = [elem > threshold for elem in L]      # This is a list comprehens
 
 Please look at [these](https://docs.python.org/3/tutorial/classes.html#iterators) docs/examples on iterators.
 
+
+
+
+# Dictionaries
+* Used to store key-value pairs.
+* All keys should be unique.
+* Internally uses a HashMap, hence complexity is O(1)
+```python
+# Creating a dict
+months = { "Jan" : "January", "Feb" : "February", "Mar" : "March"} 
+
+# Accessing a dict
+months["Jan"]
+
+ # Access with default value
+months.get("May", "Not a valid key")
+
+# We can update values like so
+months["Jul"] = "July"
+
+# Update existing keys, insert the ones not present
+months.update({"Jan": "Birthday Month", "Jun": "June"})
+
+# returns an iterable containing all keys of dict
+months.keys()
+
+# returns an iterable containing all values of dict
+months.values()
+
+# returns an iterable containing all key value pairs of the dict
+months.items()
+```
+
+
+
+
+# Set
+Set is...
+
+
+
+
+# Comprehensions
+```py
+threshold = 5
+L = [1, 7, 5, 4, 3]
+elem_greater = [elem > threshold for elem in L]      # This is a list comprehension
+```
 
 
 
@@ -342,26 +380,6 @@ elif a < b and a < c>:
   print ("a is the smallest")
 else:
   print ("a is neither the largest, nor the smallest")
-```
-
-
-
-
-# Dictionaries
-* Used to store key-value pairs.
-* All keys should be unique.
-```python
-# Creation
-months = { "Jan" : "January", "Feb" : "February", "Mar" : "March", "Apr" : "April"} 
-```
-
-```python
-# Accessing the value corresponding to a key
-print (months["Jan"])
-
-# We can use get() function, with which, we can define
-# a default if the specified key is not found.
-print (months.get("May", "Not a valid key")) 
 ```
 
 
