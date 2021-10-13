@@ -88,7 +88,7 @@ println({
 # Strings
 Scala strings are similar to strings from any other language, below are a few things to keep in mind:
 ```scala
-val firstName = "Jon"
+val firstName = "Jhon"
 val lastName = "Cena"
 
 // appending strings (method 1)
@@ -339,13 +339,68 @@ class a extends b with c with d {
 // here b, c and d are traits and a is the class that extends them 
 ```
 
+Traits can also have some methods defined while others are abstract (behaviour not implemented). When required
+the pre defined methods can be overriden as well. For example:
+```
+trait Pet {
+    def speak = println("Henlo")     // concrete implementation of a speak method
+    def comeToMaster(): Unit         // abstract
+}
+
+class Dog(name: String) extends Pet {
+    def comeToMaster(): Unit = println("Woo-hoo, I'm coming!")
+}
+
+class Cat extends Pet {
+    override def speak(): Unit = println("meow")      // override 'speak'
+    def comeToMaster(): Unit = println("Not gonna happen.")
+}
+```
+
+* Scala traits don’t allow constructor parameters. Therefore, we need to use an abstract class whenever a base behavior must have constructor parameters. However, a class can extend only one abstract class whereas it can extend multiple traits.
+```
+// defining abstract classes
+abstract class Pet (name: String) {
+    def speak(): Unit = println("Yo")   // concrete implementation
+    def comeToMaster(): Unit            // abstract method
+}
+
+class Dog(name: String) extends Pet(name){
+
+}
+
+val d = new Dog("Fido")
+```
 
 
-* classes
-* case class
-* case Some? https://stackoverflow.com/questions/49944872/understanding-some-and-option-in-scala
-* inheritence
+
+
+# Scala Collections
+Scala collections distinguish between mutable (`scala.collection.mutable`) and immutable (`scala.collection.immutable`) collections. A mutable collection can be updated or extended in place whereas Immutable collections, do not change. Immutable collections do have operations that simulate additions, removals, or updates, but those operations return a new collection and leave the old collection unchanged.
+
+By default, Scala always picks immutable collections. For instance, if you just write `Set` without any prefix or without having imported `Set` from somewhere, you get an immutable set because these are the default bindings imported from the scala package. To get the mutable default versions, you need to explicitly write `collection.mutable.Set`.
+
+Read about the overview of collections and hierarchy here: https://docs.scala-lang.org/overviews/collections/overview.html
+
+| Class / Trait  |               Description                   |                           Overview Doc                                      |
+| -------------  |               -----------                   |                           ------------                                      |
+| ArrayBuffer    | An indexed, mutable sequence                | https://docs.scala-lang.org/overviews/scala-book/arraybuffer-examples.html  |
+| List           | A linear (linked list), immutable sequence  | https://docs.scala-lang.org/overviews/scala-book/list-class.html            |
+| Vector         | An indexed, immutable sequence              | https://docs.scala-lang.org/overviews/scala-book/vector-class.html          |
+| Map            | The base Map (key/value pairs) class        | https://docs.scala-lang.org/overviews/scala-book/map-class.html             |
+| Set            | The base Set class                          | https://docs.scala-lang.org/overviews/scala-book/set-class.html             |
+
+* Map and Set come in both mutable and immutable versions.
+* **Note**: `Seq` is a trait and `List` is a class that derives from this trait. The default implementation of a `Seq` is a `List` (see the overview doc linked above) so often you'd see `Seq` being used instead of `List`. Same thing applies to `Map` and `Set`.
+
+
+
+
+# Anonymous functions
+
+
+
+
 * packaging and sbt
-
-
-baseDf.withColumn("__hoodie_active", if (op.equals("d")) lit(0) else lit(1))
+* functional programming
+* case class
