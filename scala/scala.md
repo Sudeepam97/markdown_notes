@@ -42,6 +42,20 @@ object Hello extends App {
 
 
 
+# Data Types
+
+Primitive Types are same as JAVA, but a first word is capitalized.
+```
+Int
+Long
+Float
+Double
+Char
+Short
+Byte
+Boolean
+```
+
 
 # Scala REPL
 Scala isn't really a interpreted language, however it offers something called a Scala REPL "Read-Evaluate-Print-Loop", which is a command-line interpreter that can be used as a “playground” to test Scala code. You can type in Scala expressions in the REPL to test them out.
@@ -71,6 +85,89 @@ var k: String = "hello"
 Note that in scala REPL, `val` variables can be redefined (REPL isn't 100% like actual Scala)
 
 
+# Functional programming basics
+```
+def square(x: Double): Double = x * x
+def sumOfSquares(x: Double, y: Double): Double = square(x) + square(y)
+
+val ans = sumOfSquares(4, 5)
+
+println(ans)
+```
+
+The way this program works is that...
+* We evaluate (simplify) the function arguments from left to right.
+* We replace the body of the function with its definition.
+* We repeat this till we are able to reduce the expressions to a value.
+ 
+Hence...
+ ```
+sumOfSquares(4, 2 + 3)
+
+= sumOfSquares(4, 5)
+= square(4) + square(5)
+= 4 * 4 + square(5)
+= 16 + square(5)
+= 16 + 5 * 5
+= 16 + 25
+= 41
+ ```
+
+* This is called the substitution model, as simple as it may seem, we can essentially extend this to implement every algorithm.
+* The idea of the model is that all evaluations reduce an expression to a value.
+* We can apply this to all expressions, as long as they do not have any side effects (such expressions are called pure functions).
+
+> These are the foundations of functional programming.
+
+It might be possible that ab evaluation does not terminate.
+```scala
+def x: Int = x
+```
+This will never terminate since the expression always evaluates to itself.
+
+
+
+# Call by value vs Call by name
+* Previously we saw that we were reducing the expressions for the function arguments first, and then applying the function. Alternatively, we can also apply the function first to unreduced arguments and then evaluate the expressions after function application. This would be something like...
+```
+sumOfSquares(4, 2 + 3)
+
+= square(4) + square(2 + 3)
+= 4 * 4 + square(2 + 3)
+= 16 + (2 + 3) * (2 + 3)
+= 16 + 5 * 5
+= 16 + 25
+= 41
+
+>> Note how we're applying the function first and then evaluating the expressions, unlike before.
+```
+
+- reducing and applying = call by value
+- applying and reducing = call by name
+
+Both the methods will evaluate an expression to the same value as long as.
+
+1) Reduced expressions are pure functions (no side effects).
+2) Both evaluations terminate.
+
+In the example above, we can se that `(2 + 3)` was calculated (evaluated) twice. This is a disadvantage of call by name. In call by value however, such an expression only gets evaluated once. This starts to matter when the expressions are complicated expressions instead of trivial things like addition.
+
+1) In call by value every expression gets evaluated exactly once, which may be an advantage.
+2) In call by name, an expression may be evaluated any number of times... even 0 times if a parameter is unused.
+```
+def test(x: Int, y: Int) = x * x
+
+>> test(2, 3) -> same for both
+
+>> test(2, 1 + 1) -> call by value is faster as we saw before
+
+>> test(2, 3 * 3)
+
+CBV = test(2, 9) = 2 * 9 = 18
+CBN = 2 * 3 * 3 = 18
+
+So in this case CBN is faster.
+```
 
 
 # Blocks
