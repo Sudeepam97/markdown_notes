@@ -1,699 +1,1290 @@
-- comprehensions
-- special _type functions
-- init
-- loop and functions upar
-- tuple string multi line wala
-- l1.sort()                 # Sorts the list in-place.
-- sorted()
+# Python Interview Revision Notes
 
+Quick Python 3 notes for technical interviews, LeetCode-style problems, and basic
+data science tasks. Prefer clarity first; micro-optimizations come after the
+algorithm is correct.
 
+## Table of Contents
 
+- [Mental Model](#mental-model)
+- [Syntax Basics](#syntax-basics)
+- [Control Flow and Useful Built-ins](#control-flow-and-useful-built-ins)
+- [Core Data Types](#core-data-types)
+- [Strings](#strings)
+- [Lists and Tuples](#lists-and-tuples)
+- [Dictionaries and Sets](#dictionaries-and-sets)
+- [Comprehensions](#comprehensions)
+- [Functions](#functions)
+- [Iteration and Generators](#iteration-and-generators)
+- [Sorting](#sorting)
+- [Useful Standard Library](#useful-standard-library)
+- [Complexity Cheat Sheet](#complexity-cheat-sheet)
+- [LeetCode Patterns](#leetcode-patterns)
+- [Object-Oriented Python](#object-oriented-python)
+- [Errors, Files, and Imports](#errors-files-and-imports)
+- [Type Hints](#type-hints)
+- [Basic Data Science](#basic-data-science)
+- [Common Pitfalls](#common-pitfalls)
 
-# Some Basics
-* Everything in python is an object.
-* Boolean values are `True` and `False`.
-* `\` is to escape next character and so `\\` can be used to get a backslash. `eg: print ("\\")`
-* Python uses PEMDAS (Parentheses Exponents Multiplication Division Addition Subtraction) to evaluate expressions.
-* Python doesn't have real private methods, so one underline in the beginning of a method or attribute means you shouldn't access it, because it's not part of the API.
-* The goal of two underlines in the beginning of is to avoid the attribute/method to be overridden by a subclass.
-* Finally `__this__` has a special meaning to python. It is a method that python calls and not us.
-* to check if some variable (say `x`) resolves to `True`, do bool(x)
+## Mental Model
 
-
-
-
-
-
-# Operators
-| Operator     | Name           | Description                                         |
-|--------------|----------------|-----------------------------------------------------|
-| `a + b`      | Addition       | Sum of `a` and `b`                                  |
-| `a - b`      | Subtraction    | Difference of `a` and `b`                           |
-| `a * b`      | Multiplication | Product of `a` and `b`                              |
-| `a / b`      | True division  | Quotient of `a` and `b`                             |
-| `a // b`     | Floor division | Quotient of `a` and `b`, removing fractional parts  |
-| `a % b`      | Modulus        | Integer remainder after division of `a` by `b`      |
-| `a ** b`     | Exponentiation | `a` raised to the power of `b`                      |
- `-a`         | Negation       | The negative of `a`                                  |  
-
-
-
-
-# Strings
-* In python, double quotes (`""` or `''`) are used for single line strings and triple quotes (`"""` or `'''`) are used for multiline strings.
-```python
-s = "Sudeepam Pandey."     # An object of the string class.
-
-s.lower()                  # Convert to lower case (similarly s.upper()).
-s.isupper()                # Check if everything is in upper case.
-s.isdigit()                # Checks if `s` is a valid number.
-
-s.index("e")               # First index of `e`.
-s.index("Pan")             # First index where "Pan" starts.
-s.replace("ud", 'du')      # Replace all occurrences of 'ud' with 'du'
-
-s.strip('Sud')             # Strips "sud" from the start of the string
-s.rstrip(',.')             # Strips the characters '.' and ',' from the end of the string
-
-```
-
-Strings can be concatenated with a `+` sign. Note that this requires **both** operands to be strings. Note that this method is not clean and should be avoided.
-```python
-age = 21
-statement = "My age is " + age        # incorrect
-statement = "My age is " + str(age)   # correct
-```
-
-Here's a super clean method to use if you want a single line string but the string is too large to fit in a single line of code.
-```python
-# Try this
-output = (
-  "I want to print this string "
-  "in a single line "
-  "but using a single line to "
-  "define this in the code is super ugly. "
-  "Thereforre, I will use this neat trick."
-)
-print(output)
-```
-
-
-
-
-# Printing
-```python
-# example 1: prints 'name'
-print("name")
-
-# example 2: comma separated
-name = "sudeepam"
-print("name is", name)
-
-# example 3: We can specify the
-# line endings in the print
-# function like so..
-print("cheese", end = " ")
-print("burger")
-# prints 'cheese burger'
-```
-
-### Formatted printing: 
-```python
-name = "Sudeepam"
-
-# Method 1: Never Use. Not clean
-print("My name is " + name)
-
-# Method 2: Python 3.6+
-print(f"My name is {name}")
-
-# Method 3: Most resilient method
-print("My name is {my_name}.format(my_name=name))
-# if key value pair is not specified,
-# the alphabetical order is considered.
-```
-
-
-
-
-# Lists
-A list can accomodate multiple elements of same or different data types.
-
-## Basics
-```python
-# Example 1
-items = ["apple", 5, "c", "orange"]
-print(items[0])      # Prints 'apple'
-print(items[-1])     # Prints 'orange'
-
-# Example 2
-nums = [0, 1, 2, 3, 4, 5, 6]
-print (nums[2:5])    # Prints '2, 3, 4' (2 to 4)
-print (nums[4:])     # Prints '4, 5, 6' (4 to end)
-
-# Example 3
-multi_list = [
-  [[1, 2], [3, 4]],
-  [[5, 6], [7, 8]]
-]
-
-# A three dimensional list has been defined above. The outermost brackets 
-# decide the 1st dimension, the next brackts decide the second and so on.
-# The following piece of code will help you understand this... 
-
-print(multi_list[0, 0, 0])    # = 1
-print(multi_list[1, 0, 0])    # = 5
-print(multi_list[1, 1, 1])    # = 8
-
-# A nested python list cannot be accessed via multi
-# dimensional slicing like MATLAB arrays or NumPy arrays.
-# Example 4:
-multi_list = [
-  [[1, 2], [3, 4], [5, 6]],
-  [[7, 8], [9, 2], [7, 3]]
-]
-
-print(multi_list[0, 1:])
-# throws an error instead of printing
-# [[3, 4], [5, 6]]
-
-```
-
-## Some methods available in lists
-```python
-l1 = ["hello", "darkness", "my", "old"]
-l2 = [1, 2, 3, 4, 5]
-
-
-l1.pop ()                 # Removes the last item of the list.
-l1.reverse()              # Reverse the existing order of the list.
-l1.extend(l2)             # Appends l2 at the end of l1.
-l1.append("friend")       # Appends "sup" at the end of l1.
-```
-
-
-
-
-# Tuples
-Tuples are similar to lists except the fact that **tuples are immutable.**
+- Everything in Python is an object, including integers, strings, functions,
+  classes, and modules.
+- Names are references to objects. Assignment binds a name to an object; it does
+  not copy the object.
+- Python is dynamically typed: a name can refer to objects of different types
+  over time.
+- Python is strongly typed: it will not silently combine unrelated types like
+  `"1" + 2`.
+- Mutability matters:
+  - Immutable: `int`, `float`, `bool`, `str`, `tuple`, `frozenset`, `None`.
+  - Mutable: `list`, `dict`, `set`, most class instances.
+- Use `==` for value equality and `is` for object identity.
+- Use `is None` and `is not None` for `None` checks.
+- Python passes object references by assignment. Mutating a passed-in list changes
+  the caller's list; rebinding the parameter does not.
 
 ```python
-# Example 1
-t1 = (0, 1, 2, 3, 4)
-print (t1[3])                     # Prints `3`
+def add_item(xs):
+    xs.append(10)      # mutates caller's list
 
-# Example 2
-coordinates = [(1, 2), (3, 4)]    # List of tuples
+def reassign(xs):
+    xs = [10]          # local name now points elsewhere
+
+nums = [1, 2]
+add_item(nums)         # [1, 2, 10]
+reassign(nums)         # still [1, 2, 10]
 ```
 
+## Syntax Basics
 
+### Truthiness
 
-
-# Iterable and Iterators
-**DISCLAIMER**: Many questions will arise as you read through this section. Please go through the entire thing to get answers for most of them.
-
-* In python, an `iterable` is an object that can be iterated through, and an `iterator` is an object that is used to iterate through an `iterable`.
-
-* `iterators` and `iterables` are defined by these properties respectively:
-  * All `iterators` contain a `__next()__` method.
-  *  All `iterables` contain an `__iter()__` method or a `__getitem__()` method. Defining a `__iter__()` method is the preferred way to create an iterable, and defining the `__getitem__()` method is the legacy way. We'll discuss this in a bit.
-
-
-* The `__iter__()` method returns an iterator for the given iterable.
-
-* The `__next__()` method returns the next item of the iterable. If there are no further items, `__next()__` raises the `StopIteration` exception.
-
-* The `__get_item__()` method is a bit different. It is used to **get** an item via its key or index.
-
-  This essentially means that the `[]` syntax for getting an item by its key or index is just syntactic sugar. `__get_item__()` is what is called under the hood when you do something like `x = dummy_list[5]`.
-  
-  Since we're on it, let me also mention a method called `__set_item__()` which is used to **assign** by index or key, like so `dummy_list[3] = 10`. Take a look at [this](https://stackoverflow.com/questions/43627405/understanding-getitem-method/43627975#43627975) example.
-
-* At this point, I'd like to give an example of when you would need all of this knowledge.
-
-  Let's say that you are creating a class, and you would like the objects of this classes to be iterable via a for loop.
-  
-  Under the hood, a for loop just makes calls to these `__iter__()` and `__next__()` methods to perform the action of iteration, so this is where you would have to implement an `__iter__()` function for your class, and a `__next__()` function for the iterator of your class.
-
-
-* Lastly, `__get_item__()` is a legacy way to create iterable classes. The idea was that anything that is indexable, would have a length, and is therefore, iterable.
-
-  In contrast, `__iter__()` allows us to define classes that are iterable without necessarily being indexable. A perfect example for this is a linkedlist (iterable but not indexable).
-  
-  Finally, we should understand that in modern python, anything that is iterable and indexable should have both, an `__iter__()` and a `__get_item__()`.
-
-Please look at [these](https://docs.python.org/3/tutorial/classes.html#iterators) docs/examples on iterators.
-
-
-
-
-# Dictionaries
-* Used to store key-value pairs.
-* All keys should be unique.
-* Internally uses a HashMap, hence complexity is O(1)
-```python
-# Creating a dict
-months = { "Jan" : "January", "Feb" : "February", "Mar" : "March"} 
-
-# Accessing a dict
-months["Jan"]
-
- # Access with default value
-months.get("May", "Not a valid key")
-
-# We can update values like so
-months["Jul"] = "July"
-
-# Update existing keys, insert the ones not present
-months.update({"Jan": "Birthday Month", "Jun": "June"})
-
-# returns an iterable containing all keys of dict
-months.keys()
-
-# returns an iterable containing all values of dict
-months.values()
-
-# returns an iterable containing all key value pairs of the dict
-months.items()
-```
-
-
-
-
-# Set
-Set is...
-
-
-
-
-# Comprehensions
-```py
-threshold = 5
-L = [1, 7, 5, 4, 3]
-elem_greater = [elem > threshold for elem in L]      # This is a list comprehension
-```
-
-
-
-# The `split()` function
-The `split()` function allows us to split a string into a list.
-
-`Syntax: string.split(separator, maxsplit)`
+Falsy values:
 
 ```python
-# Example 1
-sentence = "Welcome my friend"
-words = sentence.split()
-print(words)            # ["Welcome", "my", "friend"]
-
-
-# Example 2
-inpt = "1, 2, 3, 4, 5"
-nums = inpt.split(",")  # ["1", "2", "3", "4", "5"]
-
-
-# Example 3
-inpt = "1, 2, 3, 4, 5"
-inpt.split(",", 2)      # ["1", "2", "3"] (note that there are 2 splits here)
+False
+None
+0
+0.0
+""
+[]
+{}
+set()
+tuple()
 ```
 
+Use truthiness for emptiness checks:
 
-
-
-# The `map()` function
-The `map()` function allows us to apply a given function to each item of an iterable and returns a map object (which is an iterator).
-```python 
-def square(num):
-  '''Return square of num'''
-  return num * num 
-
-numbers = [5, 3, 6, 4] 
-result = map(square, numbers)
-
-# printing the result
-for number in numbers:
-  print("Square of {num} is {sqr}".format(
-    num = number,
-    sqr = next(result)
-  ))
-```
-
-
-
-
-# Input at run-time
-The Statement:
 ```python
-name = input("Enter your name: ")
+if nums:
+    print("non-empty")
+
+if not name:
+    print("empty string or missing value")
 ```
 
-`input()` accepts the input as a string. All other data types must be typecasted.
+### Operators
+
+| Expression | Meaning |
+| --- | --- |
+| `a + b` | addition or concatenation |
+| `a - b` | subtraction |
+| `a * b` | multiplication or repetition |
+| `a / b` | true division, returns `float` |
+| `a // b` | floor division |
+| `a % b` | remainder |
+| `a ** b` | exponentiation |
+| `-a` | negation |
+| `a == b` | value equality |
+| `a != b` | value inequality |
+| `a < b <= c` | chained comparison |
+| `x in items` | membership |
+| `x not in items` | non-membership |
+
+Boolean operators short-circuit:
+
 ```python
-age = int(input("How old are you: "))
-salary = float(input("Your Salary? "))
+if i < len(nums) and nums[i] == target:
+    ...
 ```
 
-Taking space separated integers as input:
+### Naming Conventions
+
+- `snake_case` for variables, functions, and methods.
+- `PascalCase` for classes.
+- `_internal_name` means "internal use by convention".
+- `__dunder__` names are special methods used by Python.
+- `__private` triggers name mangling inside classes; it is not true privacy.
+
+## Control Flow and Useful Built-ins
+
+### `if`, `elif`, `else`
+
 ```python
-numbers = list(map(int, input().split()))
-```
-
-
-
-
-
-
-
-# Useful Functions
-```py
-help(func)                # Get the documentation for indentifier specified by `func`
-len(x)                    # Generalized length function. x can be a string, list, etc.
-round (x)                 # Rounds off 'x' to the closest whole number (x = 3.5 -> 4 | x = 3.4 -> 3).
-abs (x)                   # Absolute value of 'x'.
-pow (x, y)                # Calculates x^y (x to the power of y).
-max (x, y)                # Max of x and y.
-min (x, y)                # Min of x and y.
-```
-
-
-
-
-# Math module
-```py
-import math
-
-math.floor (x)                 # Greatest integer less than x.
-math.ceil (x)                  # Least integer greater than x.
-math.sqrt (x)                  # Square root of x.
-```
-
-
-# if-elif-else
-```python
-a = 5
-b = 4
-c = 7
-# The sequence explains the usual syntax.
-if a > b and a > c:
-  print ("a is the largest")
-elif a < b and a < c>:
-  print ("a is the smallest")
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
 else:
-  print ("a is neither the largest, nor the smallest")
+    grade = "C"
 ```
 
+Python has a conditional expression:
 
-
-
-# Loops
-
-### While loop
 ```python
+label = "even" if x % 2 == 0 else "odd"
+```
+
+### Loops
+
+```python
+for x in nums:
+    print(x)
+
+for i in range(len(nums)):
+    print(i, nums[i])
+
 i = 0
-while i < 10:
-  print (i)
-  i += 1
-print ("finished")
+while i < len(nums):
+    print(nums[i])
+    i += 1
 ```
-### For loop
-For loops in python can do a whole lot. They can iterate through various kind of sequences and we will demonstrate this with various examples...
+
+Prefer direct iteration or `enumerate` over indexing when possible:
 
 ```python
-# Example 1 (Iterates through the characters in the String and prints them)
-for letter in "Sudeepam Pandey":
-  print (letter)
-
-# Example 2 (Iterates through the items of the list and prints them)
-my_list = ["item_0", "item_1", "item_2", "item_3", "item_4"]
-for my_items in my_list:
-  print (my_items)
-
-# Example 3 (Iterates through the items of the list and prints them along with their index)
-for index, my_items in enumerate(my_list):
-  print (index)
-  print (my_items)
-
-# Example 4 (Prints all numbers in range 0 - 10, excluding 10)
-for i in range(100):
-  print (i)
-
-# Example 5 (Traversing a multi dimensional list. Remember, lists don't support multi dimensional slicing)
-my_list = [ [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-            [0] ]
-for row in my_list:      # row holds each row list [1, 2, 3] / [4, 5, 6] etc.
-  for col in row:        # then col traverses through the list in row.
-    print (col)
-
-# Example 6 (The `in` keyword in python can actually be used to check if a value is present in a..
-#            range of values). The code below checks is the character entered by user is a vowel.
-ch = input("enter a character")
-if ch in "AEIOUaeiou"
-  print ("present")
+for i, value in enumerate(nums):
+    print(i, value)
 ```
 
+Loop helpers:
 
-# Try-except
-* Imagine we are executing a long program. We would not want the entire execution to break because of minor exceptions like invalid user inputs at run time. 
-* Minor runtime exceptions may occur all the time, so instead of them breaking the cycle of execution, we introduce a try-except block that can handle these exceptions at run time.
 ```python
-# "done" will not be printed if the user does not enter a valid number. 
-num = int(input("Enter a number: "))
-print ("done")
-
-# "done" will be printed even if the user does not enter a valid number. 
-try:
-    num = int(input("Enter a number: "))
-    print (num)
-except:
-    print ("Invalid Input")
-print ("done")
+break       # exit loop
+continue    # skip to next iteration
+pass        # placeholder that does nothing
 ```
 
-* Below is an example of ineffective exception handling.
-* The error is a divide by zero error but we are printing invalid input, which is inconsistent
+### Built-ins Worth Remembering
+
 ```python
-try:
-    val = 10 / 0
-    num = int(input("Enter a number: "))
-    print (num)
-except:
-    print ("Invalid Input")
+len(xs)
+sum(xs)
+min(xs)
+max(xs)
+abs(x)
+round(x, 2)
+pow(x, y)           # same as x ** y
+divmod(17, 5)       # (3, 2)
+ord("a")            # 97
+chr(97)             # "a"
 ```
-We can handle this effectively with something like this...
+
+`range(start, stop, step)` excludes `stop`:
+
 ```python
-try:
-    val = 10 / 0
-    num = int(input("Enter a number: "))
-    print (num)
-# To catch the exact exception that was raised.
-except Exception as e:
-  print (e)
-# To catch specific type of errors.
-except ZeroDivisionError:
-    print ("Divided by zero")
-except ValueError:
-    print ("Invalid Input")
+list(range(2, 8, 2))    # [2, 4, 6]
 ```
 
-Sometimes, it is useful to know the exact exception that was raised. It can be done as follows...
+### Pattern Matching
+
+`match`/`case` is available in Python 3.10+ and is useful for clean branching
+on shapes of data.
+
+```text
+match command:
+    case "quit":
+        done = True
+    case ("move", x, y):
+        position = (x, y)
+    case _:
+        raise ValueError("unknown command")
+```
+
+## Core Data Types
+
 ```python
-try:
-    val = 10 / 0
-except ZeroDivisionError as err:
-    print (err) # Spits out the exact message.
+x = 10                  # int
+pi = 3.14               # float
+ok = True               # bool
+name = "Ada"            # str
+missing = None          # NoneType
+
+nums = [1, 2, 3]        # list: mutable sequence
+point = (2, 3)          # tuple: immutable sequence
+seen = {1, 2, 3}        # set: unique hashable values
+ages = {"Ada": 36}      # dict: key-value map
 ```
 
+Conversions:
 
-# Files I/O
-Basics ...
 ```python
-# f is the file object.
-# `r`, `w`, and `a`, decide the read/write/append permissions.
-# `r` is default. We can do `w+`, `r+`, and `a+`. This will
-# open the file, for instance in, both read and write modes.
-f = open (filename, 'r/w/a')
-# Reads the contents of the file into the txt variable as a string 
-txt = f.read ()
-# Closes the file object
-f.close ()
+int("42")
+float("3.14")
+str(42)
+list("abc")             # ["a", "b", "c"]
+tuple([1, 2])           # (1, 2)
+set([1, 1, 2])          # {1, 2}
 ```
 
-Some useful functions ...
+## Strings
+
+Strings are immutable sequences of Unicode characters.
+
 ```python
-f.readline ()      # Reads one line of the file and seeks the cursor to the start of next line.
-f.readlines ()     # Reads each line of the file and puts them in a list.
-f.truncate ()      # Deletes the contents of the file.
-f.write ("...")    # Writes contents into the file.
-f.seek (k)         # Moves the cursor to the kth location in the file
+s = "Sudeepam Pandey"
+
+s[0]                    # "S"
+s[-1]                   # "y"
+s[0:8]                  # "Sudeepam"
+s[::-1]                 # reversed string
+
+s.lower()
+s.upper()
+s.strip()
+s.replace("Pandey", "P.")
+s.startswith("Sud")
+s.endswith("ey")
+"deep" in s
 ```
-**Note:** `'w'` overwrites the files whereas `'a'` adds to the existing contents of the files.
 
+Use `find` when absence is allowed; use `index` when absence should raise.
 
-# Importing code
-`import` keyword is used to import modules in python. Below are some examples of how modules are imported and used:
 ```python
-# Example 1
-import numpy
-arr = numpy.array([1, 2, 3])
-
-# Example 2
-import numpy as np
-arr = np.array([1, 2, 3])
-
-# Example 3
-from numpy import array
-arr = array([1, 2, 3])
+s.find("x")             # -1
+s.index("x")            # ValueError
 ```
-## Something extra
-* Below is how we accept and unpack command line arguments in python.
-* We can pass as many arguments as there are variables to unpack into.
-* All command line arguments are strings.
+
+Split and join:
+
 ```python
-from sys import argv
-script, first, second, third = argv
+line = "1,2,3"
+parts = line.split(",")             # ["1", "2", "3"]
+nums = list(map(int, parts))        # [1, 2, 3]
+
+words = ["hello", "world"]
+" ".join(words)                     # "hello world"
 ```
-Now execute this script as follows in your terminal ...
-```
-user-PC:~$ python3 code.py hello I'm Sudeepam
-```
-to get ...
+
+Prefer f-strings for formatting:
+
 ```python
-script == "code.py"
-first == "hello"
-second == "I'm"
-third == "Sudeepam"
+name = "Ada"
+score = 95.1234
+print(f"{name}: {score:.2f}")       # Ada: 95.12
 ```
 
+Multi-line code, single-line string:
 
-# Functions
-In python, functions are defined as follows:
 ```python
-def function_name (arguments):
-    # Code...
-    # Code...
+message = (
+    "This is written across multiple source lines "
+    "but becomes one string."
+)
 ```
 
-Examples of how arguments can be passed in python functions ...
+## Lists and Tuples
+
+Lists are mutable dynamic arrays.
+
 ```python
-# Example 1  (Pass by value)
-def pass_by_val (arg1, arg2):
-    """ This is a docstring. This is basically the
-    documentation of this function and this is what
-    is returned by the `help` function"""
-    print (f"arg1: {arg1}, arg2: {arg2}")
+nums = [10, 20, 30, 40]
 
-pass_by_val ("Sudeepam","Pandey")
-```
-```py
-# Example 2  (Returning values)
-def returning_stuff ():
-    return "nothing here"
-
-message = returning_stuff ()
-print (message)
+nums[0]                 # 10
+nums[-1]                # 40
+nums[1:3]               # [20, 30]
+nums[:2]                # [10, 20]
+nums[2:]                # [30, 40]
+nums[::-1]              # [40, 30, 20, 10]
 ```
 
-```py
-# Example 3 (Pack arguments into a dictionary)
-def pass_dictionary (*args):
-    arg1, arg2 = args
-    print (f"arg1: {arg1}, arg2: {arg2}")
+Common list methods:
 
-pass_dictionary ("Sudeepam","Pandey")
-```
-
-```py
-# Example 4 (Passing file pointers)
-def print_file (f): 
-    print (f.read())
-
-f = open ("text_file.txt")
-print_file(f)
-```
-
-
-# Classes and Objects
-Creating a Class ...
 ```python
-class undergrad_student:
-  # Class attributes (this attribute is same for all instances of the class)
-  university = "JIIT"
-
-  # Instance attributes (these attributes can be different for each instance)
-  def __init__(self, name, major, gpa, is_placed):
-    self.name = name
-    self.major = major
-    self.gpa = gpa
-    self.is_placed = is_placed
-
-  # Instance methods
-  def check_gpa_criterion (self)
-    if self.gpa >= 7.0
-      return True
-    else
-      return False
+nums.append(50)         # add one item at end
+nums.extend([60, 70])   # add many items at end
+nums.pop()              # remove and return last item
+nums.pop(0)             # remove first item, O(n)
+nums.reverse()          # reverse in place
+nums.sort()             # sort in place
 ```
 
-Creating an object (instance of a class) ...
+Use `sorted(nums)` when you want a new sorted list.
+
 ```python
-student1 = undergrad_student ("Sudeepam", "ECE", "7.0", False)
+a = [3, 1, 2]
+b = sorted(a)           # b = [1, 2, 3], a unchanged
+a.sort()                # a = [1, 2, 3]
 ```
 
-Accessing the members of an objects ...
+Tuples are immutable and useful for fixed records, coordinates, and hashable keys.
+
 ```python
-print (student1.name)
-print (student1.major)
-result = student1.check_gpa_criterion ()
-if result == True
-  print ("GPA criterion Satisfied")
-else
-  print ("GPA criterion not Satisfied")
+point = (3, 4)
+x, y = point
+
+seen_edges = set()
+seen_edges.add((u, v))
 ```
-In various programming languages, there is a concept of  private members of a class. If
-something is declared private, it essentially means that you do not want to mess around
-with it. Some languages impose this by strictly disabling the access to private members.
-In a practical situation however, someone who really wants to access these private
-members would be able to do so very easily.
 
-Python therefore, does not impose any such restrictions. In reality, all class members
-in python are public. Python only has a simple convention that notifies the programmer
-about a private member and encourages them to not mess around with it. The convention
-is to start the name of such need to be private members with a double underscore `__`.
+Nested lists use repeated indexing, not multi-dimensional comma indexing:
 
-For example:
+```python
+grid = [
+    [1, 2, 3],
+    [4, 5, 6],
+]
+
+grid[1][2]              # 6
+```
+
+Be careful when initializing matrices:
+
+```python
+bad = [[0] * 3] * 3     # rows share the same inner list
+good = [[0] * 3 for _ in range(3)]
+```
+
+## Dictionaries and Sets
+
+Dictionaries preserve insertion order in modern Python and provide average O(1)
+lookup, insertion, and deletion.
+
+```python
+counts = {"a": 2, "b": 1}
+
+counts["a"]             # 2
+counts.get("z", 0)      # 0
+counts["c"] = 3
+del counts["b"]
+
+for key in counts:
+    print(key)
+
+for key, value in counts.items():
+    print(key, value)
+```
+
+Set basics:
+
+```python
+seen = set()
+seen.add(10)
+10 in seen              # True
+seen.remove(10)         # KeyError if missing
+seen.discard(10)        # no error if missing
+```
+
+Set operations:
+
+```python
+a = {1, 2, 3}
+b = {3, 4}
+
+a | b                   # union: {1, 2, 3, 4}
+a & b                   # intersection: {3}
+a - b                   # difference: {1, 2}
+a ^ b                   # symmetric difference: {1, 2, 4}
+```
+
+## Comprehensions
+
+```python
+nums = [1, 2, 3, 4]
+
+squares = [x * x for x in nums]
+evens = [x for x in nums if x % 2 == 0]
+parity = ["even" if x % 2 == 0 else "odd" for x in nums]
+
+square_by_num = {x: x * x for x in nums}
+unique_remainders = {x % 3 for x in nums}
+```
+
+Use a generator expression for streaming values:
+
+```python
+total = sum(x * x for x in nums)
+```
+
+## Functions
+
+```python
+def add(a, b):
+    return a + b
+
+def greet(name="friend"):
+    return f"Hello, {name}"
+```
+
+Arguments:
+
+```python
+def f(a, b, *args, debug=False, **kwargs):
+    print(a, b)         # required positional
+    print(args)         # extra positional as tuple
+    print(debug)        # keyword-only after *args
+    print(kwargs)       # extra keyword args as dict
+```
+
+Avoid mutable default arguments:
+
+```python
+def bad_append(x, items=[]):
+    items.append(x)
+    return items
+
+def good_append(x, items=None):
+    if items is None:
+        items = []
+    items.append(x)
+    return items
+```
+
+Lambda is useful for small sort keys:
+
+```python
+pairs = [(1, "b"), (2, "a")]
+sorted(pairs, key=lambda pair: pair[1])
+```
+
+## Iteration and Generators
+
+Common iteration tools:
+
+```python
+for i, value in enumerate(nums):
+    ...
+
+for a, b in zip(xs, ys):
+    ...
+
+for i in range(5):          # 0, 1, 2, 3, 4
+    ...
+
+for i in range(5, 0, -1):   # 5, 4, 3, 2, 1
+    ...
+```
+
+Useful built-ins:
+
+```python
+any(x > 0 for x in nums)
+all(x > 0 for x in nums)
+sum(nums)
+min(nums)
+max(nums)
+```
+
+Generators produce values lazily:
+
+```python
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+
+for x in countdown(3):
+    print(x)
+```
+
+Iterator protocol:
+
+- An iterable has `__iter__`.
+- An iterator has `__iter__` and `__next__`.
+- `for` loops call `iter(obj)` and repeatedly call `next(...)` until
+  `StopIteration`.
+
+## Sorting
+
+```python
+nums = [3, 1, 2]
+sorted(nums)                        # new sorted list
+nums.sort()                         # in-place sort
+
+words = ["pear", "apple", "fig"]
+sorted(words, key=len)              # ["fig", "pear", "apple"]
+sorted(words, reverse=True)
+```
+
+Sort tuples by multiple keys:
+
+```python
+people = [("Ada", 36), ("Bob", 20), ("Amy", 20)]
+
+sorted(people, key=lambda x: (x[1], x[0]))
+# age ascending, then name ascending
+```
+
+Sort descending on one numeric key and ascending on another:
+
+```python
+scores = [("A", 10), ("B", 20), ("C", 20)]
+sorted(scores, key=lambda x: (-x[1], x[0]))
+```
+
+## Useful Standard Library
+
+### `collections`
+
+```python
+from collections import Counter, defaultdict, deque
+
+Counter("banana")                   # Counter({"a": 3, "n": 2, "b": 1})
+
+graph = defaultdict(list)
+graph[u].append(v)
+
+q = deque([1, 2, 3])
+q.append(4)
+q.appendleft(0)
+q.pop()
+q.popleft()                         # O(1), good for BFS queues
+```
+
+### `heapq`
+
+Python's heap is a min-heap.
+
+```python
+import heapq
+
+heap = []
+heapq.heappush(heap, 5)
+heapq.heappush(heap, 2)
+heapq.heappop(heap)                 # 2
+```
+
+Max-heap trick:
+
+```python
+heapq.heappush(heap, -value)
+largest = -heapq.heappop(heap)
+```
+
+Top-k:
+
+```python
+heapq.nlargest(k, nums)
+heapq.nsmallest(k, nums)
+```
+
+### `bisect`
+
+Binary search in sorted lists.
+
+```python
+import bisect
+
+arr = [1, 2, 2, 4]
+bisect.bisect_left(arr, 2)           # 1
+bisect.bisect_right(arr, 2)          # 3
+bisect.insort(arr, 3)                # arr becomes [1, 2, 2, 3, 4]
+```
+
+### `functools`
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    if n < 2:
+        return n
+    return fib(n - 1) + fib(n - 2)
+```
+
+### `itertools`
+
+```python
+from itertools import combinations, permutations, product
+
+list(combinations([1, 2, 3], 2))     # pairs, order does not matter
+list(permutations([1, 2, 3], 2))     # arrangements, order matters
+list(product([0, 1], repeat=3))      # Cartesian product
+```
+
+## Complexity Cheat Sheet
+
+| Operation | Average Complexity |
+| --- | --- |
+| `list[i]` | O(1) |
+| `list.append(x)` | O(1) amortized |
+| `list.pop()` | O(1) |
+| `list.pop(0)` | O(n) |
+| `x in list` | O(n) |
+| `dict[key]`, `key in dict` | O(1) average |
+| `set.add(x)`, `x in set` | O(1) average |
+| `deque.append`, `deque.popleft` | O(1) |
+| `heapq.heappush`, `heappop` | O(log n) |
+| `sorted(xs)` | O(n log n) |
+
+## LeetCode Patterns
+
+### Input Parsing
+
+```python
+nums = list(map(int, input().split()))
+n = int(input())
+matrix = [list(map(int, input().split())) for _ in range(n)]
+```
+
+On LeetCode, methods usually receive already-parsed arguments:
+
+```python
+class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        ...
+```
+
+### Frequency Counting
+
+```python
+from collections import Counter
+
+counts = Counter(nums)
+most_common = counts.most_common(1)
+```
+
+Manual counting:
+
+```python
+counts = {}
+for x in nums:
+    counts[x] = counts.get(x, 0) + 1
+```
+
+### Hash Map Lookup
+
+```python
+def two_sum(nums, target):
+    seen = {}
+    for i, x in enumerate(nums):
+        need = target - x
+        if need in seen:
+            return [seen[need], i]
+        seen[x] = i
+```
+
+### Two Pointers
+
+Works well on sorted arrays or when shrinking from both ends.
+
+```python
+def has_pair_sorted(nums, target):
+    left, right = 0, len(nums) - 1
+    while left < right:
+        total = nums[left] + nums[right]
+        if total == target:
+            return True
+        if total < target:
+            left += 1
+        else:
+            right -= 1
+    return False
+```
+
+### Sliding Window
+
+Use when you need the best/valid contiguous subarray or substring.
+
+```python
+def max_sum_k(nums, k):
+    window = sum(nums[:k])
+    best = window
+    for right in range(k, len(nums)):
+        window += nums[right] - nums[right - k]
+        best = max(best, window)
+    return best
+```
+
+Variable-size window:
+
+```python
+def min_len_at_least_target(nums, target):
+    left = 0
+    total = 0
+    best = float("inf")
+
+    for right, x in enumerate(nums):
+        total += x
+        while total >= target:
+            best = min(best, right - left + 1)
+            total -= nums[left]
+            left += 1
+
+    return 0 if best == float("inf") else best
+```
+
+### Prefix Sums
+
+Use when many range-sum queries are needed.
+
+```python
+prefix = [0]
+for x in nums:
+    prefix.append(prefix[-1] + x)
+
+sum_l_to_r = prefix[r + 1] - prefix[l]
+```
+
+Count subarrays with sum `k`:
+
+```python
+from collections import defaultdict
+
+def subarray_sum(nums, k):
+    count_by_prefix = defaultdict(int)
+    count_by_prefix[0] = 1
+    prefix = 0
+    ans = 0
+
+    for x in nums:
+        prefix += x
+        ans += count_by_prefix[prefix - k]
+        count_by_prefix[prefix] += 1
+
+    return ans
+```
+
+### Monotonic Stack
+
+Useful for next greater/smaller element problems.
+
+```python
+def next_greater(nums):
+    ans = [-1] * len(nums)
+    stack = []                      # stores indices
+
+    for i, x in enumerate(nums):
+        while stack and nums[stack[-1]] < x:
+            ans[stack.pop()] = x
+        stack.append(i)
+
+    return ans
+```
+
+### Intervals
+
+```python
+def merge_intervals(intervals):
+    intervals.sort()
+    merged = []
+
+    for start, end in intervals:
+        if not merged or start > merged[-1][1]:
+            merged.append([start, end])
+        else:
+            merged[-1][1] = max(merged[-1][1], end)
+
+    return merged
+```
+
+### BFS
+
+```python
+from collections import deque
+
+def bfs(start, graph):
+    q = deque([start])
+    seen = {start}
+
+    while q:
+        node = q.popleft()
+        for nei in graph[node]:
+            if nei not in seen:
+                seen.add(nei)
+                q.append(nei)
+```
+
+Grid BFS:
+
+```python
+directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+for dr, dc in directions:
+    nr, nc = r + dr, c + dc
+    if 0 <= nr < rows and 0 <= nc < cols:
+        ...
+```
+
+### DFS
+
+```python
+def dfs(node, graph, seen):
+    if node in seen:
+        return
+    seen.add(node)
+    for nei in graph[node]:
+        dfs(nei, graph, seen)
+```
+
+Python recursion depth can be a problem on long chains. Consider iterative DFS or:
+
+```python
+import sys
+sys.setrecursionlimit(10**6)
+```
+
+### Binary Search
+
+Search exact value:
+
+```python
+def binary_search(nums, target):
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+```
+
+Search first true in a monotonic boolean space:
+
+```python
+def first_true(lo, hi, condition):
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if condition(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+```
+
+### Heap
+
+```python
+import heapq
+
+def k_largest(nums, k):
+    heap = []
+    for x in nums:
+        heapq.heappush(heap, x)
+        if len(heap) > k:
+            heapq.heappop(heap)
+    return heap
+```
+
+### Union Find
+
+```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb:
+            return False
+        if self.rank[ra] < self.rank[rb]:
+            ra, rb = rb, ra
+        self.parent[rb] = ra
+        if self.rank[ra] == self.rank[rb]:
+            self.rank[ra] += 1
+        return True
+```
+
+### Dynamic Programming
+
+Top-down memoization:
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def dp(i, remaining):
+    if remaining == 0:
+        return True
+    if i == len(nums) or remaining < 0:
+        return False
+    return dp(i + 1, remaining) or dp(i + 1, remaining - nums[i])
+```
+
+Bottom-up example:
+
+```python
+def climb_stairs(n):
+    if n <= 2:
+        return n
+    prev2, prev1 = 1, 2
+    for _ in range(3, n + 1):
+        curr = prev1 + prev2
+        prev2, prev1 = prev1, curr
+    return prev1
+```
+
+### Backtracking
+
+```python
+def subsets(nums):
+    ans = []
+    path = []
+
+    def backtrack(i):
+        if i == len(nums):
+            ans.append(path.copy())
+            return
+
+        backtrack(i + 1)
+
+        path.append(nums[i])
+        backtrack(i + 1)
+        path.pop()
+
+    backtrack(0)
+    return ans
+```
+
+## Object-Oriented Python
+
+Basic class:
+
 ```python
 class Student:
-  # hidden variable
-  __hidden = "Hidden variable, don't tamper it"
+    university = "JIIT"              # class attribute
 
-  # hidden method
-  def __hidden_method (self):
-    #code...
-    #code...
+    def __init__(self, name, gpa):
+        self.name = name             # instance attribute
+        self.gpa = gpa
 
-# Hidden members cannot be directly accessed from outside the class
-Student1 = Student ()
-print (Student1.__hidden)          # throws error
-
-# Hidden members can be accessed with an extra line of code
-print (Student1._Student__hidden)  # prints the hidden variable
+    def is_eligible(self):
+        return self.gpa >= 7.0
 ```
 
-# Inheritance
-**Note:** The code snippets have been borrowed from [here](https://www.digitalocean.com/community/tutorials/understanding-class-inheritance-in-python-3).
-* In inheritance a class, usually called the superclass is inherited by a subclass.
-* Lets create a superclass first ...
+Use `dataclass` for simple data containers:
 
 ```python
-class Fish:
-  def __init__ (self, first_name, last_name = "Fish", skeleton = "bone", eyelids = False):
-    self.first _name = first_name
-    self.last_name = last_name
-    self.skeleton = skeleton
-    self.eyelids = eyelids
+from dataclasses import dataclass
 
-    def swim (self):
-      print ("This fish is swimming")
-    
-    def swim_backwards (self):
-      print ("This fish can swim backwards")
+@dataclass
+class Point:
+    x: int
+    y: int
 ```
 
-* The subclass will be able to make use of methods and variables of the superclass
-* We can also choose to just use the existing members of the superclass by using the `pass` keyword, or we can add more members and override existing members.
-* Lets create a subclass ...
+Special methods:
 
 ```python
-# Example 1: using `pass`
-class Trout(Fish):
-    pass
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
-terry = Trout("Terry")
-print(terry.first_name + " " + terry.last_name)
-print(terry.skeleton)
-print(terry.eyelids)
-terry.swim()
-terry.swim_backwards()
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+    def __eq__(self, other):
+        return isinstance(other, Vector) and (self.x, self.y) == (other.x, other.y)
 ```
+
+Inheritance:
+
+```python
+class Animal:
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):
+        return "woof"
+```
+
+Prefer composition over inheritance unless an actual "is-a" relationship is useful.
+
+## Errors, Files, and Imports
+
+Catch specific exceptions:
+
+```python
+try:
+    value = int(text)
+except ValueError:
+    value = 0
+```
+
+Use `finally` for cleanup that must always run:
+
+```python
+try:
+    process()
+finally:
+    cleanup()
+```
+
+Use context managers for files:
+
+```python
+from pathlib import Path
+
+path = Path("data.txt")
+text = path.read_text()
+path.write_text("hello\n")
+
+with path.open("a") as f:
+    f.write("more\n")
+```
+
+JSON:
+
+```python
+import json
+
+data = json.loads('{"name": "Ada"}')
+text = json.dumps(data)
+```
+
+Imports:
+
+```python
+import math
+import numpy as np
+from collections import Counter
+```
+
+Common script entry point:
+
+```python
+def main():
+    ...
+
+if __name__ == "__main__":
+    main()
+```
+
+Command-line arguments:
+
+```python
+import sys
+
+args = sys.argv[1:]
+```
+
+## Type Hints
+
+Type hints improve readability and editor support; Python does not enforce them
+at runtime by default.
+
+```python
+def two_sum(nums: list[int], target: int) -> list[int]:
+    ...
+
+def get_user(user_id: int) -> dict[str, str] | None:
+    ...
+```
+
+Useful typing imports:
+
+```python
+from typing import Iterable, Iterator, Optional
+
+def first_positive(nums: Iterable[int]) -> Optional[int]:
+    for x in nums:
+        if x > 0:
+            return x
+    return None
+```
+
+## Basic Data Science
+
+### NumPy
+
+NumPy arrays support vectorized operations. Prefer vectorization over Python loops
+for numeric workloads.
+
+```python
+import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.array([10, 20, 30])
+
+a + b                   # array([11, 22, 33])
+a * 2                   # array([2, 4, 6])
+a.mean()
+a.std()
+```
+
+Array creation and shape:
+
+```python
+np.zeros((2, 3))
+np.ones((2, 3))
+np.arange(0, 10, 2)
+np.linspace(0, 1, 5)
+
+x = np.array([[1, 2, 3], [4, 5, 6]])
+x.shape                 # (2, 3)
+x.reshape(3, 2)
+```
+
+Boolean masks:
+
+```python
+x = np.array([1, 5, 10, 15])
+x[x > 5]                # array([10, 15])
+```
+
+### pandas
+
+```python
+import pandas as pd
+
+df = pd.read_csv("data.csv")
+df.head()
+df.info()
+df.describe()
+```
+
+Selecting data:
+
+```python
+df["age"]                       # one column
+df[["name", "age"]]             # multiple columns
+df.loc[0, "age"]                # label-based
+df.iloc[0, 2]                   # position-based
+df[df["age"] >= 18]             # filter rows
+```
+
+Missing values:
+
+```python
+df.isna().sum()
+df = df.dropna()
+df["age"] = df["age"].fillna(df["age"].median())
+```
+
+Group, sort, join:
+
+```python
+df.groupby("city")["salary"].mean()
+df.sort_values("salary", ascending=False)
+
+merged = left.merge(right, on="user_id", how="left")
+```
+
+Create or update columns:
+
+```python
+df["income_k"] = df["income"] / 1000
+df["is_adult"] = df["age"] >= 18
+```
+
+### Basic ML Workflow
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, mean_squared_error
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)
+
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+```
+
+Classification metric:
+
+```python
+accuracy_score(y_test, pred)
+```
+
+Regression metric:
+
+```python
+mean_squared_error(y_test, pred)
+```
+
+## Common Pitfalls
+
+### Aliasing vs Copying
+
+```python
+a = [1, 2]
+b = a
+b.append(3)
+print(a)                 # [1, 2, 3]
+
+c = a.copy()             # shallow copy
+```
+
+For nested objects:
+
+```python
+import copy
+
+deep = copy.deepcopy(nested)
+```
+
+### Modifying a List While Iterating
+
+Prefer building a new list:
+
+```python
+nums = [1, 2, 3, 4]
+odds = [x for x in nums if x % 2 == 1]
+```
+
+### Integer Division
+
+```python
+5 / 2                    # 2.5
+5 // 2                   # 2
+-5 // 2                  # -3, floors toward negative infinity
+```
+
+### Floating Point
+
+```python
+0.1 + 0.2 == 0.3         # False
+```
+
+Use tolerance:
+
+```python
+import math
+
+math.isclose(0.1 + 0.2, 0.3)
+```
+
+### Shadowing Built-ins
+
+Avoid using names like `list`, `dict`, `set`, `str`, `sum`, `min`, and `max` for
+variables.
+
+```python
+nums = [1, 2, 3]         # good
+list = [1, 2, 3]         # bad
+```
+
+### Late Binding in Closures
+
+```python
+funcs = []
+for i in range(3):
+    funcs.append(lambda i=i: i)
+```
+
+### Interview Habits
+
+- Clarify input size and edge cases before coding.
+- State time and space complexity.
+- Test empty input, one-element input, duplicates, negative numbers, and already
+  sorted or reversed data when relevant.
+- Prefer readable variable names unless the loop is very small.
+- Use standard library tools like `Counter`, `defaultdict`, `deque`, `heapq`, and
+  `bisect` confidently.
