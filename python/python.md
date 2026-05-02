@@ -597,6 +597,8 @@ all(x > 0 for x in nums)
 sum(nums)
 min(nums)
 max(nums)
+float("inf")                         # positive infinity
+float("-inf")                        # negative infinity
 ```
 
 Generators produce values lazily:
@@ -624,11 +626,15 @@ Iterator protocol:
 nums = [3, 1, 2]
 sorted(nums)                        # new sorted list
 nums.sort()                         # in-place sort
+nums.sort(reverse=False, key=None)  # generic form
 
 words = ["pear", "apple", "fig"]
 sorted(words, key=len)              # ["fig", "pear", "apple"]
 sorted(words, reverse=True)
 ```
+
+`reverse` is `False` by default. `key` is a function that maps each element to
+the value Python should compare while sorting.
 
 Sort tuples by multiple keys:
 
