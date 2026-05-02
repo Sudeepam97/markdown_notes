@@ -358,12 +358,78 @@ counts["a"]             # 2
 counts.get("z", 0)      # 0
 counts["c"] = 3
 del counts["b"]
+```
 
-for key in counts:
-    print(key)
+Keys must be hashable, so strings, numbers, tuples of immutable values, and
+`frozenset` can be keys. Lists, dicts, and sets cannot be keys.
 
-for key, value in counts.items():
-    print(key, value)
+```python
+locations = {
+    (10, 20): "start",
+    (30, 40): "finish",
+}
+
+locations[(10, 20)]     # "start"
+```
+
+Common dictionary views:
+
+```python
+scores = {"Ada": 95, "Bob": 82}
+
+scores.keys()           # dict_keys(["Ada", "Bob"])
+scores.values()         # dict_values([95, 82])
+scores.items()          # dict_items([("Ada", 95), ("Bob", 82)])
+
+for name in scores:     # iterates keys
+    print(name)
+
+for name, score in scores.items():
+    print(name, score)
+```
+
+Useful dictionary methods:
+
+```python
+scores = {"Ada": 95, "Bob": 82}
+
+scores.get("Amy", 0)            # 0, does not insert
+scores.setdefault("Amy", 0)     # inserts "Amy": 0, returns 0
+scores.update({"Bob": 90})      # overwrite/add many keys
+scores.update(Cam=88)           # keyword form for string keys
+
+scores.pop("Ada")               # 95, removes key
+scores.pop("Zoe", None)         # None, default avoids KeyError
+scores.popitem()                # removes and returns last inserted pair
+scores.copy()                   # shallow copy
+scores.clear()                  # remove all items
+```
+
+Build dictionaries from keys or pairs:
+
+```python
+dict.fromkeys(["a", "b"], 0)    # {"a": 0, "b": 0}
+dict([("a", 1), ("b", 2)])      # {"a": 1, "b": 2}
+```
+
+Be careful with mutable defaults in `fromkeys`:
+
+```python
+bad = dict.fromkeys(["a", "b"], [])
+bad["a"].append(1)
+bad                         # {"a": [1], "b": [1]}
+
+good = {key: [] for key in ["a", "b"]}
+```
+
+Merge dictionaries:
+
+```python
+base = {"host": "localhost", "port": 8000}
+override = {"port": 9000, "debug": True}
+
+base | override             # new dict, right side wins
+base |= override            # update base in place
 ```
 
 Set basics:
@@ -374,6 +440,15 @@ seen.add(10)
 10 in seen              # True
 seen.remove(10)         # KeyError if missing
 seen.discard(10)        # no error if missing
+seen.pop()              # remove and return an arbitrary item
+seen.clear()            # remove all items
+```
+
+Use `{}` for an empty dict, not an empty set:
+
+```python
+type({})                # dict
+type(set())             # set
 ```
 
 Set operations:
@@ -386,6 +461,54 @@ a | b                   # union: {1, 2, 3, 4}
 a & b                   # intersection: {3}
 a - b                   # difference: {1, 2}
 a ^ b                   # symmetric difference: {1, 2, 4}
+```
+
+Method versions are often clearer in longer code:
+
+```python
+a.union(b)              # same as a | b
+a.intersection(b)       # same as a & b
+a.difference(b)         # same as a - b
+a.symmetric_difference(b)
+
+a.update(b)             # add all items from b
+a.intersection_update(b)
+a.difference_update(b)
+a.symmetric_difference_update(b)
+```
+
+Subset and disjoint checks:
+
+```python
+small = {1, 2}
+large = {1, 2, 3}
+other = {9}
+
+small.issubset(large)       # True
+large.issuperset(small)     # True
+small.isdisjoint(other)     # True
+
+small <= large              # subset
+small < large               # proper subset
+large >= small              # superset
+```
+
+Sets are useful for uniqueness and fast membership tests:
+
+```python
+nums = [3, 1, 3, 2, 1]
+unique = set(nums)          # {1, 2, 3}
+
+if target in unique:
+    print("seen")
+```
+
+Use `frozenset` when you need an immutable set, for example as a dictionary key
+or as a value inside another set.
+
+```python
+edge = frozenset({"A", "B"})
+weights = {edge: 5}
 ```
 
 ## Comprehensions
