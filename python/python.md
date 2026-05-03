@@ -564,12 +564,27 @@ def good_append(x, items=None):
     return items
 ```
 
-Lambda is useful for small sort keys:
+### Lambda Functions
+
+Use `lambda` for short, one-expression functions, often as quick callbacks.
+
+Signature:
 
 ```python
+lambda arguments: expression
+```
+
+Examples:
+
+```python
+square = lambda x: x * x
+square(5)                           # 25
+
 pairs = [(1, "b"), (2, "a")]
 sorted(pairs, key=lambda pair: pair[1])
 ```
+
+For multi-step logic or reusability, prefer a normal `def`.
 
 ## Iteration and Generators
 
@@ -622,6 +637,18 @@ Iterator protocol:
 
 ## Sorting
 
+`list.sort` signature:
+
+```python
+list.sort(*, key=None, reverse=False)
+```
+
+`sorted` signature:
+
+```python
+sorted(iterable, /, *, key=None, reverse=False)
+```
+
 ```python
 nums = [3, 1, 2]
 sorted(nums)                        # new sorted list
@@ -635,6 +662,24 @@ sorted(words, reverse=True)
 
 `reverse` is `False` by default. `key` is a function that maps each element to
 the value Python should compare while sorting.
+
+Use `key` with a normal function (no lambda):
+
+```python
+def by_length(word):
+    return len(word)
+
+words = ["pear", "apple", "fig"]
+sorted(words, key=by_length)        # ["fig", "pear", "apple"]
+words.sort(key=by_length)           # in-place sort
+```
+
+`sorted(...)` works on any iterable and returns a new list:
+
+```python
+sorted({3, 1, 2})                   # [1, 2, 3]
+sorted("cab")                       # ["a", "b", "c"]
+```
 
 Sort tuples by multiple keys:
 
