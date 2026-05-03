@@ -566,25 +566,18 @@ def good_append(x, items=None):
 
 ### Lambda Functions
 
-Use `lambda` for short, one-expression functions, often as quick callbacks.
-
-Signature:
+Use `lambda` for short one-expression callbacks.
 
 ```python
 lambda arguments: expression
 ```
 
-Examples:
-
 ```python
-square = lambda x: x * x
-square(5)                           # 25
-
 pairs = [(1, "b"), (2, "a")]
-sorted(pairs, key=lambda pair: pair[1])
+sorted(pairs, key=lambda pair: pair[1])   # [(2, "a"), (1, "b")]
 ```
 
-For multi-step logic or reusability, prefer a normal `def`.
+Prefer `def` when logic is more than one simple expression.
 
 ## Iteration and Generators
 
@@ -637,23 +630,14 @@ Iterator protocol:
 
 ## Sorting
 
-`list.sort` signature:
-
-```python
-list.sort(*, key=None, reverse=False)
-```
-
-`sorted` signature:
-
-```python
-sorted(iterable, key=None, reverse=False)
-```
+Signatures:
+- `list.sort(*, key=None, reverse=False)` (in place)
+- `sorted(iterable, key=None, reverse=False)` (returns a new list)
 
 ```python
 nums = [3, 1, 2]
 sorted(nums)                        # new sorted list
 nums.sort()                         # in-place sort
-nums.sort(reverse=False, key=None)  # generic form
 
 words = ["pear", "apple", "fig"]
 sorted(words, key=len)              # ["fig", "pear", "apple"]
@@ -663,53 +647,7 @@ sorted(words, reverse=True)
 `reverse` is `False` by default. `key` is a function that maps each element to
 the value Python should compare while sorting.
 
-Use `key` with a normal function (no lambda):
-
-```python
-def by_length(word):
-    return len(word)
-
-words = ["pear", "apple", "fig"]
-sorted(words, key=by_length)        # ["fig", "pear", "apple"]
-words.sort(key=by_length)           # in-place sort
-```
-
-Another non-lambda `key` example with `sorted`:
-
-```python
-def second_item(pair):
-    return pair[1]
-
-pairs = [(1, "b"), (2, "a"), (3, "c")]
-sorted(pairs, key=second_item)      # [(2, "a"), (1, "b"), (3, "c")]
-```
-
-`sorted(...)` works on any iterable and returns a new list:
-
-```python
-sorted({3, 1, 2})                   # [1, 2, 3]
-sorted("cab")                       # ["a", "b", "c"]
-```
-
-Sort tuples by multiple keys:
-
-```python
-people = [("Ada", 36), ("Bob", 20), ("Amy", 20)]
-
-sorted(people, key=lambda x: (x[1], x[0]))
-# age ascending, then name ascending
-```
-
-Sort list of lists by first key, then second key:
-
-```python
-intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
-
-sorted(intervals, key=lambda x: (x[0], x[1]))
-# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
-```
-
-Same example without lambda:
+`key` with a normal function (no lambda):
 
 ```python
 def by_start_then_end(interval):
@@ -718,13 +656,6 @@ def by_start_then_end(interval):
 intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
 sorted(intervals, key=by_start_then_end)
 # [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
-```
-
-Sort descending on one numeric key and ascending on another:
-
-```python
-scores = [("A", 10), ("B", 20), ("C", 20)]
-sorted(scores, key=lambda x: (-x[1], x[0]))
 ```
 
 ## Useful Standard Library
