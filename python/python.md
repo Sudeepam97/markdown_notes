@@ -709,6 +709,17 @@ sorted(intervals, key=lambda x: (x[0], x[1]))
 # [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
 ```
 
+Same example without lambda:
+
+```python
+def by_start_then_end(interval):
+    return (interval[0], interval[1])
+
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals, key=by_start_then_end)
+# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
+```
+
 Sort descending on one numeric key and ascending on another:
 
 ```python
