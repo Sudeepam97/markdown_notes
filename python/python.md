@@ -634,6 +634,11 @@ Signatures:
 - `list.sort(*, key=None, reverse=False)` (in place)
 - `sorted(iterable, key=None, reverse=False)` (returns a new list)
 
+Complexity (Timsort):
+- Time: `O(n log n)` average/worst, `O(n)` best on nearly sorted input
+- Extra space: `sort()` uses less extra memory than `sorted()` because
+  `sorted()` always creates a new list
+
 ```python
 nums = [3, 1, 2]
 sorted(nums)                        # new sorted list
