@@ -700,6 +700,15 @@ sorted(people, key=lambda x: (x[1], x[0]))
 # age ascending, then name ascending
 ```
 
+Sort list of lists by first key, then second key:
+
+```python
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+
+sorted(intervals, key=lambda x: (x[0], x[1]))
+# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
+```
+
 Sort descending on one numeric key and ascending on another:
 
 ```python
