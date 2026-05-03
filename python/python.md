@@ -344,7 +344,16 @@ Be careful when initializing matrices:
 ```python
 bad = [[0] * 3] * 3     # rows share the same inner list
 good = [[0] * 3 for _ in range(3)]
+
+bad[0][1] = 7
+bad                         # [[0, 7, 0], [0, 7, 0], [0, 7, 0]]
+
+good[0][1] = 7
+good                        # [[0, 7, 0], [0, 0, 0], [0, 0, 0]]
 ```
+
+`[[0] * m] * n` reuses the same row object `n` times.
+`[[0] * m for _ in range(n)]` creates `n` independent rows.
 
 ## Dictionaries and Sets
 
