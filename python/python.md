@@ -647,6 +647,15 @@ sorted(words, reverse=True)
 `reverse` is `False` by default. `key` is a function that maps each element to
 the value Python should compare while sorting.
 
+For lists/tuples of comparable values, Python already sorts lexicographically
+(first item, then second, and so on), so `key` is optional:
+
+```python
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals)
+# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
+```
+
 `key` with a normal function (no lambda):
 
 ```python
@@ -656,6 +665,18 @@ def by_start_then_end(interval):
 intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
 sorted(intervals, key=by_start_then_end)
 # [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
+```
+
+Example where `key` is necessary for two-parameter custom sorting:
+first by start ascending, then by end descending.
+
+```python
+def by_start_then_end_desc(interval):
+    return (interval[0], -interval[1])
+
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals, key=by_start_then_end_desc)
+# [[1, 3], [2, 6], [2, 5], [8, 10], [15, 18]]
 ```
 
 ## Useful Standard Library
