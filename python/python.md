@@ -646,7 +646,7 @@ list.sort(*, key=None, reverse=False)
 `sorted` signature:
 
 ```python
-sorted(iterable, /, *, key=None, reverse=False)
+sorted(iterable, key=None, reverse=False)
 ```
 
 ```python
@@ -672,6 +672,16 @@ def by_length(word):
 words = ["pear", "apple", "fig"]
 sorted(words, key=by_length)        # ["fig", "pear", "apple"]
 words.sort(key=by_length)           # in-place sort
+```
+
+Another non-lambda `key` example with `sorted`:
+
+```python
+def second_item(pair):
+    return pair[1]
+
+pairs = [(1, "b"), (2, "a"), (3, "c")]
+sorted(pairs, key=second_item)      # [(2, "a"), (1, "b"), (3, "c")]
 ```
 
 `sorted(...)` works on any iterable and returns a new list:
