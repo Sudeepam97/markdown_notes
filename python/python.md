@@ -41,8 +41,17 @@ algorithm is correct.
   - Mutable: `list`, `dict`, `set`, most class instances.
 - Use `==` for value equality and `is` for object identity.
 - Use `is None` and `is not None` for `None` checks.
-- Python passes object references by assignment. Mutating a passed-in list changes
-  the caller's list; rebinding the parameter does not.
+- Python uses a mechanism called pass-by-object-reference. It does not strictly
+  follow the traditional "pass-by-value" or "pass-by-reference" models.
+- A variable is a reference to an object. When you pass a variable to a
+  function, Python passes a reference to the underlying object, but passes that
+  reference by value. The function gets a copy of the reference, not a copy of
+  the object.
+- Depending on the mutability of the object that the reference points to,
+  in-function operations may or may not change the original object. If a list
+  (mutable) is passed to a function, in-function operations can change the
+  original list. If an integer (immutable) is passed, in-function operations
+  will not change it.
 
 ```python
 def add_item(xs):
@@ -55,6 +64,37 @@ nums = [1, 2]
 add_item(nums)         # [1, 2, 10]
 reassign(nums)         # still [1, 2, 10]
 ```
+
+Mutate vs rebind in function calls:
+
+```python
+def sort_in_place(nums):
+    nums.sort()            # mutates the same list object
+
+def caller_sort(nums):
+    sort_in_place(nums)
+    return nums            # sorted, because list is mutable
+
+def add_all(nums, total):
+    for num in nums:
+        total += num       # rebinds local int, does not mutate caller value
+
+def caller_sum(nums):
+    total = 0
+    add_all(nums, total)
+    return total           # still 0, int is immutable
+```
+
+Quick mutability table:
+
+| Type  | Mutable? | Changes visible outside function? |
+| ----- | -------- | --------------------------------- |
+| list  | Yes      | Yes                               |
+| dict  | Yes      | Yes                               |
+| set   | Yes      | Yes                               |
+| int   | No       | No                                |
+| str   | No       | No                                |
+| tuple | No       | No                                |
 
 ## Syntax Basics
 
@@ -344,7 +384,16 @@ Be careful when initializing matrices:
 ```python
 bad = [[0] * 3] * 3     # rows share the same inner list
 good = [[0] * 3 for _ in range(3)]
+
+bad[0][1] = 7
+bad                         # [[0, 7, 0], [0, 7, 0], [0, 7, 0]]
+
+good[0][1] = 7
+good                        # [[0, 7, 0], [0, 0, 0], [0, 0, 0]]
 ```
+
+`[[0] * m] * n` reuses the same row object `n` times.
+`[[0] * m for _ in range(n)]` creates `n` independent rows.
 
 ## Dictionaries and Sets
 
@@ -358,12 +407,78 @@ counts["a"]             # 2
 counts.get("z", 0)      # 0
 counts["c"] = 3
 del counts["b"]
+```
 
-for key in counts:
-    print(key)
+Keys must be hashable, so strings, numbers, tuples of immutable values, and
+`frozenset` can be keys. Lists, dicts, and sets cannot be keys.
 
-for key, value in counts.items():
-    print(key, value)
+```python
+locations = {
+    (10, 20): "start",
+    (30, 40): "finish",
+}
+
+locations[(10, 20)]     # "start"
+```
+
+Common dictionary views:
+
+```python
+scores = {"Ada": 95, "Bob": 82}
+
+scores.keys()           # dict_keys(["Ada", "Bob"])
+scores.values()         # dict_values([95, 82])
+scores.items()          # dict_items([("Ada", 95), ("Bob", 82)])
+
+for name in scores:     # iterates keys
+    print(name)
+
+for name, score in scores.items():
+    print(name, score)
+```
+
+Useful dictionary methods:
+
+```python
+scores = {"Ada": 95, "Bob": 82}
+
+scores.get("Amy", 0)            # 0, does not insert
+scores.setdefault("Amy", 0)     # inserts "Amy": 0, returns 0
+scores.update({"Bob": 90})      # overwrite/add many keys
+scores.update(Cam=88)           # keyword form for string keys
+
+scores.pop("Ada")               # 95, removes key
+scores.pop("Zoe", None)         # None, default avoids KeyError
+scores.popitem()                # removes and returns last inserted pair
+scores.copy()                   # shallow copy
+scores.clear()                  # remove all items
+```
+
+Build dictionaries from keys or pairs:
+
+```python
+dict.fromkeys(["a", "b"], 0)    # {"a": 0, "b": 0}
+dict([("a", 1), ("b", 2)])      # {"a": 1, "b": 2}
+```
+
+Be careful with mutable defaults in `fromkeys`:
+
+```python
+bad = dict.fromkeys(["a", "b"], [])
+bad["a"].append(1)
+bad                         # {"a": [1], "b": [1]}
+
+good = {key: [] for key in ["a", "b"]}
+```
+
+Merge dictionaries:
+
+```python
+base = {"host": "localhost", "port": 8000}
+override = {"port": 9000, "debug": True}
+
+base | override             # new dict, right side wins
+base |= override            # update base in place
 ```
 
 Set basics:
@@ -374,6 +489,15 @@ seen.add(10)
 10 in seen              # True
 seen.remove(10)         # KeyError if missing
 seen.discard(10)        # no error if missing
+seen.pop()              # remove and return an arbitrary item
+seen.clear()            # remove all items
+```
+
+Use `{}` for an empty dict, not an empty set:
+
+```python
+type({})                # dict
+type(set())             # set
 ```
 
 Set operations:
@@ -386,6 +510,54 @@ a | b                   # union: {1, 2, 3, 4}
 a & b                   # intersection: {3}
 a - b                   # difference: {1, 2}
 a ^ b                   # symmetric difference: {1, 2, 4}
+```
+
+Method versions are often clearer in longer code:
+
+```python
+a.union(b)              # same as a | b
+a.intersection(b)       # same as a & b
+a.difference(b)         # same as a - b
+a.symmetric_difference(b)
+
+a.update(b)             # add all items from b
+a.intersection_update(b)
+a.difference_update(b)
+a.symmetric_difference_update(b)
+```
+
+Subset and disjoint checks:
+
+```python
+small = {1, 2}
+large = {1, 2, 3}
+other = {9}
+
+small.issubset(large)       # True
+large.issuperset(small)     # True
+small.isdisjoint(other)     # True
+
+small <= large              # subset
+small < large               # proper subset
+large >= small              # superset
+```
+
+Sets are useful for uniqueness and fast membership tests:
+
+```python
+nums = [3, 1, 3, 2, 1]
+unique = set(nums)          # {1, 2, 3}
+
+if target in unique:
+    print("seen")
+```
+
+Use `frozenset` when you need an immutable set, for example as a dictionary key
+or as a value inside another set.
+
+```python
+edge = frozenset({"A", "B"})
+weights = {edge: 5}
 ```
 
 ## Comprehensions
@@ -441,12 +613,20 @@ def good_append(x, items=None):
     return items
 ```
 
-Lambda is useful for small sort keys:
+### Lambda Functions
+
+Use `lambda` for short one-expression callbacks.
+
+```python
+lambda arguments: expression
+```
 
 ```python
 pairs = [(1, "b"), (2, "a")]
-sorted(pairs, key=lambda pair: pair[1])
+sorted(pairs, key=lambda pair: pair[1])   # [(2, "a"), (1, "b")]
 ```
+
+Prefer `def` when logic is more than one simple expression.
 
 ## Iteration and Generators
 
@@ -474,6 +654,8 @@ all(x > 0 for x in nums)
 sum(nums)
 min(nums)
 max(nums)
+float("inf")                         # positive infinity
+float("-inf")                        # negative infinity
 ```
 
 Generators produce values lazily:
@@ -497,6 +679,15 @@ Iterator protocol:
 
 ## Sorting
 
+Signatures:
+- `list.sort(*, key=None, reverse=False)` (in place)
+- `sorted(iterable, key=None, reverse=False)` (returns a new list)
+
+Complexity (Timsort):
+- Time: `O(n log n)` average/worst, `O(n)` best on nearly sorted input
+- Extra space: `sort()` uses less extra memory than `sorted()` because
+  `sorted()` always creates a new list
+
 ```python
 nums = [3, 1, 2]
 sorted(nums)                        # new sorted list
@@ -507,20 +698,39 @@ sorted(words, key=len)              # ["fig", "pear", "apple"]
 sorted(words, reverse=True)
 ```
 
-Sort tuples by multiple keys:
+`reverse` is `False` by default. `key` is a function that maps each element to
+the value Python should compare while sorting.
+
+For lists/tuples of comparable values, Python already sorts lexicographically
+(first item, then second, and so on), so `key` is optional:
 
 ```python
-people = [("Ada", 36), ("Bob", 20), ("Amy", 20)]
-
-sorted(people, key=lambda x: (x[1], x[0]))
-# age ascending, then name ascending
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals)
+# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
 ```
 
-Sort descending on one numeric key and ascending on another:
+`key` with a normal function (no lambda):
 
 ```python
-scores = [("A", 10), ("B", 20), ("C", 20)]
-sorted(scores, key=lambda x: (-x[1], x[0]))
+def by_start_then_end(interval):
+    return (interval[0], interval[1])
+
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals, key=by_start_then_end)
+# [[1, 3], [2, 5], [2, 6], [8, 10], [15, 18]]
+```
+
+Example where `key` is necessary for two-parameter custom sorting:
+first by start ascending, then by end descending.
+
+```python
+def by_start_then_end_desc(interval):
+    return (interval[0], -interval[1])
+
+intervals = [[1, 3], [15, 18], [2, 5], [2, 6], [8, 10]]
+sorted(intervals, key=by_start_then_end_desc)
+# [[1, 3], [2, 6], [2, 5], [8, 10], [15, 18]]
 ```
 
 ## Useful Standard Library
