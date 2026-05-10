@@ -41,14 +41,17 @@ algorithm is correct.
   - Mutable: `list`, `dict`, `set`, most class instances.
 - Use `==` for value equality and `is` for object identity.
 - Use `is None` and `is not None` for `None` checks.
-- Python passes object references by assignment. It does not strictly match the
-  traditional "pass-by-value" or "pass-by-reference" model.
-- When you pass a variable to a function, Python passes a reference to the
-  object, but passes that reference by value. The function gets a copy of the
-  reference, not a copy of the object.
-- Whether changes are visible outside depends on mutability: mutating a passed
-  mutable object (like a list) changes caller-visible state, while rebinding or
-  operating on immutable values (like `int`) does not change the caller's object.
+- Python uses a mechanism called pass-by-object-reference. It does not strictly
+  follow the traditional "pass-by-value" or "pass-by-reference" models.
+- A variable is a reference to an object. When you pass a variable to a
+  function, Python passes a reference to the underlying object, but passes that
+  reference by value. The function gets a copy of the reference, not a copy of
+  the object.
+- Depending on the mutability of the object that the reference points to,
+  in-function operations may or may not change the original object. If a list
+  (mutable) is passed to a function, in-function operations can change the
+  original list. If an integer (immutable) is passed, in-function operations
+  will not change it.
 
 ```python
 def add_item(xs):
