@@ -56,6 +56,37 @@ add_item(nums)         # [1, 2, 10]
 reassign(nums)         # still [1, 2, 10]
 ```
 
+Mutate vs rebind in function calls:
+
+```python
+def sort_in_place(nums):
+    nums.sort()            # mutates the same list object
+
+def caller_sort(nums):
+    sort_in_place(nums)
+    return nums            # sorted, because list is mutable
+
+def add_all(nums, total):
+    for num in nums:
+        total += num       # rebinds local int, does not mutate caller value
+
+def caller_sum(nums):
+    total = 0
+    add_all(nums, total)
+    return total           # still 0, int is immutable
+```
+
+Quick mutability table:
+
+| Type  | Mutable? | Changes visible outside function? |
+| ----- | -------- | --------------------------------- |
+| list  | Yes      | Yes                               |
+| dict  | Yes      | Yes                               |
+| set   | Yes      | Yes                               |
+| int   | No       | No                                |
+| str   | No       | No                                |
+| tuple | No       | No                                |
+
 ## Syntax Basics
 
 ### Truthiness
